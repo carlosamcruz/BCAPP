@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.nibblelinx.BCAPP">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+<!-- como mudar os nomes dos modulos do projeto:
+    https://stackoverflow.com/questions/21177495/renaming-a-project-in-intellij-idea
+
+https://stackoverflow.com/questions/12131025/android-preventing-webview-reload-on-rotate
+    android:configChanges="orientation|screenSize"
+
+    -->
+
+
+    <application
+            android:allowBackup="true"
+
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round"
+
+            android:label="@string/app_name"
+
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme"
+            android:usesCleartextTraffic="true"
+            android:hardwareAccelerated="true"
+            android:requestLegacyExternalStorage="true"
+
+
+            android:configChanges="orientation|screenSize"
+
+            android:largeHeap="true"
+    >
+
+        <!-- LARGE FILES android:largeHeap="true"
+        https://stackoverflow.com/questions/32244851/androidjava-lang-outofmemoryerror-failed-to-allocate-a-23970828-byte-allocatio
+        https://stackoverflow.com/questions/25719620/how-to-solve-java-lang-outofmemoryerror-trouble-in-android
+
+         https://stackoverflow.com/questions/14678593/the-application-may-be-doing-too-much-work-on-its-main-thread
+
+         Problemas com Leitura de Arquivo em Adnroid 10:
+         https://stackoverflow.com/questions/61410012/android-10-openfiledescriptor-stuck
+         https://stackoverflow.com/questions/63364476/requestlegacyexternalstorage-is-not-working-in-android-11-api-30
+         android:preserveLegacyExternalStorage="true"
+
+         -->
+
+
+        <activity
+                android:name="com.nibblelinx.BCAPP.MainBCAPP"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <!--      <activity
+                android:name="pdpJSON"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+                android:name="com.nibblelinx.BCAPP.MainBCAPP               android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar"/>
+                -->
+
+
+        <activity
+                android:name="com.nibblelinx.BCAPP.MoneyButton"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+                android:name="com.nibblelinx.BCAPP.MBPayment"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+                android:name="com.nibblelinx.BCAPP.TxidList"
+                android:label="@string/app_name"/>
+           <!--     android:theme="@style/AppTheme.NoActionBar"-->
+
+
+        <activity
+                android:name="com.nibblelinx.BCAPP.NFTText"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+                android:name="com.nibblelinx.BCAPP.NFTOPReturn"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar"/>
+
+    </application>
+
+</manifest>

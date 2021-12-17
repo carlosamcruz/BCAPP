@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".MBPayment"
+
+
+        tools:showIn="@layout/activity_mbpayment">
+
+    <!--
+    <TextView
+            android:id="@+id/TV_TEXT"
+            android:layout_width="319dp"
+            android:layout_height="39dp"
+            android:gravity="center"
+            android:text="Login Moneybutton"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/webview2"
+            android:layout_marginBottom="24dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.941"/>
+    -->
+    <!--
+    <WebView
+            android:id="@+id/webviewMBPayXXX"
+            android:layout_width="310dp"
+            android:layout_height="300dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.492"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.555"/>
+    -->
+
+    <WebView
+            android:id="@+id/webviewMBPay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+    />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

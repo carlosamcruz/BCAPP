@@ -1,0 +1,84 @@
+<!-- Exemplo de: https://developer.android.com/guide/webapps/webview </div> -->
+<!-- Mais Exemplo: How to build Android App with HTML5/CSS/JavaScript: https://youtu.be/eJa8xie9WZs  </div> -->
+<!--<input type="button" value="Say hello" onClick="showAndroidToast('Hello Android!')" /> -->
+<div style="text-align: center;">
+    <h2>BROADCAST TO BSV MAINNET</h2>
+</div>
+<!--<p>Sweep MoneyButton:</p>-->
+
+<form>
+    <div style="text-align: center;">
+    <textarea id="message" class="tohex" rows="8" cols= "35"></textarea>
+    </div>
+</form>
+
+<div id ="my-button-here2"></div>
+
+<div style="text-align:  center;">
+    <div id ="my-button-here" ></div>
+</div>
+
+<div style="text-align: center;">
+    <p>Sweep MoneyButton</p>
+</div>
+
+<body onload="myMB3()" />
+
+<p></p>
+<p></p>
+
+<script type="text/javascript">
+
+    let wvstrOld = "";
+    let bIDold = "";
+    let flagI = 0;
+    let flagCont = 0;
+
+    function bkground() {
+        document.body.style.backgroundColor = "#DDDDDE";
+        document.getElementById("my-button-here").style.backgroundColor = "#DDDDDE";
+    }
+
+    function addText(elId,text) {
+        document.getElementById(elId).value += text;
+    }
+
+    function myMB3 ()
+    {
+        bkground();
+        addText("message", Android.getPieceMBDATA())
+        myMB4();
+    }
+    function myMB4 ()
+    {
+
+        let dataToChain = Android.getDataToChain(0)
+        //let dataAddress = Android.getDataAddress()
+        let amountData = Android.getAmountToAddress()
+        let mailData = Android.getMailData()
+        let amountToDataAddress = Android.getAmountToDataAddress()
+        let nftIndex = Android.getNftIndex()
+
+        if(dataToChain.localeCompare(wvstrOld) != 0)
+        {
+            wvstrOld = dataToChain;
+
+            flagCont = flagCont + 1;
+            Android.setTest(flagCont);
+
+            //mybuttonMainNet001(dataToChain, dataAddress, amountData, mailData, amountToDataAddress, nftIndex);
+            mybuttonMainNet001(dataToChain, amountData, mailData, amountToDataAddress, nftIndex);
+        }
+    }
+
+
+
+
+</script>
+
+<script type="text/javascript" src="https://www.moneybutton.com/moneybutton.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="sMoneyButton.js"></script>
+
+<!-- Fim Money Button </div> -->
+<!-- Fim Money Button </div> -->

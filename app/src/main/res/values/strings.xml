@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">BLOCKCHAIN APP</string>
+    <string name="site_app">BCAPP.COM</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_share_text">Compartilhar Dados</string>
+    <string name="action_PVTKEY_text">Chave Privada</string>
+    <string name="action_share_pub_key">Gerar Link P2P</string>
+    <string name="action_add_new_contact">Insert by ID</string>
+    <string name="action_add_new_nft">Insert by Token</string>
+    <string name="action_tranfer_nft">Transfer NFT</string>
+    <string name="title_activity_coding">Codificando</string>
+    <string name="title_contacts_list">My NFTs</string>
+    <string name="title_TXID_list">MainID List</string>
+
+    <string name="title_text_dec">CONTEÚDO:</string>
+    <string name="title_text_enc">CRIPTOGRAMA:</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+
+</resources>
