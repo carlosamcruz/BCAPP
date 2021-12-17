@@ -76,10 +76,8 @@ public class NFTText extends AppCompatActivity {
                         //Tem um problema de quebra na falta de internet
                         //Mas quando foi colocado a linha abaixo o app não parou mais
                         //Toast.makeText(getApplicationContext(), "Connection Out!!!", Toast.LENGTH_SHORT).show();
-
                         timerMB = new Timer();
                     }
-
 
                     if (state) {
 
@@ -456,7 +454,6 @@ public class NFTText extends AppCompatActivity {
 
     private void putTextAndSaveFile(byte[] DATA,  String text)
     {
-        if(UTFstr) text = PDPUtils.toUTF(text);
         ((EditText)findViewById(R.id.ET_TEXTOST)).setText(text);
 
         ((TextView)findViewById(R.id.TV_TEXTST)).setText("CONTEÚDO:");

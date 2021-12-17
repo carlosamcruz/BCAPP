@@ -21,7 +21,7 @@ public class MBPayment extends AppCompatActivity {
 
     private Timer timerMB;
     String lastTXID = "";
-    private int TXType;
+    private int TXType = 0;
 ///////////////////////////////////////////////////////
 //WEB INTERFACE
 ///////////////////////////////////////////////////////
@@ -95,6 +95,10 @@ public class MBPayment extends AppCompatActivity {
         //it.putExtra("AmountToDataAddress", Variables.BSVDustLimit);
         myWebInterface.setAmountToDataAddress(getIntent().getExtras().getString("AmountToDataAddress"));
         //Principal
+        //Este é o endereço para os dados serão enviados
+        //Deste endereço os dados também serão lidos
+        //É importante você ter o controle sobre este endereço
+        //Ou seja, que faça parte de uma das carteiras das quais você tem acesso
         myWebInterface.setNftIndex("1McQFu2vM5LnnanWA3su4LmokHZDchqM7u");// Novo Endereço
 
         ////////////////////////////////////////////////////////////////////////////////////////////////

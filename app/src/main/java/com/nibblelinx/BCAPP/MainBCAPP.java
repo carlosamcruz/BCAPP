@@ -67,7 +67,10 @@ public class MainBCAPP extends AppCompatActivity {
 
                 Intent it = new Intent(MainBCAPP.this, TxidList.class);
                 Variables.MyNFTs = false;
-                //it.putExtra("NFTIndex", "1GHz8oqDXRRSBiXfWxkmB3fzCFvLaCbAMF");
+                //Este é o endereço para os dados serão enviados
+                //Deste endereço os dados também serão lidos
+                //É importante você ter o controle sobre este endereço
+                //Ou seja, que faça parte de uma das carteiras das quais você tem acesso
                 it.putExtra("NFTIndex", "1McQFu2vM5LnnanWA3su4LmokHZDchqM7u");
                 startActivity(it);
             }

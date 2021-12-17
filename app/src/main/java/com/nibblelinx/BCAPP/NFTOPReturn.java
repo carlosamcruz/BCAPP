@@ -140,7 +140,6 @@ public class NFTOPReturn extends AppCompatActivity {
         ((TextView)findViewById(R.id.TV_TEXTROR2)).setText("RETRIEVING DATA...");
 
         videoView = (VideoView) findViewById(R.id.videoView);
-
         videoView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         ((EditText) findViewById(R.id.ET_TEXTOROR2)).setBackgroundColor(0);//  + NFTDescription);
@@ -148,9 +147,7 @@ public class NFTOPReturn extends AppCompatActivity {
         DecOnly = true;
         activeProcess = false;
 
-
         timer.schedule(new TimeCheckURL(), 0, 5000);
-        //timerBAR.schedule(new TimeCheckBAR(), 0, 250);
     }
 
     ////////////////////////////////////////////////////////////////
@@ -188,7 +185,6 @@ public class NFTOPReturn extends AppCompatActivity {
         {
             if(BarCont >= 100)
             {
-
                 if(BarSize*nORTotal > 100 && (BarSize*nORTotal-100) <=100)
                     BarCont = 100 - (BarSize*nORTotal-100);
                 mProgressBar.setProgress(100);
@@ -225,10 +221,8 @@ public class NFTOPReturn extends AppCompatActivity {
                                 new JsonTaskTXID().onPostExecute(result);
                             }
                         });
-
                     }
                 }).start();
-
 
             } else {
 
@@ -295,14 +289,12 @@ public class NFTOPReturn extends AppCompatActivity {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
 
-
             try
             {
                 URL url = new URL(params[0]);
 
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
-
 
                 InputStream stream = connection.getInputStream();
 
@@ -350,7 +342,6 @@ public class NFTOPReturn extends AppCompatActivity {
                 }
                 //return null;
             }
-
             //return null;
         }
 
@@ -403,11 +394,7 @@ public class NFTOPReturn extends AppCompatActivity {
     public void urlProccessTXID(final String urlContent, Boolean Flag) //content
     {
         jsonStrTXID = urlContent;
-        //int firstIndiceOf;
 
-        //Toast.makeText(NFTOPReturn.this, jsonStrTXID.substring(14, 30) + "\n" + jsonStrTXID.length(), Toast.LENGTH_SHORT).show();
-
-        //if (Flag || (urlContent != null)) {
         if (Flag) {
 
             //https://www.geeksforgeeks.org/searching-for-character-and-substring-in-a-string/
@@ -496,9 +483,7 @@ public class NFTOPReturn extends AppCompatActivity {
                             break;
                         }
                 }
-
             }
-
             return OPRETURNDATA;
         }
 
@@ -724,7 +709,6 @@ public class NFTOPReturn extends AppCompatActivity {
         //O contador de Interação com Usuário deve também estar presente em OnResume e em OnCreate de cada activity
         //O contador deve ser resetado em OnResume, OnCreate, onUserInteraction de cada Activity
         Variables.userInteractionAct = Variables.MAXNOINTERACTIONTIME;
-
     }
 
     //Monitora intecação do usuário com a aplicação
