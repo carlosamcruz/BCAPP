@@ -279,10 +279,33 @@ public class SHA256G {
         strChar = hashKey.toCharArray();
         for (int i = 0; i < hashKey.length(); i++)
         {
-           result[i] = (byte) (strChar [i] & 0xFF);
+            result[i] = (byte) (strChar [i] & 0xFF);
         }
 
         return  result;
+    }
+
+
+
+    //Metodo usado para transforma um HASH SHA256 de String para Bytes
+    //String to byte
+    public static String LEformat (String hashKey)
+    {
+        char[] result = new char[hashKey.length()];
+        char[] strChar = new char[hashKey.length()];
+        strChar = hashKey.toCharArray();
+        for (int i = 0; i < hashKey.length(); i = i+2)
+        //for (int i = 0; i < hashKey.length(); i = i+1)
+        {
+            result[hashKey.length()-2 - i] = strChar [i];
+
+            result[hashKey.length()-1 - i] = strChar [i+1];
+            //result[hashKey.length() -1 - i] = strChar [i];
+            //result[i] = strChar [hashKey.length() -1];
+        }
+
+        return  String.valueOf(result);
+        //return  String.valueOf(strChar);
     }
 
     //public char base16[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
@@ -474,7 +497,11 @@ public class SHA256G {
             }
             else
             {
-                W[15]  = 0x00000000L;
+
+                //if(k % 16 == 14) // isso
+                //    W[15]  = 0x00000000L;
+
+                //W[15]  = 0x00000000L; //Esta linha pode ter causado uma serie de problemas, mas ainda não foi analisado direito
                 if(firstCyle)
                 {
                     sha_256(W, H0, Hi);
@@ -664,7 +691,9 @@ public class SHA256G {
             {
                 //W[k]  = 0x80000000L;
                 //W[k+1]  = 0x00000000L;
-                W[15]  = 0x00000000L;
+                //W[15]  = 0x00000000L;
+
+                //W[15]  = 0x00000000L; //Esta linha pode ter causado uma serie de problemas, mas ainda não foi analisado direito
                 //W[k+2]  = 0x00000001L * (long) strIn.length();
                 if(firstCyle)
                 {
@@ -700,7 +729,7 @@ public class SHA256G {
 
         }
 
-         return null;
+        return null;
     }
 
     //Metodo usado para construir um Hash com H0 diferente
@@ -955,7 +984,7 @@ public class SHA256G {
             {
                 //W[k]  = 0x80000000L;
                 //W[k+1]  = 0x00000000L;
-                W[15]  = 0x00000000L;
+                //W[15]  = 0x00000000L; //Esta linha pode ter causado uma serie de problemas, mas ainda não foi analisado direito
                 //W[k+2]  = 0x00000001L * (long) strIn.length();
                 if(firstCyle)
                 {
@@ -1063,7 +1092,7 @@ public class SHA256G {
 
             //char[] txtcomp = new char[strIn.length];
             char[] result = new char[64];
-           //char[] H0xStr = new char[32];
+            //char[] H0xStr = new char[32];
 
             //Cada valor de Hx[i] usa somente 4 bits
 
@@ -1190,7 +1219,7 @@ public class SHA256G {
             {
                 //W[k]  = 0x80000000L;
                 //W[k+1]  = 0x00000000L;
-                W[15]  = 0x00000000L;
+                //W[15]  = 0x00000000L; //Esta linha pode ter causado uma serie de problemas, mas ainda não foi analisado direito
                 //W[k+2]  = 0x00000001L * (long) strIn.length();
                 if(firstCyle)
                 {
@@ -1394,7 +1423,7 @@ public class SHA256G {
             {
                 //W[k]  = 0x80000000L;
                 //W[k+1]  = 0x00000000L;
-                W[15]  = 0x00000000L;
+                //W[15]  = 0x00000000L; //Esta linha pode ter causado uma serie de problemas, mas ainda não foi analisado direito
                 //W[k+2]  = 0x00000001L * (long) strIn.length();
                 if(firstCyle)
                 {
@@ -1669,7 +1698,7 @@ public class SHA256G {
             {
                 //W[k]  = 0x80000000L;
                 //W[k+1]  = 0x00000000L;
-                W[15]  = 0x00000000L;
+                //W[15]  = 0x00000000L; //Esta linha pode ter causado uma serie de problemas, mas ainda não foi analisado direito
                 //W[k+2]  = 0x00000001L * (long) strIn.length();
                 if(firstCyle)
                 {

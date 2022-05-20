@@ -29,7 +29,7 @@ public class NFTText extends AppCompatActivity {
 
     //https://pt.stackoverflow.com/questions/76476/como-utilizo-o-progress-bar
     private ProgressBar mProgressBar;
-    private Timer timerMB;
+    //private Timer timerMB;
     private Boolean descInput = false;
 
     @Override
@@ -61,7 +61,7 @@ public class NFTText extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabST);
 
-        timerMB = new Timer();
+        //timerMB = new Timer();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,24 +69,7 @@ public class NFTText extends AppCompatActivity {
 
                 if(descInput) {
 
-                    if (timerMB != null) {
-                        timerMB.cancel();
-                        timerMB.purge();
-
-                        //Tem um problema de quebra na falta de internet
-                        //Mas quando foi colocado a linha abaixo o app não parou mais
-                        //Toast.makeText(getApplicationContext(), "Connection Out!!!", Toast.LENGTH_SHORT).show();
-                        timerMB = new Timer();
-                    }
-
                     if (state) {
-
-                        //Verifica se a ultima operação foi realizada com a internet boa ou ruím;
-                        if (MBCon) {
-                            MBFLag = true;
-
-                            MBCon = false;
-                        } else MBFLag = false;
 
                         //processo de decriptografia
                         //new DecBackGround2().execute(((EditText) findViewById(R.id.ET_TEXTO)).getText().toString());
@@ -154,7 +137,7 @@ public class NFTText extends AppCompatActivity {
                                 newTextChar[j] = (byte) (text.charAt(i) & 0xFF);
                             }
                         }
-                        assinatura2(newTextChar);
+                        sendTX(newTextChar);
                     }
                 }
             }
@@ -163,160 +146,82 @@ public class NFTText extends AppCompatActivity {
         Toast.makeText(this, "TEXT DATA!!!", Toast.LENGTH_SHORT).show();
     }
 
+
+    public void sendTX(byte[] newTextChar)
+    {
+
+        String pvtkey = Variables.MainPaymail;
+        //String sendTo = SendTo.getText().toString();
+        //String sats = Satoshis.getText().toString();
+        String data = SHA256G.ByteToStrHex(newTextChar);
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        //Preparação das Chaves
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        Keygen pubKey = new Keygen();
+        Boolean CompPKey = false;
+
+        String PUBKEY = pubKey.publicKeyHEX(pvtkey);
+        //String PUBKEY = pubKey.publicKeyHEX("5fc83936c7a1d514f2843bc90353e002f5af03358f9f13290de71b59fc6b7480");
+        String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, CompPKey);
+        String BSVADD = pubKey.bsvWalletFull(PUBKEY, CompPKey);
+
+
+        /////////////////////////////////////////////////////////////////////
+        //User Data Input
+        /////////////////////////////////////////////////////////////////////
+
+        String [] PayWallets = new String[10];
+        String [] PayValues = new String[10];
+        String [] OP_RETURNs = new String[10];
+
+        //PayWallets[0] = "1B69q3ZY6VsuKwCinvbB5tkKWLjHWfGz1J"; //MoneyButton
+        //PayWallets[0] = sendTo; //Carteira para onde esta sendo enviado
+        //PayWallets[1] = BSVADD;
+        PayWallets[0] = BSVADD;
+        PayValues[0] = "0";
+        //PayValues[0] = "1000";
+        //PayValues[0] = sats;
+        //...at the name of Jesus every knee should bow, of things in heaven, and things in earth, and things under the earth;
+        //OP_RETURNs[0] = "2e2e2e617420746865206e616d65206f66204a65737573206576657279206b6e65652073686f756c6420626f772c206f66207468696e677320696e2068656176656e2c20616e64207468696e677320696e2065617274682c20616e64207468696e677320756e646572207468652065617274683b";
+
+        int nOR = 0;
+        if(data.length() > 0) {
+            //OP_RETURNs[0] = StrToHex(data);
+            OP_RETURNs[0] = SHA256G.ByteToStrHex(newTextChar);
+            //OP_RETURNs[0] = "5465737465204e205454542074" + "5465737465204e205454542074";
+            nOR = 1;
+        }
+
+        if(nOR == 0) {
+
+            Toast.makeText(NFTText.this, "No Data!!!"
+                    , Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+
+        BsvTxCreation txCreate = new BsvTxCreation();
+
+        String result = "";
+        result = txCreate.buildAndBroadCast(pvtkey,1 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
+
+        //result = txCreate.totalUnspent(BSVADD);
+
+        //Toast.makeText(NFTText.this, "Result: " + OP_RETURNs[0]
+        //Toast.makeText(NFTText.this, "Result: " + result + 1 + nOR
+        Toast.makeText(NFTText.this, "Result: " + result
+                , Toast.LENGTH_LONG).show();
+
+        //((EditText) findViewById(R.id.ET_TEXTOST)).setText(result);
+    }
+
+
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
-
-    public boolean onNetwork()
-    {
-        ConnectivityManager connectivityManager = getSystemService(ConnectivityManager.class);
-        Network currentNetwork = connectivityManager.getActiveNetwork();
-
-        if(currentNetwork == null)
-            return false;
-        else
-            //https://developer.android.com/reference/android/net/ConnectivityManager#isDefaultNetworkActive()
-            //if(connectivityManager.isDefaultNetworkActive()) return true;
-            //else return false;
-            return true;
-    }
-
-    String MBDATA = "";
-    String lastTXID = "";
-
-    class TimeCheckMB extends TimerTask
-    {
-        public void run()
-        {
-            if (onNetwork()) {
-                //new MBOn().execute(MBDATA);
-
-                Thread b = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        MBDATA = new MBOn().execute(MBDATA);
-
-                        //Para a execução na thread pricipal
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                // do onPostExecute stuff
-                                new MBOn().onPostExecute(MBDATA);
-                            }
-                        });
-                    }
-                });
-                b.start();
-
-            } else {
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        MBDATA = new MBOff().execute(MBDATA);;
-
-                        //Para a execução na thread pricipal
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                // do onPostExecute stuff
-                                new MBOff().onPostExecute(MBDATA);
-                            }
-                        });
-                    }
-                }).start();
-
-            }
-        }
-    }
-
-    private class MBOn //extends AsyncTask<String, String, String>
-    {
-        protected void onPreExecute()
-        {
-            //super.onPreExecute();
-        }
-
-        //protected String doInBackground(String... params)
-        protected String execute(String... params)
-        {
-            return MBDATA;
-        }
-
-        //@Override
-        protected void onPostExecute(String result)
-        {
-            //super.onPostExecute(result);
-            //CHAMA A FUNCAO DE PROCESSAMENTO
-            MBProccess(result, true);
-        }
-    }
-
-    private class MBOff //extends AsyncTask<String, String, String>
-    {
-        protected void onPreExecute()
-        {
-            //super.onPreExecute();
-        }
-
-        //protected String doInBackground(String... params)
-        protected String execute(String... params)
-        {
-            return MBDATA;
-        }
-
-        //@Override
-        protected void onPostExecute(String result)
-        {
-            //super.onPostExecute(result);
-            //CHAMA A FUNCAO DE PROCESSAMENTO
-            MBProccess(result, false);
-        }
-    }
-
-    boolean MBFLag = true;
-    boolean MBCon = false;
-
-    public void MBProccess(String urlContent, Boolean Flag) //content
-    {
-        if(lastTXID.compareTo(Variables.LastTXID) != 0){
-            timerMB.cancel();
-            timerMB.purge();
-            timerMB = new Timer();
-            MBCon = false;
-        }
-        else {
-            if (Flag) {
-
-                if(!MBFLag) {
-
-                    MBFLag = true;
-                }
-                MBCon = true;
-
-                Intent it = new Intent(NFTText.this, MBPayment.class);
-
-                it.putExtra("MBDATA", MBDATA);
-                Variables.MBDATA = MBDATA;
-                it.putExtra("MailData", "15164");
-
-                //Em AmountToAddress é determinado a taxa do serviço de
-                it.putExtra("AmountToAddress", PDPUtils.dataSatoshi(MBDATA));
-                it.putExtra("AmountToDataAddress", Variables.BSVDustLimit);
-
-                startActivity(it);
-
-            } else {
-
-                if(MBCon) {
-                    MBFLag = false;
-                }
-
-                MBCon = false;
-                //Toast.makeText(this, "Bad or no Conection: " + myWebInterface.getTest(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "Bad or no Conection!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     Timer timerBAR;
     int BarCont = 0;
@@ -459,131 +364,6 @@ public class NFTText extends AppCompatActivity {
         ((TextView)findViewById(R.id.TV_TEXTST)).setText("CONTEÚDO:");
     }
 
-    private void assinatura2(final byte[] text) {
-
-        if(text.length>0) {
-
-            //new AssinaturaBackGround2().execute(text);
-
-            result = null;
-            new AssinaturaBackGround2().onPreExecute();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    result = new AssinaturaBackGround2().execute(text);
-
-                    //Para a execução na thread pricipal
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            // do onPostExecute stuff
-                            new AssinaturaBackGround2().onPostExecute(result);
-                        }
-                    });
-                }
-            }).start();
-
-        }else
-            Toast.makeText(this, "Dados inválidos", Toast.LENGTH_LONG).show();
-    }
-
-    class AssinaturaBackGround2 //extends AsyncTask<byte[], byte[],byte[]> {
-    {
-
-        //@Override
-        protected void onPreExecute() {
-            //super.onPreExecute();
-            exibirProgress(true);
-        }
-
-        //@Override
-        //protected byte[] doInBackground(byte[]... params) {
-        protected byte[] execute(byte[]... params) {
-
-            return criptografia2(params[0]);
-        }
-
-        //@Override
-        protected void onPostExecute(byte[] params) {
-            //super.onPostExecute(params);
-
-            AssinaturaResult2(params);
-            exibirProgress(false);
-        }
-    }
-
-    void AssinaturaResult2(byte[] text)
-    {
-        if(text == null)
-        {
-            Toast.makeText(this, "Dados inválidos", Toast.LENGTH_LONG).show();
-        }
-        else //Toast.makeText(SendText.this, "Dados ?????", Toast.LENGTH_LONG).show();
-        {
-
-            String bStringPiece;
-            byte[] b;
-            char[] bChar;
-            //if(text.length > 250 && (!TextOrFile))
-            if(text.length > 250)
-            {
-                b = new byte[250];
-                for(int i = 0; i < 250 ; i++)
-                    b[i] = text[i];
-            }
-            else b = text;
-
-            bChar = new char[b.length];
-            for (int i = 0; i < b.length; i++)
-                bChar[i] = (char) (b[i] & 0xFF);
-
-            bStringPiece = PDPUtils.strToHEXStr(String.valueOf(bChar));
-
-            ((EditText) findViewById(R.id.ET_TEXTOST)).setText(bStringPiece);
-            ((TextView) findViewById(R.id.TV_TEXTST)).setText("HEXADECIMAL DATA:");
-
-        }
-        state = !state;
-    }
-
-    private byte[] criptografia2(byte[] text){
-
-
-        int textIni = text.length;
-
-        //PROCESSO DE CRIPTOGRAFIA - Não existe criptorafia nesta aplicação
-        if(textIni>0)
-        {
-            char[] pkg16New = new char[2*text.length];
-            char base16[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-            for(int j = (text.length-1); j >= 0; j--)
-            {
-                pkg16New[j*2] = base16[((text[j] & 0xFF)/0x10) & 0x0F];
-                pkg16New[(j*2) + 1] = base16[ text[j] & 0x0F ];
-            }
-
-            MBDATA = String.valueOf(pkg16New);
-            lastTXID = Variables.LastTXID;
-
-            timerMB.schedule(new TimeCheckMB(), 0, 5000);
-
-            ///////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////
-            return text;
-        }
-        else
-            return null;
-    }
-
-    private void checkForPayment()
-    {
-        if (Variables.Payment) {
-            //Toast.makeText(this, "NFT data recorded @ BSV Chain!!!", Toast.LENGTH_LONG).show();
-            Variables.Payment = false;
-        }
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -610,15 +390,15 @@ public class NFTText extends AppCompatActivity {
         super.onPause();
         Variables.activityPause = true;
 
-        timerMB.cancel();
-        timerMB.purge();
+        //timerMB.cancel();
+        //timerMB.purge();
     }
     //https://stuff.mit.edu/afs/sipb/project/android/docs/training/basics/activity-lifecycle/pausing.html
     @Override
     public void onResume(){
         super.onResume();
 
-        checkForPayment();
+        //checkForPayment();
 
         //O verficador de pausa deve ser modificado em OnResume e OnCreate de cada Activity
         Variables.activityPause = false;
@@ -629,7 +409,7 @@ public class NFTText extends AppCompatActivity {
         //O contador deve ser resetado em OnResume, OnCreate, onUserInteraction de cada Activity
         Variables.userInteractionAct = Variables.MAXNOINTERACTIONTIME;
 
-        timerMB = new Timer();
+       // timerMB = new Timer();
     }
 
     //Monitora intecação do usuário com a aplicação

@@ -9,6 +9,13 @@ public class Variables {
     static int TotalList = 0;
     static String MBDATA = "";
     static int operation = 0;
+    static String SatBalance = "";
+    static int STREAMTT = 0;
+
+    static Boolean threadM = false;
+
+
+    static int ntries = 0;
 
     //Old Dust Limite = "0.00000546"
     static String BSVDustLimit = "0.00000135"; //it has changed to 136 on 10/25/2021

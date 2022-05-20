@@ -71,15 +71,18 @@ https://stackoverflow.com/questions/12131025/android-preventing-webview-reload-o
                 -->
 
 
+        <!--
         <activity
                 android:name="com.nibblelinx.BCAPP.MoneyButton"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar"/>
 
+
         <activity
                 android:name="com.nibblelinx.BCAPP.MBPayment"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar"/>
+        -->
 
         <activity
                 android:name="com.nibblelinx.BCAPP.TxidList"

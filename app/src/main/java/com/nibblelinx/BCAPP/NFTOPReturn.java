@@ -452,7 +452,7 @@ public class NFTOPReturn extends AppCompatActivity {
             //https://www.geeksforgeeks.org/searching-for-character-and-substring-in-a-string/
 
             //firstIndiceOf = jsonStrTXID.indexOf(searchStrOPRETURN);
-            firstIndiceOf = jsonStrTXID.indexOf("4e4654");
+            firstIndiceOf = jsonStrTXID.indexOf("006a4c");
 
             //Finaliza o thread de tempo
             timer.cancel();
@@ -469,8 +469,11 @@ public class NFTOPReturn extends AppCompatActivity {
                 if(firstOR) {
                     //NFT = 4e 46 54
                     for (int i = 0; i < jsonStrTXID.length(); i++)
-                        if (jsonStrTXID.substring(i, i + 6).compareTo("4e4654") == 0) {
-                            OPRETURNDATA = jsonStrTXID.substring(i, jsonStrTXID.length());
+                        //if (jsonStrTXID.substring(i, i + 6).compareTo("4e4654") == 0) {
+                        if (jsonStrTXID.substring(i, i + 6).compareTo("006a4c") == 0) {
+
+
+                            OPRETURNDATA = jsonStrTXID.substring(i+2, jsonStrTXID.length());
                             break;
                         }
                 }
@@ -478,8 +481,9 @@ public class NFTOPReturn extends AppCompatActivity {
                 {
                     //NFT = 4e 46 54
                     for (int i = 0; i < jsonStrTXID.length(); i++)
-                        if (jsonStrTXID.substring(i, i + 6).compareTo("4e4654") == 0){
-                            OPRETURNDATA = jsonStrTXID.substring(i + 6, jsonStrTXID.length());
+                        //if (jsonStrTXID.substring(i, i + 6).compareTo("4e4654") == 0){
+                        if (jsonStrTXID.substring(i, i + 6).compareTo("006a4c") == 0){
+                            OPRETURNDATA = jsonStrTXID.substring(i + 6 + 2, jsonStrTXID.length());
                             break;
                         }
                 }
