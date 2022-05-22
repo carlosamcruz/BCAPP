@@ -48,8 +48,6 @@ public class MainBCAPP extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-                //Variables.MainPaymail = "5fc83936c7a1d514f2843bc90353e002f5af03358f9f13290de71b59fc6b7480";
                 //if(Variables.MainPaymail.compareTo("")==0)
                 if(Variables.MainPaymail.length() != 64)
                 {
@@ -84,7 +82,6 @@ public class MainBCAPP extends AppCompatActivity {
                     Boolean CompPKey = false;
 
                     String PUBKEY = pubKey.publicKeyHEX(Variables.MainPaymail);
-                    //String PUBKEY = pubKey.publicKeyHEX("5fc83936c7a1d514f2843bc90353e002f5af03358f9f13290de71b59fc6b7480");
                     String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, CompPKey);
                     String BSVADD = pubKey.bsvWalletFull(PUBKEY, CompPKey);
 
