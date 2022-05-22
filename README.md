@@ -18,4 +18,4 @@ TonelliShanks.java - to deal with some Ellipical Curves operations;
 
 Ripemd160.java - RIPEMD160 hash function to deal with bitcoin wallets;
 
-Keygen.java - Classe to deal with private/public generation and encoding, gernation of BSV wallets, SEC public key encode and decode, DER ECDSA singature encoding and decode.
+Keygen.java - Classe to deal with private/public key generation and encoding, generation of BSV wallets, SEC public key encode and decode, DER ECDSA singature encoding and decode.
