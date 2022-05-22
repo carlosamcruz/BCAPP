@@ -452,7 +452,8 @@ public class NFTOPReturn extends AppCompatActivity {
             //https://www.geeksforgeeks.org/searching-for-character-and-substring-in-a-string/
 
             //firstIndiceOf = jsonStrTXID.indexOf(searchStrOPRETURN);
-            firstIndiceOf = jsonStrTXID.indexOf("006a4c");
+            //firstIndiceOf = jsonStrTXID.indexOf("006a4c");
+            firstIndiceOf = jsonStrTXID.indexOf("006a4");
 
             //Finaliza o thread de tempo
             timer.cancel();
@@ -470,10 +471,25 @@ public class NFTOPReturn extends AppCompatActivity {
                     //NFT = 4e 46 54
                     for (int i = 0; i < jsonStrTXID.length(); i++)
                         //if (jsonStrTXID.substring(i, i + 6).compareTo("4e4654") == 0) {
-                        if (jsonStrTXID.substring(i, i + 6).compareTo("006a4c") == 0) {
+                        //if (jsonStrTXID.substring(i, i + 6).compareTo("006a4c") == 0) {
+                        if (jsonStrTXID.substring(i, i + 5).compareTo("006a4") == 0) {
 
 
-                            OPRETURNDATA = jsonStrTXID.substring(i+2, jsonStrTXID.length());
+                            //OPRETURNDATA = jsonStrTXID.substring(i+2, jsonStrTXID.length());
+
+
+                            if(jsonStrTXID.substring(i+5, i+6).compareTo("c") == 0)
+                               OPRETURNDATA = jsonStrTXID.substring(i+2, jsonStrTXID.length());
+
+
+                            else if(jsonStrTXID.substring(i+5, i+6).compareTo("d") == 0)
+                                OPRETURNDATA = jsonStrTXID.substring(i+4, jsonStrTXID.length());
+
+
+                            else if(jsonStrTXID.substring(i+5, i+6).compareTo("e") == 0)
+                                OPRETURNDATA = jsonStrTXID.substring(i+6, jsonStrTXID.length());
+
+
                             break;
                         }
                 }
@@ -482,8 +498,25 @@ public class NFTOPReturn extends AppCompatActivity {
                     //NFT = 4e 46 54
                     for (int i = 0; i < jsonStrTXID.length(); i++)
                         //if (jsonStrTXID.substring(i, i + 6).compareTo("4e4654") == 0){
-                        if (jsonStrTXID.substring(i, i + 6).compareTo("006a4c") == 0){
+                        //if (jsonStrTXID.substring(i, i + 6).compareTo("006a4c") == 0){
+                        if (jsonStrTXID.substring(i, i + 5).compareTo("006a4") == 0){
+
+
+                            //Aqui deve ser feito a cosinderação de OP_RETURNs com tamanhos diferentes;
+
                             OPRETURNDATA = jsonStrTXID.substring(i + 6 + 2, jsonStrTXID.length());
+                            //OPRETURNDATA = jsonStrTXID.substring(i + 6 + 2 + 1, jsonStrTXID.length());
+
+
+                            if(jsonStrTXID.substring(i+5, i+6).compareTo("c") == 0)
+                                OPRETURNDATA = jsonStrTXID.substring(i + 6 + 2, jsonStrTXID.length());
+
+                            else if(jsonStrTXID.substring(i+5, i+6).compareTo("d") == 0)
+                                OPRETURNDATA = jsonStrTXID.substring(i + 6 + 4, jsonStrTXID.length());
+
+                            else if(jsonStrTXID.substring(i+5, i+6).compareTo("e") == 0)
+                                OPRETURNDATA = jsonStrTXID.substring(i + 6 + 6, jsonStrTXID.length());
+
                             break;
                         }
                 }

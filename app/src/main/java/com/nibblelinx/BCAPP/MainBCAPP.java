@@ -44,6 +44,8 @@ public class MainBCAPP extends AppCompatActivity {
         //O contador deve ser resetado em OnResume, OnCreate, onUserInteraction de cada Activity
         Variables.userInteractionAct = Variables.MAXNOINTERACTIONTIME;
 
+        Variables.SatBalance = "";
+
         buttonMS1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,9 +220,12 @@ public class MainBCAPP extends AppCompatActivity {
             inicio = 1;
         else
         {
-            ((TextView) findViewById(R.id.TV_TEXT2)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
-            ((TextView) findViewById(R.id.TV_TEXT3)).setText(Variables.BSVWallet);
-            ((TextView) findViewById(R.id.TV_TEXT4)).setText("Balance (Miritis): " + Long.valueOf(Variables.SatBalance)/1000 + " Miritis");
+           if(Variables.SatBalance.length() > 0) {
+
+               ((TextView) findViewById(R.id.TV_TEXT2)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
+               ((TextView) findViewById(R.id.TV_TEXT3)).setText(Variables.BSVWallet);
+               ((TextView) findViewById(R.id.TV_TEXT4)).setText("Balance (Miritis): " + Long.valueOf(Variables.SatBalance) / 1000 + " Miritis");
+           }
         }
 
         //((TextView) findViewById(R.id.TV_TEXT2)).setText("Balance: " + Variables.SatBalance + " sats");

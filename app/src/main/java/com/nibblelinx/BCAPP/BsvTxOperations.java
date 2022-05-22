@@ -405,6 +405,8 @@ public class BsvTxOperations {
                 String out1size = "00";
                 String out1ScriptType = "00" + "6a"; // OP_Return
                 String out1DataSizeType = "4c";//only one byte
+                String byteSizeout1size = "";
+                //String out1DataSizeType;
                 String out1DataSize = "00";//only one byte
 
                 //String out1Data = "2e2e2e617420746865206e616d65206f66204a65737573206576657279206b6e65652073686f756c6420626f772c206f66207468696e677320696e2068656176656e2c20616e64207468696e677320696e2065617274682c20616e64207468696e677320756e646572207468652065617274683b";
@@ -417,6 +419,41 @@ public class BsvTxOperations {
                 if(out1DataSize.length() % 2 == 1)
                     out1DataSize = "0" + out1DataSize;
 
+                ////////////////////////////////////////////
+                //OP_RETURN size
+                ////////////////////////////////////////////
+
+                //if((out1Data.length() / 2)>=1 && (out1Data.length() / 2)<=256)
+                if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0xff) {
+                    out1DataSizeType = "4c";
+                    //byteSizeout1size = "";
+                }
+                else if ((out1Data.length() / 2) >= 0x0100 && (out1Data.length() / 2) <= 0xffff) {
+                    out1DataSizeType = "4d";
+                    //byteSizeout1size = "fd";
+
+                    while (out1DataSize.length() < 4)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+
+
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                else if ((out1Data.length() / 2) >= 0x00010000 && (out1Data.length() / 2) <= 0x000182b8) {
+                    out1DataSizeType = "4e";
+                    //byteSizeout1size = "fe";
+
+                    while (out1DataSize.length() < 8)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+                }
+
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
+
                 //String Out1Script = "1976a914" + PayWallet160 + "88ac";
                 String Out1Script = out1ScriptType + out1DataSizeType + out1DataSize + out1Data;
 
@@ -426,6 +463,45 @@ public class BsvTxOperations {
 
                 if(out1size.length() % 2 == 1)
                     out1size = "0" + out1size;
+
+                //out1size = SHA256G.LEformat(out1size);
+
+
+                ////////////////////////////////////////////
+                //Ajuste do tamanho do Script e indicação do byte de tamanho em bytes
+                // Só pode ser indicado a partir desta posição para não dar conflito
+                // se o script ultrapassar os bytes indicados para os dados
+                ////////////////////////////////////////////
+
+                if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xff) {
+                    //out1size = out1size;
+                    byteSizeout1size = "";
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                else if ((Out1Script.length() / 2) >= 0x0100 && (Out1Script.length() / 2) <= 0xffff) {
+
+                    byteSizeout1size = "fd";
+
+                    while (out1size.length() < 4)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                else if ((Out1Script.length() / 2) >= 0x00010000 && (Out1Script.length() / 2) <= 0x000182b8) {
+
+                    byteSizeout1size = "fe";
+
+                    while (out1size.length() < 8)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
 
                 Out1Script = outOpReturn + out1size + Out1Script;
 
