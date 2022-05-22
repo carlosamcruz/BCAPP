@@ -81,7 +81,7 @@ public class MainBCAPP extends AppCompatActivity {
                     Keygen pubKey = new Keygen();
                     Boolean CompPKey = false;
 
-                    String PUBKEY = pubKey.publicKeyHEX(Variables.MainPaymail);
+                    String PUBKEY = pubKey.publicKeyHEX(Variables.MainPaymail);//Variables.MainPaymail hex 64 elementos
                     String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, CompPKey);
                     String BSVADD = pubKey.bsvWalletFull(PUBKEY, CompPKey);
 

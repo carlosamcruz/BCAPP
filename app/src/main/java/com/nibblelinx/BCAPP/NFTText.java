@@ -162,7 +162,7 @@ public class NFTText extends AppCompatActivity {
         Keygen pubKey = new Keygen();
         Boolean CompPKey = false;
 
-        String PUBKEY = pubKey.publicKeyHEX(pvtkey); //PVTKEY - string Hexadecimal de 64 elementos
+        String PUBKEY = pubKey.publicKeyHEX(pvtkey); //PVTKEY - string Hexadecimal de 64 elementos.
         String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, CompPKey);
         String BSVADD = pubKey.bsvWalletFull(PUBKEY, CompPKey);
 

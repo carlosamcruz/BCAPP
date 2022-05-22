@@ -570,7 +570,7 @@ public class BsvTxOperations {
 
                     //Variables.TxHexDataSent = conn.getResponseMessage();
                     TxHexDataSent = conn.getResponseMessage();
-                    threadEndBroadcastHexBsvTx = true;
+                    threadEndBroadcastHexBsvTx = true;//necessário
                     //Get Message "OK" if successfull
                     //Get Message "Bad Request" Oterwise
 

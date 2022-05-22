@@ -69,7 +69,7 @@ public class BsvTxCreation {
         Keygen pubKey = new Keygen();
         EcdsaSecretus ECDSA = new EcdsaSecretus();
         //PUB KEY from PVT Key
-
+        //PVT key
         //String PUBKEY = pubKey.publicKey(PVTKEY);
 
         Boolean CompPKey = false;
