@@ -5,9 +5,11 @@
       <map>
         <entry key="..\:/GITPRJ/BCAPP/app/src/main/res/layout/activity_mainnft.xml" value="0.15942028985507245" />
         <entry key="..\:/GITPRJ/BCAPP/app/src/main/res/layout/activity_senddata.xml" value="0.1" />
+        <entry key="..\:/GITPRJ/BCAPP/app/src/main/res/layout/activity_token.xml" value="0.25181159420289856" />
         <entry key="..\:/GITPRJ/BCAPP/app/src/main/res/layout/activity_txidlist.xml" value="0.1" />
         <entry key="..\:/GITPRJ/BCAPP/app/src/main/res/layout/content_mainnft.xml" value="0.24010416666666667" />
         <entry key="..\:/GITPRJ/BCAPP/app/src/main/res/layout/content_senddata.xml" value="0.24010416666666667" />
+        <entry key="..\:/GITPRJ/BCAPP/app/src/main/res/layout/content_token.xml" value="0.2390625" />
       </map>
     </option>
   </component>

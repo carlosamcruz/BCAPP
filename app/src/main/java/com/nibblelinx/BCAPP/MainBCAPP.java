@@ -27,6 +27,7 @@ public class MainBCAPP extends AppCompatActivity {
         Button buttonMS2 = (Button) findViewById(R.id.buttonMS2);
        // Button buttonMS4 = (Button) findViewById(R.id.buttonMS4);
         Button buttonMS6 = (Button) findViewById(R.id.buttonMS6);
+        Button buttonMS7 = (Button) findViewById(R.id.buttonMS7);
 
         //fa = this;
 
@@ -101,6 +102,30 @@ public class MainBCAPP extends AppCompatActivity {
         });
 
 
+        buttonMS7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+                else if(Variables.SatBalance.compareTo("0")==0)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                    Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+
+                }
+
+
+
+            }
+        });
 
         buttonMS6.setOnClickListener(new View.OnClickListener() {
             @Override
