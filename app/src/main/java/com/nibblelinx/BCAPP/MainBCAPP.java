@@ -46,6 +46,7 @@ public class MainBCAPP extends AppCompatActivity {
         Variables.userInteractionAct = Variables.MAXNOINTERACTIONTIME;
 
         Variables.SatBalance = "";
+        Variables.MainPaymail = "";
 
         buttonMS1.setOnClickListener(new View.OnClickListener() {
             @Override
