@@ -85,7 +85,6 @@ public class Token extends AppCompatActivity {
         EditText Data = (EditText) findViewById(R.id.ET_LobbyAct_Data);
 
         //String pvtkey = PVTKEY.getText().toString();
-        //String pvtkey = "5fc83936c7a1d514f2843bc90353e002f5af03358f9f13290de71b59fc6b7480";
 
         String pvtkey = Variables.MainPaymail;
 
@@ -107,7 +106,7 @@ public class Token extends AppCompatActivity {
         Boolean CompPKey = false;
 
         String PUBKEY = pubKey.publicKeyHEX(pvtkey);
-        //String PUBKEY = pubKey.publicKeyHEX("5fc83936c7a1d514f2843bc90353e002f5af03358f9f13290de71b59fc6b7480");
+
         String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, CompPKey);
         String BSVADD = pubKey.bsvWalletFull(PUBKEY, CompPKey);
 
