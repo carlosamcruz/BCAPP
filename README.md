@@ -1,9 +1,9 @@
 # BCAPP
-Template to Help the Creation of Android Application using the BSV Blockchain
+Template to Help Building Android Application using the BSV Blockchain
 
 This template includes classes that enables the creation and use of Bitcoin legacy wallets from a hexadecimal private key.
 This wallet is able to handle compressed and uncompressed BSV addresses and deal with OP_RETURN data.
-The codes of all JAVA classes of the project are open, nevertheless they are still poorly documented, and it is not neatly written as well.
+The code of all JAVA classes of the project are open, nevertheless they are still poorly documented, and it is not neatly written as well.
 Though template worked well on our tests, we do not warrant it to be free of bugs or any malfunctionality whatsoever. Therefore, use at your own risk.
 
 The set of classes employed in this template project includes:
