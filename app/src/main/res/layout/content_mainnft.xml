@@ -75,17 +75,8 @@
             android:id="@+id/buttonMS1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.238"
-            app:layout_constraintVertical_bias="0.317"/>
-    <Button
-            android:text="READ BC"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonMS2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.777"
-            app:layout_constraintVertical_bias="0.317"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.235"
+            app:layout_constraintVertical_bias="0.208"/>
     <!--
     <Button
             android:text="Money Button"
@@ -98,6 +89,16 @@
             app:layout_constraintVertical_bias="0.499"/>
     -->
     <Button
+            android:text="READ BC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMS2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.789"
+            app:layout_constraintVertical_bias="0.208"/>
+
+    <Button
             android:text="PVT KEY"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,8 +107,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.789"
-            app:layout_constraintVertical_bias="0.459"/>
-
+            app:layout_constraintVertical_bias="0.334"/>
     <Button
             android:text="SEND BSV"
             android:layout_width="wrap_content"
@@ -116,7 +116,17 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.236"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.232"
+            app:layout_constraintVertical_bias="0.334"/>
+    <Button
+            android:text="TX Verify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMS8"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.514"
             app:layout_constraintVertical_bias="0.459"/>
     <!-- <WebView
              android:id="@+id/webview2"

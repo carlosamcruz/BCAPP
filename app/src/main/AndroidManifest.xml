@@ -103,6 +103,10 @@ https://stackoverflow.com/questions/12131025/android-preventing-webview-reload-o
                 android:name="com.nibblelinx.BCAPP.Token"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+                android:name="com.nibblelinx.BCAPP.TxVerify"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 

@@ -28,6 +28,7 @@ public class MainBCAPP extends AppCompatActivity {
        // Button buttonMS4 = (Button) findViewById(R.id.buttonMS4);
         Button buttonMS6 = (Button) findViewById(R.id.buttonMS6);
         Button buttonMS7 = (Button) findViewById(R.id.buttonMS7);
+        Button buttonMS8 = (Button) findViewById(R.id.buttonMS8);
 
         //fa = this;
 
@@ -119,6 +120,27 @@ public class MainBCAPP extends AppCompatActivity {
                 else {
 
                     Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+
+                }
+
+
+
+            }
+        });
+
+        buttonMS8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.LastTXID.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "TXID inválido!!!", Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                    Intent it = new Intent(MainBCAPP.this, TxVerify.class);
                     startActivity(it);
 
                 }

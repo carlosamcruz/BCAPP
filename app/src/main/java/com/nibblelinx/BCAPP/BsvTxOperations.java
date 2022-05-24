@@ -37,10 +37,11 @@ public class BsvTxOperations {
 
     //Boolean isOnline;
 
-    Timer timer = new Timer();
+    //Timer timer = new Timer();
+    Timer timer;
 
 
-    //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 //  Faz a leitura do conteúdo em HEXADECINAL de uma TX pela API WhatsOnChain
 //  Conteudo: TXID
 //  A operação é feita em BACKGROUND, o resultado será colocado em TxHexData
@@ -53,8 +54,8 @@ public class BsvTxOperations {
     Boolean threadEndReadHexBsvTx = false;
     public void readHexBsvTx(String TXID){
 
-        timer.cancel();
-        timer.purge();
+        //timer.cancel();
+        //timer.purge();
         timer = new Timer();
         urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
         //timer.schedule(new TimeCheckURL(), 0, 5000);

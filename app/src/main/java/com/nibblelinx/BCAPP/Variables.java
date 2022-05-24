@@ -13,6 +13,7 @@ public class Variables {
     static int STREAMTT = 0;
 
     static Boolean threadM = false;
+    static String LastTxHexData = "";
 
 
     static int ntries = 0;

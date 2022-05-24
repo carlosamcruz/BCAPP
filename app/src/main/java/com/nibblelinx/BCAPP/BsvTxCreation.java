@@ -4,6 +4,13 @@ public class BsvTxCreation {
 
     public BsvTxOperations bsvTX = new BsvTxOperations();
 
+    public String NewTxHexData = "";
+
+///////////////////////////////////////////////////////////////////////////////
+// Verifica a quantidade de satoshis que uma determinada carteira
+// possui para gastar;
+///////////////////////////////////////////////////////////////////////////////
+
     public  String totalUnspent (String BSVADD)
     {
         /////////////////////////////////////////////////////////////////////
@@ -57,12 +64,20 @@ public class BsvTxCreation {
         //totalValueHex = Long.toHexString(totalValue);
         return Long.toString(totalValue);
     }
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
+// Cria uma transação e envia para a rede BSV tipo ForkID 41
+///////////////////////////////////////////////////////////////////////////////
 
+    String TXID = "";
 
-    public String buildAndBroadCast (String PVTKEY, int nOfOutputs, String [] PayWallets, String [] PayValues,
+    //public String buildAndBroadCast (String PVTKEY, int nOfOutputs, String [] PayWallets, String [] PayValues,
+    public String txBuilder (String PVTKEY, int nOfOutputs, String [] PayWallets, String [] PayValues,
                                      String [] OP_RETURNs, int numberOfOPRETURNS)
     {
+        NewTxHexData = "";
         //////////////////////////////////////////////////////////////////////////////////////////////////
         //Preparação das Chaves
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,7 +196,8 @@ public class BsvTxCreation {
         String[] DERsizeOut = new String[nInp];
         String[] inputScript = new String[nInp];
         String newTX = "";
-        String TXID = "";
+        //String TXID = "";
+        TXID = "";
         int[] DERsize = new int[nInp];
         String[] inputScriptSize = new String[nInp];
 
@@ -226,9 +242,13 @@ public class BsvTxCreation {
         inputString =  bsvTX.inputPosString(nInp, SECsizeOut, PUBKEYSEC, inputScript);
 
         newTX = inputString + OutputString;
-        /////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////
 
+        NewTxHexData = newTX;
+
+        return newTX;
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+/*
         /////////////////////////////////////////////////////////////////////
         //TXID da Transação
         /////////////////////////////////////////////////////////////////////
@@ -236,12 +256,15 @@ public class BsvTxCreation {
         TXID = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(TXID));
         TXID = SHA256G.LEformat(TXID);
 
+
         /////////////////////////////////////////////////////
         //ENVIO da Transação
         /////////////////////////////////////////////////////
 
         String txSent = null;
         bsvTX.TxHexDataSent = null;
+
+        //Adaptar a função para o caso de falta de sinal de internet
         bsvTX.broadcastHexBsvTx(newTX);
 
         //Loop necessário para esperar a consulta a rede realizado pelo metodo acima
@@ -257,7 +280,110 @@ public class BsvTxCreation {
         else
             return bsvTX.TxHexDataSent;
             //return newTX;
+
+ */
     }
 
+///////////////////////////////////////////////////////////////////////////////
+// Envia uma transação para a rede BSV via API WhatsOnChain
+///////////////////////////////////////////////////////////////////////////////
+    public String txBroadCast(String newTX)
+    {
+        TXID = "";
+        /////////////////////////////////////////////////////////////////////
+        //TXID da Transação
+        /////////////////////////////////////////////////////////////////////
+        TXID = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(newTX));
+        TXID = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(TXID));
+        TXID = SHA256G.LEformat(TXID);
+
+
+        /////////////////////////////////////////////////////
+        //ENVIO da Transação
+        /////////////////////////////////////////////////////
+
+        String txSent = null;
+        bsvTX.TxHexDataSent = null;
+
+        //Adaptar a função para o caso de falta de sinal de internet
+        bsvTX.broadcastHexBsvTx(newTX);
+
+        //Loop necessário para esperar a consulta a rede realizado pelo metodo acima
+        //while (bsvTX.TxHexDataSent == null)
+        while (!bsvTX.threadEndBroadcastHexBsvTx)
+            txSent = bsvTX.TxHexDataSent;
+
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+
+        if(bsvTX.TxHexDataSent.compareTo("OK")==0)
+            return TXID;
+        else
+            return bsvTX.TxHexDataSent;
+        //return newTX;
+    }
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+// Cria uma transação e envia para a rede BSV
+///////////////////////////////////////////////////////////////////////////////
+    public Boolean txVerify(String txToVerify)
+    {
+        String [] TXPartes41 = bsvTX.txParts(txToVerify);
+
+        String [] signDER41 = new String[bsvTX.nOfInputs];
+        String [] pubKeySEC41 = new String[bsvTX.nOfInputs];
+        for (int i =0 ; i < bsvTX.nOfInputs; i ++) {
+
+            signDER41[i] = bsvTX.signDER[i];
+            pubKeySEC41[i] = bsvTX.pubKeySEC[i];
+        }
+        int nInputs = bsvTX.nOfInputs;
+
+        String [] preImage41 = bsvTX.txPreImager41(txToVerify);
+        int nPI = bsvTX.nOfPreImages41;
+
+        String [] signVerify = new String[nInputs];
+
+        for (int i =0 ; i < nInputs; i ++) {
+
+            signVerify[i] = bsvTX.txSigVerify(preImage41[i], pubKeySEC41[i], signDER41[i]);
+            if(signVerify[i].compareTo("OK") != 0)
+                return false;
+        }
+        return true;
+    }
+
+    public String txHexRead (String TXID)
+    {
+        Boolean searchFail = true;
+
+        String TXToSeach = "";
+
+        //while (searchFail) {
+
+            bsvTX.TxHexData = null;
+            bsvTX.readHexBsvTx(TXID);
+
+            //Aguarda até que o dado seja lido da WhatsOnChain
+            //Aqui temos que respeitar o
+            //while (TxHexData == null)
+            while(!bsvTX.threadEndReadHexBsvTx)
+                TXToSeach = "";
+
+            TXToSeach = bsvTX.TxHexData;
+
+            if(TXToSeach.length() < 100 || TXToSeach == null)
+                searchFail = true;
+            else
+                searchFail = false;
+
+            bsvTX.timer.cancel();
+            bsvTX.timer.purge();
+        //}
+
+        return TXToSeach;
+    }
 }
 

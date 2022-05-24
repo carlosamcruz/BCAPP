@@ -137,6 +137,9 @@ public class TxidList extends AppCompatActivity {
 
                 it.putExtra("TXID", list.substring(list.indexOf(':') + 2));
 
+                Variables.LastTXID =  list.substring(list.indexOf(':') + 2);
+                Variables.LastTxHexData = "";
+
                 TimerRun = false;
 
                 startActivity(it);
