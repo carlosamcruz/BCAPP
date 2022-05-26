@@ -14,6 +14,7 @@ public class Variables {
 
     static Boolean threadM = false;
     static String LastTxHexData = "";
+    static Boolean CompPKey = false;
 
 
     static int ntries = 0;

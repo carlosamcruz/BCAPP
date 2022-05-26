@@ -103,12 +103,13 @@ public class Token extends AppCompatActivity {
         //Preparação das Chaves
         //////////////////////////////////////////////////////////////////////////////////////////////////
         Keygen pubKey = new Keygen();
-        Boolean CompPKey = false;
+        //Boolean CompPKey = false;
+        //Variables.CompPKey = false;
 
         String PUBKEY = pubKey.publicKeyHEX(pvtkey);
 
-        String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, CompPKey);
-        String BSVADD = pubKey.bsvWalletFull(PUBKEY, CompPKey);
+        String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, Variables.CompPKey);
+        String BSVADD = pubKey.bsvWalletFull(PUBKEY, Variables.CompPKey);
 
 
         /////////////////////////////////////////////////////////////////////
@@ -138,7 +139,7 @@ public class Token extends AppCompatActivity {
 
         BsvTxCreation txCreate = new BsvTxCreation();
 
-        String newTX = txCreate.txBuilder(pvtkey,2 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
+        String newTX = txCreate.txBuilder(pvtkey, Variables.CompPKey,2 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
         String result = "";
         Variables.LastTxHexData = newTX;
 

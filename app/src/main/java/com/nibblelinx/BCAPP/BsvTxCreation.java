@@ -74,7 +74,7 @@ public class BsvTxCreation {
     String TXID = "";
 
     //public String buildAndBroadCast (String PVTKEY, int nOfOutputs, String [] PayWallets, String [] PayValues,
-    public String txBuilder (String PVTKEY, int nOfOutputs, String [] PayWallets, String [] PayValues,
+    public String txBuilder (String PVTKEY, Boolean CompPKey, int nOfOutputs, String [] PayWallets, String [] PayValues,
                                      String [] OP_RETURNs, int numberOfOPRETURNS)
     {
         NewTxHexData = "";
@@ -87,7 +87,7 @@ public class BsvTxCreation {
         //PVT key
         //String PUBKEY = pubKey.publicKey(PVTKEY);
 
-        Boolean CompPKey = false;
+        //Boolean CompPKey = false;
 
         String PUBKEY = pubKey.publicKeyHEX(PVTKEY);
         String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, CompPKey);

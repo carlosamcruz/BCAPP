@@ -84,11 +84,12 @@ public class MainBCAPP extends AppCompatActivity {
                 else {
 
                     Keygen pubKey = new Keygen();
-                    Boolean CompPKey = false;
+                    //Boolean CompPKey = false;
+                    //Variables.CompPKey = false;
 
                     String PUBKEY = pubKey.publicKeyHEX(Variables.MainPaymail);//Variables.MainPaymail hex 64 elementos
-                    String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, CompPKey);
-                    String BSVADD = pubKey.bsvWalletFull(PUBKEY, CompPKey);
+                    String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, Variables.CompPKey);
+                    String BSVADD = pubKey.bsvWalletFull(PUBKEY, Variables.CompPKey);
 
 
                     Intent it = new Intent(MainBCAPP.this, TxidList.class);
@@ -185,7 +186,7 @@ public class MainBCAPP extends AppCompatActivity {
 
                         if(Variables.MainPaymail.length() == 64) {
 
-                            CompPKey = false;
+                            Variables.CompPKey = false;
 
                             setAddValue();
 
@@ -202,7 +203,7 @@ public class MainBCAPP extends AppCompatActivity {
 
                         if(Variables.MainPaymail.length() == 64) {
                             //Keygen pubKey = new Keygen();
-                            CompPKey = true;
+                            Variables.CompPKey = true;
                             setAddValue();
 
                         }
@@ -215,13 +216,14 @@ public class MainBCAPP extends AppCompatActivity {
             }
         });
     }
-    Boolean CompPKey = true;
+    //Boolean CompPKey = true;
+
     public void setAddValue()
     {
         Keygen pubKey = new Keygen();
         BsvTxCreation txCreate = new BsvTxCreation();
         String PUBKEY = pubKey.publicKeyHEX(Variables.MainPaymail);
-        String BSVADD = pubKey.bsvWalletFull(PUBKEY, CompPKey);
+        String BSVADD = pubKey.bsvWalletFull(PUBKEY, Variables.CompPKey);
         Variables.BSVWallet = BSVADD;
         //BsvTxCreation txCreate = new BsvTxCreation();
         txCreate = null;
@@ -231,7 +233,7 @@ public class MainBCAPP extends AppCompatActivity {
         //txCreate.totalUnspent(BSVADD);
         ((TextView) findViewById(R.id.TV_TEXT2)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
         ((TextView) findViewById(R.id.TV_TEXT3)).setText(Variables.BSVWallet);
-        ((TextView) findViewById(R.id.TV_TEXT4)).setText("Balance (Miritis): " + Long.valueOf(Variables.SatBalance)/1000 + " Miritis");
+        //((TextView) findViewById(R.id.TV_TEXT4)).setText("Balance (Miritis): " + Long.valueOf(Variables.SatBalance)/1000 + " Miritis");
 
 
     }
@@ -272,7 +274,7 @@ public class MainBCAPP extends AppCompatActivity {
 
                ((TextView) findViewById(R.id.TV_TEXT2)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
                ((TextView) findViewById(R.id.TV_TEXT3)).setText(Variables.BSVWallet);
-               ((TextView) findViewById(R.id.TV_TEXT4)).setText("Balance (Miritis): " + Long.valueOf(Variables.SatBalance) / 1000 + " Miritis");
+               //((TextView) findViewById(R.id.TV_TEXT4)).setText("Balance (Miritis): " + Long.valueOf(Variables.SatBalance) / 1000 + " Miritis");
            }
         }
 
