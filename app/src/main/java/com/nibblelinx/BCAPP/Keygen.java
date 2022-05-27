@@ -317,6 +317,21 @@ public class Keygen {
         return SecretKey;
     }
 
+    // Recebe uma string com conteúdo hexadecimal e retorna um um array com o respectivo valor de cada char em hexadecimal.
+    private char[] textToHexaValue(String text)
+    {
+        String hexadecimal = "0123456789abcdef";
+        char[] key = text.toCharArray();
+
+        for (int i = 0; i < text.length(); i++) {
+            // Verifica se o char está na String 'hexadecimal', se tiver converte para o seu valor em hexa
+            if (hexadecimal.contains(String.valueOf(key[i])))
+                key[i] = (char)hexadecimal.indexOf(key[i]);
+        }
+
+        return key;
+    }
+
     //Gera uma chave privada a partir de uma string Hexadecimal resultante de uma HASH SHA256
     public BigInteger secKeyHashToBigInt (String text)
     {
@@ -324,64 +339,8 @@ public class Keygen {
         int keySize;
         BigInteger SecretKey = new BigInteger("0");
         BigInteger cont = new BigInteger("1");
-        char[] secKey;
+        char[] secKey = textToHexaValue(text);
 
-        secKey = text.toCharArray();
-
-        for (int i = 0; i < text.length(); i++)
-        {
-            switch (secKey[i])
-            {
-                case '0':
-                    secKey[i] = 0;
-                    break;
-                case '1':
-                    secKey[i] = 1;
-                    break;
-                case '2':
-                    secKey[i] = 2;
-                    break;
-                case '3':
-                    secKey[i] = 3;
-                    break;
-                case '4':
-                    secKey[i] = 4;
-                    break;
-                case '5':
-                    secKey[i] = 5;
-                    break;
-                case '6':
-                    secKey[i] = 6;
-                    break;
-                case '7':
-                    secKey[i] = 7;
-                    break;
-                case '8':
-                    secKey[i] = 8;
-                    break;
-                case '9':
-                    secKey[i] = 9;
-                    break;
-                case 'a':
-                    secKey[i] = 10;
-                    break;
-                case 'b':
-                    secKey[i] = 11;
-                    break;
-                case 'c':
-                    secKey[i] = 12;
-                    break;
-                case 'd':
-                    secKey[i] = 13;
-                    break;
-                case 'e':
-                    secKey[i] = 14;
-                    break;
-                case 'f':
-                    secKey[i] = 15;
-                    break;
-            }
-        }
         //for(int i = (Hx.length()/2)-1; i>=0; i--)
         for(int i = 0; i < (text.length()/2); i++)
         {
@@ -410,64 +369,8 @@ public class Keygen {
         int keySize;
         BigInteger SecretKey = new BigInteger("0");
         BigInteger cont = new BigInteger("1");
-        char[] secKey;
+        char[] secKey = textToHexaValue(text);
 
-        secKey = text.toCharArray();
-
-        for (int i = 0; i < text.length(); i++)
-        {
-            switch (secKey[i])
-            {
-                case '0':
-                    secKey[i] = 0;
-                    break;
-                case '1':
-                    secKey[i] = 1;
-                    break;
-                case '2':
-                    secKey[i] = 2;
-                    break;
-                case '3':
-                    secKey[i] = 3;
-                    break;
-                case '4':
-                    secKey[i] = 4;
-                    break;
-                case '5':
-                    secKey[i] = 5;
-                    break;
-                case '6':
-                    secKey[i] = 6;
-                    break;
-                case '7':
-                    secKey[i] = 7;
-                    break;
-                case '8':
-                    secKey[i] = 8;
-                    break;
-                case '9':
-                    secKey[i] = 9;
-                    break;
-                case 'a':
-                    secKey[i] = 10;
-                    break;
-                case 'b':
-                    secKey[i] = 11;
-                    break;
-                case 'c':
-                    secKey[i] = 12;
-                    break;
-                case 'd':
-                    secKey[i] = 13;
-                    break;
-                case 'e':
-                    secKey[i] = 14;
-                    break;
-                case 'f':
-                    secKey[i] = 15;
-                    break;
-            }
-        }
         //for(int i = (Hx.length()/2)-1; i>=0; i--)
         for(int i = 0; i < (text.length()/2); i++)
         {
@@ -488,7 +391,6 @@ public class Keygen {
         return SecretKey;
     }
 
-
     //Gera um BigInteger em Formato WIF
     public BigInteger HashToBigIntWIF (String text)
     {
@@ -496,64 +398,8 @@ public class Keygen {
         int keySize;
         BigInteger SecretKey = new BigInteger("0");
         BigInteger cont = new BigInteger("1");
-        char[] secKey;
+        char[] secKey = textToHexaValue(text); 
 
-        secKey = text.toCharArray();
-
-        for (int i = 0; i < text.length(); i++)
-        {
-            switch (secKey[i])
-            {
-                case '0':
-                    secKey[i] = 0;
-                    break;
-                case '1':
-                    secKey[i] = 1;
-                    break;
-                case '2':
-                    secKey[i] = 2;
-                    break;
-                case '3':
-                    secKey[i] = 3;
-                    break;
-                case '4':
-                    secKey[i] = 4;
-                    break;
-                case '5':
-                    secKey[i] = 5;
-                    break;
-                case '6':
-                    secKey[i] = 6;
-                    break;
-                case '7':
-                    secKey[i] = 7;
-                    break;
-                case '8':
-                    secKey[i] = 8;
-                    break;
-                case '9':
-                    secKey[i] = 9;
-                    break;
-                case 'a':
-                    secKey[i] = 10;
-                    break;
-                case 'b':
-                    secKey[i] = 11;
-                    break;
-                case 'c':
-                    secKey[i] = 12;
-                    break;
-                case 'd':
-                    secKey[i] = 13;
-                    break;
-                case 'e':
-                    secKey[i] = 14;
-                    break;
-                case 'f':
-                    secKey[i] = 15;
-                    break;
-            }
-        }
         //for(int i = (Hx.length()/2)-1; i>=0; i--)
         for(int i = 0; i < (text.length()/2); i++)
         {
