@@ -474,13 +474,15 @@ public class BsvTxOperations {
                 // se o script ultrapassar os bytes indicados para os dados
                 ////////////////////////////////////////////
 
-                if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xff) {
+                //if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xff) {
+                if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xfc) {
                     //out1size = out1size;
                     byteSizeout1size = "";
 
                     out1size = byteSizeout1size + SHA256G.LEformat(out1size);
                 }
-                else if ((Out1Script.length() / 2) >= 0x0100 && (Out1Script.length() / 2) <= 0xffff) {
+                //else if ((Out1Script.length() / 2) >= 0x0100 && (Out1Script.length() / 2) <= 0xffff) {
+                else if ((Out1Script.length() / 2) >= 0x00fd && (Out1Script.length() / 2) <= 0xffff) {
 
                     byteSizeout1size = "fd";
 
