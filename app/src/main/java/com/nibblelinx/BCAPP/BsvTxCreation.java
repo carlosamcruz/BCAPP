@@ -306,7 +306,22 @@ public class BsvTxCreation {
         bsvTX.TxHexDataSent = null;
 
         //Adaptar a função para o caso de falta de sinal de internet
-        bsvTX.broadcastHexBsvTx(newTX, 1);
+
+
+        bsvTX.broadcastHexBsvTx(newTX, Variables.PoolID);
+
+        /////////////////////////////////////////
+        //Change the pool for each TX sent
+        // WhatsOnChain = 0
+        // Gorilla Pool = 1
+        // More pool can be added in the future
+        /////////////////////////////////////////
+        if(Variables.PoolID == 0)
+            Variables.PoolID = 1;
+        else
+            Variables.PoolID = 0;
+        /////////////////////////////////////////
+        /////////////////////////////////////////
 
         //Loop necessário para esperar a consulta a rede realizado pelo metodo acima
         //while (bsvTX.TxHexDataSent == null)
@@ -321,6 +336,7 @@ public class BsvTxCreation {
 
         if(bsvTX.TxHexDataSent.compareTo("OK")==0)
             return TXID;
+            //return TXID + " " + Variables.PoolID;
         else
             return bsvTX.TxHexDataSent;
 
