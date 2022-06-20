@@ -602,10 +602,12 @@ public class BsvTxOperations {
 
     String TxHexDataSent;
     private String urlAdress = "https://api.whatsonchain.com/v1/bsv/main/tx/raw";
+    private String urlAdress02 = "https://mapi.gorillapool.io/mapi/tx";
+
     Boolean threadEndBroadcastHexBsvTx = false;
 
     //public void sendPost(final String TXIDin) {
-    public void broadcastHexBsvTx(final String TxHexBsv) {
+    public void broadcastHexBsvTx(final String TxHexBsv, int poolID) {
 
         TxHexDataSent = null;
         threadEndBroadcastHexBsvTx = false;
@@ -614,12 +616,45 @@ public class BsvTxOperations {
             @Override
             public void run() {
                 try {
-                    URL url = new URL(urlAdress);
+
+                    URL url;
+
+                    //poolID == 0 WhatsOnChain
+                    //poolID == 1 Gorilla Pool
+
+                    /*switch (poolID){
+                        case 0: url = new URL(urlAdress);
+                        break;
+                        default: url = new URL(urlAdress02);
+                    } */
+
+
+                    if(poolID == 0)
+                        url = new URL(urlAdress);
+                    else
+                        url = new URL(urlAdress02);
+
+
+
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
                     //conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Content-Type", "text/plain;charset=UTF-8");
-                    conn.setRequestProperty("Accept","application/json");
+
+                    //Whats On Chain
+
+                    //conn.setRequestProperty("Content-Type", "text/plain;charset=UTF-8");
+                //    conn.setRequestProperty("Content-Type", "text/plain");
+                //    conn.setRequestProperty("Accept","application/json");
+
+                    //Content-Type: application/octet-stream
+
+
+
+                    //Gorilla Pool
+                    conn.setRequestProperty("Content-Type", "application/json");
+                    conn.setRequestProperty("accept","text/plain");
+
+
                     conn.setDoOutput(true);
                     conn.setDoInput(true);
 
@@ -637,11 +672,68 @@ public class BsvTxOperations {
                     DataOutputStream os = new DataOutputStream(conn.getOutputStream());
                     //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
                     //os.writeBytes(jsonParam.toString());
+
+                    /*
                     os.writeBytes("{\"txhex\": \"" +
                             //"hex..." +
                             TxHexBsv +
                             //HEXTX +
                             "\" }");
+
+                    */
+
+
+                    String TXJson;
+
+                    //poolID == 0 WhatsOnChain
+                    //poolID == 1 Gorilla Pool
+
+                    /*
+                    switch (poolID){
+                        case 0: TXJson = "{\"txhex\": \"" +
+                                //"hex..." +
+                                TxHexBsv +
+                                //HEXTX +
+                                "\" }";
+                            break;
+                        default: TXJson = "{\"rawTx\": \"" +
+                                TxHexBsv +
+                                "\" }";
+                    }
+                    */
+                    if(poolID == 0) {
+                        TXJson = "{\"txhex\": \"" +
+                                //"hex..." +
+                                TxHexBsv +
+                                //HEXTX +
+                                "\" }";
+                    }
+                    else{
+                        TXJson = "{\"rawTx\": \"" +
+                                TxHexBsv +
+                                "\" }";
+                    }
+
+                    /*
+
+                    String TXJson01 = "{\"txhex\": \"" +
+                            //"hex..." +
+                            TxHexBsv +
+                            //HEXTX +
+                            "\" }";
+
+
+                    String TXJson02 = "{\"rawTx\": \"" +
+                            TxHexBsv +
+                            "\" }";
+
+                    */
+
+
+                    //os.writeBytes(TXJson01);
+                    //os.writeBytes(TXJson02);
+                    os.writeBytes(TXJson);
+
 
                     ////////////////////////////////////////////////////////////
                     //Resultado Verificqdo em uma variável Global

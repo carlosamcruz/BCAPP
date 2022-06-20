@@ -306,7 +306,7 @@ public class BsvTxCreation {
         bsvTX.TxHexDataSent = null;
 
         //Adaptar a função para o caso de falta de sinal de internet
-        bsvTX.broadcastHexBsvTx(newTX);
+        bsvTX.broadcastHexBsvTx(newTX, 1);
 
         //Loop necessário para esperar a consulta a rede realizado pelo metodo acima
         //while (bsvTX.TxHexDataSent == null)
@@ -316,10 +316,16 @@ public class BsvTxCreation {
         /////////////////////////////////////////////////////
         /////////////////////////////////////////////////////
 
+        //return bsvTX.TxHexDataSent;
+
+
         if(bsvTX.TxHexDataSent.compareTo("OK")==0)
             return TXID;
         else
             return bsvTX.TxHexDataSent;
+
+
+
         //return newTX;
     }
 ///////////////////////////////////////////////////////////////////////////////
