@@ -528,12 +528,21 @@ public class BsvTxOperations {
                     totalSpent = totalSpent + ivalue;
                 else
                 {
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //Neste ponto eh calculado o valor de retorno para a carteira original,
+                    // menos a taxa oferecida aos mineradores
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                     ivalue = ivalue - totalSpent -
                             ((
                                     inputPreString.length() +
                                             totalOutString.length() +
                                             ("0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000").length()
-                            )/2) / 2; //0.5 Satoshis por byte
+                            )/2)
+                                    // / 2; //0.5 Satoshis por byte
+                                    / 20; //0.05 Satoshis por byte
+                                    // / 200; //0.005 Satoshis por byte - funciona, mas ainda demora demais.
+                                    // 0.005 sat/b demora cerca de 6 hora para ser minerado em 30/06/2022
                 }
 
                 Variables.SatBalance = Long.toString(ivalue);
@@ -556,6 +565,8 @@ public class BsvTxOperations {
 
 
         }
+
+        //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
         String lockTime = "00000000";
 
 
