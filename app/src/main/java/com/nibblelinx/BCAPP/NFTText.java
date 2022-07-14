@@ -206,19 +206,24 @@ public class NFTText extends AppCompatActivity {
 
         BsvTxCreation txCreate = new BsvTxCreation();
 
+        //Problema Aqui;
         String newTX = txCreate.txBuilder(pvtkey, Variables.CompPKey,1 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
         String result = "";
-        Variables.LastTxHexData = newTX;
+        //if(newTX.compareTo("Error 1")==0 || newTX.compareTo("Error 2")==0)
+        if(newTX.substring(0,5).compareTo("Error")==0)
+            result = newTX;
+        else {
 
-        BsvTxOperations bsvTxOp = new BsvTxOperations();
-        bsvTxOp.txID(newTX);
-        Variables.LastTXID = bsvTxOp.TXID;
+            Variables.LastTxHexData = newTX;
 
-        result = txCreate.txBroadCast(newTX);
-
-
+            BsvTxOperations bsvTxOp = new BsvTxOperations();
+            bsvTxOp.txID(newTX);
+            Variables.LastTXID = bsvTxOp.TXID;
 
 
+            result = txCreate.txBroadCast(newTX);
+            //result = "Debug";
+        }
 
         //result = txCreate.totalUnspent(BSVADD);
 

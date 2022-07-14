@@ -2,6 +2,7 @@ package com.nibblelinx.BCAPP;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentCallbacks2;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainBCAPP extends AppCompatActivity {
 
     //public static Activity fa;
+
 
     int inicio = 0;
 

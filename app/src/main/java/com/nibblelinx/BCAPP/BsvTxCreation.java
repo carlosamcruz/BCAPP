@@ -78,6 +78,11 @@ public class BsvTxCreation {
                                      String [] OP_RETURNs, int numberOfOPRETURNS)
     {
         NewTxHexData = "";
+
+        //DEBUG
+        //if(PVTKEY != null)
+        //    return "Error 1";
+
         //////////////////////////////////////////////////////////////////////////////////////////////////
         //Preparação das Chaves
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,18 +108,61 @@ public class BsvTxCreation {
         /////////////////////////////////////////////////////////////////////
         //Unspent TX treatment do Endereço da Chave privada Indicada pelo Usruário
         //////1///////////////////////////////////////////////////////////////
+
+        String unspentTX = "";
+
         bsvTX.unsPentInputs = null;
         bsvTX.readBsvAddsUnspent(BSVADD);
-        String unspentTX = "";
+
+        //Tratamento da quebra
+        String waitHashing = "";
+
+        waitHashing = SHA256G.SHA256STR("ABC");
+
+        /*
+        if(Variables.LastTXID != null)
+            waitHashing = SHA256G.SHA256STR(Variables.LastTXID);
+        else
+            waitHashing = SHA256G.SHA256STR("ABC");
+        */
+
+        long count = 0;
+
+        int flagFail = 0;
 
         //while(bsvTX.unsPentInputs == null)
         while(!bsvTX.threadEndReadBsvAddsUnspent)
         {
             unspentTX = "";
+            if(waitHashing != null)
+                waitHashing = SHA256G.SHA256STR(waitHashing);
+            else
+                waitHashing = SHA256G.SHA256STR("ABC");
+
+            if(waitHashing != null)
+            {
+                count ++;
+            }
+
+            //if(count == 20000) {  // debug
+            //if(count == 13000) { //limit entre erro e debug
+            if(count == 40000) {
+
+                flagFail = 1;
+                break;
+            }
         }
         unspentTX = bsvTX.unsPentInputs;
         bsvTX.timer.cancel();
         bsvTX.timer.purge();
+
+        if(flagFail == 1) {
+            if(bsvTX.unsPentInputs == null)
+                 return  "Error: Time out reading Unspent TX inputs";
+        }
+
+//////////Debug
+        //unspentTX = "[{\"height\":748082,\"tx_pos\":1,\"tx_hash\":\"285ba37b6d402bac560929eaaa935b8e88aafa04206db5de1ed2731c24eaf66d\",\"value\":13698},{\"height\":748103,\"tx_pos\":0,\"tx_hash\":\"59a8155eb097e04715bd2f6920766b7a32fd0e2aa6d9b8bdf38f581c4cfd9fe4\",\"value\":1000},{\"height\":748132,\"tx_pos\":0,\"tx_hash\":\"6c4d93bd473fefc84bce4132e6294723913c564fd0a1c7d85ab9cce8a42bffc1\",\"value\":1000}]";
 
         /////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////
@@ -172,10 +220,23 @@ public class BsvTxCreation {
         /////////////////////////////////////////////////////////////////////
 
 
+        //DEBUG
+        //if(PVTKEY != null)
+        //    return "Error 1";
+
+
+
         /////////////////////////////////////////////////////////////////////
         //Confecção das preImagenS dos inputs
         /////////////////////////////////////////////////////////////////////
         String[] preimage = bsvTX.txPreImager41(preTX);
+
+        //DEBUG
+        //if(PVTKEY != null)
+        //    return "Error 1";
+        //if(preimage[0].compareTo("Error 1") == 0  || preimage[0].compareTo("Error 2") == 0)
+        if(preimage[0].substring(0,5).compareTo("Error") == 0)
+            return preimage[0];
 
         /////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////
@@ -316,17 +377,66 @@ public class BsvTxCreation {
         // Gorilla Pool = 1
         // More pool can be added in the future
         /////////////////////////////////////////
+
+        //Variables.PoolID = 0;     //Testado para Taxa 0.05 sat/byte - ok
+        //Whats On Chain aceitou uma TX com 1 sat de Taxa em 04/07/2022;
+        //Variables.PoolID = 1;     //Testado para Taxa 0.05 sat/byte - ok
+        //Whats On Chain aceitou uma TX com 1 sat de Taxa em 04/07/2022;
+
         if(Variables.PoolID == 0)
             Variables.PoolID = 1;
         else
             Variables.PoolID = 0;
+
+        //No Previous TX found - na Gorilla Pool, quando a primeira TX de uma dupla enviada para WOC
+        // TX consecutivas, antes da execução - devem ser enviadas para a mesma POOL
+        // Isso parece ser um problema intermitente de comunicação entre POOLs, pois não se repete com frequência
+        // Também o envio entre pools afeta a leitura das TXs ainda não Mineradas para o saldo da carteira;
+
+
+
         /////////////////////////////////////////
         /////////////////////////////////////////
 
+        String waitHashing = "";
+        waitHashing = SHA256G.SHA256STR("ABC");
+
+        long count = 0;
+        int flagFail = 0;
+
+
         //Loop necessário para esperar a consulta a rede realizado pelo metodo acima
         //while (bsvTX.TxHexDataSent == null)
-        while (!bsvTX.threadEndBroadcastHexBsvTx)
+        while (!bsvTX.threadEndBroadcastHexBsvTx) {
             txSent = bsvTX.TxHexDataSent;
+
+            if(waitHashing != null)
+                waitHashing = SHA256G.SHA256STR(waitHashing);
+            else
+                waitHashing = SHA256G.SHA256STR("ABC");
+
+            if(waitHashing != null)
+            {
+                count ++;
+            }
+
+            if(count == 60000) {
+
+                flagFail = 1;
+                break;
+            }
+        }
+        //Esta tread não é chamada com timer
+        //timer.cancel();
+        //timer.purge();
+
+        //monitorar esta variável entre 2 transações;
+        //escrever o estado no inicio e no final da execução
+
+        if(flagFail == 1) {
+            if(bsvTX.TxHexDataSent == null)
+                return "Error: Time out Broacasting";
+        }
 
         /////////////////////////////////////////////////////
         /////////////////////////////////////////////////////
@@ -364,6 +474,10 @@ public class BsvTxCreation {
         int nInputs = bsvTX.nOfInputs;
 
         String [] preImage41 = bsvTX.txPreImager41(txToVerify);
+
+        if(preImage41[0].compareTo("Error 1") == 0)
+            return false;
+
         int nPI = bsvTX.nOfPreImages41;
 
         String [] signVerify = new String[nInputs];

@@ -16,6 +16,7 @@ public class Variables {
     static String LastTxHexData = "";
     static Boolean CompPKey = false;
     static int PoolID = 0;
+    static int ErroPreImagem = 0; //0 sem erro;
 
 
     static int ntries = 0;

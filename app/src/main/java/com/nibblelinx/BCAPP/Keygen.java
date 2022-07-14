@@ -1511,6 +1511,106 @@ public class Keygen {
         //return  String.valueOf(strChar);
     }
 
+    //Esta versão apresenta somente o endereço comprimido
+    public String getAddressFromRMDHash (String ripemdHash) {
+        byte[] pRIPEMD160 = new byte[21];
+        byte[] RIPEMDoutj;
+
+        RIPEMDoutj = SHA256G.HashStrToByte2(ripemdHash);
+
+        // Acrescenta o byte de versao do BTC, neste caso, 0x00.
+        pRIPEMD160[0] = 0;
+
+        System.arraycopy(RIPEMDoutj, 0, pRIPEMD160, 1, 20);
+
+        String SHA256out = SHA256G.SHA256bytes(pRIPEMD160);
+
+        if (SHA256out == null) {
+            System.out.println("Hash SHA256 Inválido");
+            return null;
+        }
+
+        SHA256out = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(SHA256out));
+
+        ////////////////////////////////////////////////////////////////////
+        //PREPARA O BIGINT PARA CONVERSAO A BASE 58
+        ////////////////////////////////////////////////////////////////////
+
+        //Transformar o Payload em BIGNUMBER
+        BigInteger VPC, VPCcont, VPC2, VPCcont2;
+        VPC = BigInteger.valueOf(0);
+        VPCcont = BigInteger.valueOf(1);
+        VPC2 = BigInteger.valueOf(0);
+        VPCcont2 = BigInteger.valueOf(1);
+
+        byte[] SHA256outj;
+
+        SHA256outj = SHA256G.HashStrToByte2(SHA256out);
+
+        // Primeiros 4 bits do SHA256 (SHAS256 (PREFIX + RIPEMD(SHA256(PUB KEY))))
+        // Adiciona o CHEKSUM ao BIGINT
+        for (int i = 3; i >= 0; i--) {
+            VPC = VPC.add(VPCcont.multiply(BigInteger.valueOf(SHA256outj[i] & 0xFF)));
+            VPCcont = VPCcont.multiply(BigInteger.valueOf(256));
+            VPCcont2 = VPCcont2.multiply(BigInteger.valueOf(256));
+        }
+
+        // Adiciona o PREFIXO + RIPEMD160 ao BIGINT
+        for (int i = 20; i >= 0; i--) {
+            VPC = VPC.add(VPCcont.multiply(BigInteger.valueOf(pRIPEMD160[i] & 0xFF)));
+            VPCcont = VPCcont.multiply(BigInteger.valueOf(256));
+            VPCcont2 = VPCcont2.multiply(BigInteger.valueOf(256));
+        }
+
+        ////////////////////////////////////////////////////////////////////
+        //CONVERTE O BIGINT PARA BASE 58
+        ////////////////////////////////////////////////////////////////////
+
+        String base58s = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+        char[] base58 = base58s.toCharArray();
+        char[] BTCaddr = new char[100];
+
+        int li = 0;
+
+        while (VPC.compareTo(BigInteger.valueOf(0)) > 0) {
+            BTCaddr [li] = base58[(VPC.mod(BigInteger.valueOf(58))).intValue()];
+            VPC = VPC.divide(BigInteger.valueOf(58));
+            li++;
+        }
+
+        ////////////////////////////////////////////////////////////////////
+        //ADICIONA OS LEADING ZEROES DO PREFIX + RIPEMED160
+        ////////////////////////////////////////////////////////////////////
+
+        int lzeros = 0;
+
+        while (pRIPEMD160[lzeros] == 0) {
+            BTCaddr [li] = base58[0];
+            lzeros++;
+            li++;
+        }
+
+        ////////////////////////////////////////////////////////////////////
+        //INVERTE A ORDEM DA MATRIZ DE ENDERECO E ADICIONA O FINALIZADOR
+        ////////////////////////////////////////////////////////////////////
+
+        char[] BTCaddrCOMP = new char[li];
+
+        // ENDERECO COMPRIMIDO
+        int iout = 0;
+        li--;
+
+        while (li >= 0) {
+            BTCaddrCOMP[iout] = BTCaddr [li];
+            iout++;
+            li--;
+        }
+
+        // FINALIZADOR PARA FUTURA COMPARACAO
+
+        return String.valueOf(BTCaddrCOMP);
+    }
+
     public String bsvWalletRMD160 (String pubkeyCOD, Boolean Compressed)
     {
         BigInteger[] pubKey = pubKeyRev(pubkeyCOD);

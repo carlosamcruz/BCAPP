@@ -141,13 +141,18 @@ public class Token extends AppCompatActivity {
 
         String newTX = txCreate.txBuilder(pvtkey, Variables.CompPKey,2 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
         String result = "";
-        Variables.LastTxHexData = newTX;
+        if(newTX.substring(0,5).compareTo("Error")==0)
+            result = newTX;
+        else {
 
-        BsvTxOperations bsvTxOp = new BsvTxOperations();
-        bsvTxOp.txID(newTX);
-        Variables.LastTXID = bsvTxOp.TXID;
+            Variables.LastTxHexData = newTX;
 
-        result = txCreate.txBroadCast(newTX);
+            BsvTxOperations bsvTxOp = new BsvTxOperations();
+            bsvTxOp.txID(newTX);
+            Variables.LastTXID = bsvTxOp.TXID;
+
+            result = txCreate.txBroadCast(newTX);
+        }
 
         //result = txCreate.totalUnspent(BSVADD);
 

@@ -60,7 +60,11 @@ public class BsvTxOperations {
         urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
         //timer.schedule(new TimeCheckURL(), 0, 5000);
         threadEndReadHexBsvTx = false;
+
+
         timer.schedule(new TimeCheckURL(), dalyWhatsOnChain, 5000);
+
+
     }
 
     //private String result = "";
@@ -88,9 +92,9 @@ public class BsvTxOperations {
                     //  timer.purge();
                     //result = new JsonTaskTXID().execute(urlBaseTXID2);;
                     //Looper.loop();
+
                 }
             }).start();
-
 
         }
     }
@@ -533,6 +537,20 @@ public class BsvTxOperations {
                     // menos a taxa oferecida aos mineradores
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    //ivalue = ivalue - totalSpent - 1;
+                    //A taxa Minima para ser testada na Gorilla Pool, a WhatsOnChain também aceitou em 04/07/2022;
+                    // Transações enviadas entre 19:50 e 20:00 de 04/07/2022
+                    //2d046b7bc16cb5863482d293b6a5fd9738945bace98f93abfcb46ca40ab364ab
+                    //b564a1212d0d5b0a4c1333de640e8dec387a05b1ed5d1580efbd0d4cd4338d05
+                    //Gorilla Pool Minerou 2 Blocos as 20:30 3 20:35 de 04/07/2022 mas não levou as TXs
+                    //As transações foram removidas da MemPool depois de cerca de 30h
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    // Esta taxa pode ser interessantes para comunicar dados que não queremos que permaneçam na rede
+                    // Usar a MemPool como canal de comunicação
+                    /////////////////////////////////////////////////////////////////////////////////////
+
+
                     ivalue = ivalue - totalSpent -
                             ((
                                     inputPreString.length() +
@@ -541,8 +559,25 @@ public class BsvTxOperations {
                             )/2)
                                     // / 2; //0.5 Satoshis por byte
                                     / 20; //0.05 Satoshis por byte
+
+                                    // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
+                                    // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
+
+                                    // / 30; //0.033 Satoshis por byte
+                                    // 2 TX enviadas por volta de 19:35 de 03/07/2022
+                                    // Gorilla Pool has mined the 2 TXx on 04/07/2022
+                                    // https://whatsonchain.com/tx/03840ceecf29f079879b4b49ea96e879d9ff5ae69b5315944da95363ab746136
+                                    // https://whatsonchain.com/tx/b0dc1711dda5994eb27eb3cff9de75fc9026d16ebad9077ba4b96386437f9bc0
+
+                                    // / 40; //0.025 Satoshis por byte
+                                    // TAAL não permite entrada de TX com taxa < 0.032 sat/byte
+                                    // TX recusada pela TAAL em 03/07/2022
+                                    //There was an issue with the broadcast:unexpected response code 500: 66: mempool min fee not met
+
+
                                     // / 200; //0.005 Satoshis por byte - funciona, mas ainda demora demais.
                                     // 0.005 sat/b demora cerca de 6 hora para ser minerado em 30/06/2022
+                                    // Somente Gorilla Pool aceita TXs com estas taxas por enquanto (03/07/2022);
                 }
 
                 Variables.SatBalance = Long.toString(ivalue);
@@ -880,6 +915,7 @@ public class BsvTxOperations {
 
 
             //https://wiki.bitcoinsv.io/index.php/Opcodes_used_in_Bitcoin_Script
+            //"fc" não entra aqui, pois não é necessário para OP_RETURN < 256 bytes
             if(     txHexParts[txPartIndex-1].compareTo("fd") == 0 ||
                     txHexParts[txPartIndex-1].compareTo("fe") == 0 ||
                     txHexParts[txPartIndex-1].compareTo("fe") == 0
@@ -961,7 +997,7 @@ public class BsvTxOperations {
         nOfOutputs = Integer.decode("0x"+ txHexParts[txPartIndex-1]);
 
         ////////////////////////////////////////////////////////////
-        //Extração de Inputs
+        //Extração de Outputs
         ////////////////////////////////////////////////////////////
 
         for (int i=0, j=0; i < nOfOutputs; i++)
@@ -984,12 +1020,18 @@ public class BsvTxOperations {
             j++;
 
             //https://wiki.bitcoinsv.io/index.php/Opcodes_used_in_Bitcoin_Script
+
+            //"fc" não entra aqui, pois não é necessário para OP_RETURN < 256 bytes
             if(     txHexParts[txPartIndex-1].compareTo("fd") == 0 ||
                     txHexParts[txPartIndex-1].compareTo("fe") == 0 ||
                     txHexParts[txPartIndex-1].compareTo("fe") == 0
             )
             {
                 //Tamanho do SCRIPT
+
+                /////////////////////////////////////////////////////////////
+                // Precisa ser corrigido para OP_RETURNS de "fd" e "fe"
+                //////////////////////////////////////////////////////////////
                 txHexParts[txPartIndex] = txHexData.substring(0, 4);
                 txHexData = txHexData.substring(4);
                 txPartIndex = txPartIndex + 1;
@@ -1061,11 +1103,20 @@ public class BsvTxOperations {
     //String[] OutDEP = new String[2];
 
     public String [] txPreImager41 (String txHexDataIn)
+    //public String [] txPreImager41x (String txHexDataIn)
     {
         //Vamos precisar das partes da TX atual
         String [] txPartsCurrent = txParts(txHexDataIn);
 
         int totalElementsCurrent = this.totalElements;
+
+
+        //DEBUG
+        //if(txHexDataIn != null) {
+        //    String [] TxPreimageOutFail = new String[1];
+        //    TxPreimageOutFail[0] = "Error 1";
+        //    return TxPreimageOutFail;
+        //}
 
         //Vamos precisar dos outputs da TX atual
         //O elemento muda quando uma nova busca é realizada.
@@ -1124,6 +1175,13 @@ public class BsvTxOperations {
 
         String prvOutHASH = "";
 
+
+        //DEBUG
+        //if(txHexDataIn != null) {
+        //    String [] TxPreimageOutFail = new String[1];
+        //    TxPreimageOutFail[0] = "Error 1";
+        //    return TxPreimageOutFail;
+        //}
 
         for(int i=0; i<nOfInputsCurrent; i++)
             //prvOutHASH = prvOutHASH + this.prvOutHASH[i] + this.pvOutIndex[i];
@@ -1198,6 +1256,14 @@ public class BsvTxOperations {
         // or send us an email at support@taal.com
         dalyWhatsOnChain = 350;
 
+
+        //DEBUG
+        //if(txHexDataIn != null) {
+        //    String [] TxPreimageOutFail = new String[1];
+        //    TxPreimageOutFail[0] = "Error 1";
+        //    return TxPreimageOutFail;
+        //}
+
         for(int i = 0; i < nOfInputsCurrent; i++) {
 
             //txPartsCurrent
@@ -1211,27 +1277,104 @@ public class BsvTxOperations {
 
             String TXToSeach = "";
 
-            while (searchFail) {
+            //Revisar e tratar este While
+
+            //while (searchFail) {
+            //{
+
+            //DEBUG
+            //if(txHexDataIn != null) {
+            //    String [] TxPreimageOutFail = new String[1];
+            //    TxPreimageOutFail[0] = "Error 1";
+            //    return TxPreimageOutFail;
+            //}
 
                 TxHexData = null;
+                threadEndReadHexBsvTx = true;
                 readHexBsvTx(TxidTosearch);
 
                 //Aguarda até que o dado seja lido da WhatsOnChain
                 //Aqui temos que respeitar o
                 //while (TxHexData == null)
-                while(!threadEndReadHexBsvTx)
+                //int inparPar = 0;
+
+
+                String waitHashing = "";
+            waitHashing = SHA256G.SHA256STR("ABC");
+            /*
+                if(Variables.LastTXID != null)
+                    waitHashing = SHA256G.SHA256STR(Variables.LastTXID);
+                else
+                    waitHashing = SHA256G.SHA256STR("ABC");
+                */
+
+                long count = 0;
+
+                int flagFail = 0;
+
+                while(!threadEndReadHexBsvTx) {
                     TXToSeach = "";
 
-                TXToSeach = TxHexData;
+                    if(waitHashing != null)
+                        waitHashing = SHA256G.SHA256STR(waitHashing);
+                    else
+                        waitHashing = SHA256G.SHA256STR("ABC");
 
-                if(TXToSeach.length() < 100 || TXToSeach == null)
-                    searchFail = true;
-                else
-                    searchFail = false;
+                    if(waitHashing != null)
+                    {
+                        count ++;
+                    }
+
+                    if(count == 40000) {
+
+                        flagFail = 1;
+                        break;
+                    }
+                      //  break;
+                }
 
                 timer.cancel();
                 timer.purge();
-            }
+
+            //DEBUG
+            //if(txHexDataIn != null) {
+            //    String [] TxPreimageOutFail = new String[1];
+            //    TxPreimageOutFail[0] = "Error 1";
+            //    return TxPreimageOutFail;
+            //}
+
+                //monitorar esta variável entre 2 transações;
+                //escrever o estado no inicio e no final da execução
+
+               if(flagFail == 1) {
+
+                   if(TxHexData == null) {
+                       String[] TxPreimageOutFail = new String[1];
+                       TxPreimageOutFail[0] = "Error: Time out reading TX HEX DATA";
+                       return TxPreimageOutFail;
+                   }
+                }
+
+                TXToSeach = TxHexData;
+
+                //Debug Error:
+                //TXToSeach = TxHexData.substring(0,50);
+
+                if(TXToSeach.length() < 100) {
+                    searchFail = true;
+                    //Variables.ErroPreImagem = 1; //não conseguiu ler o input
+                    String [] TxPreimageOutFail = new String[1];
+                    //Não conseguiu ler toda a string
+                    TxPreimageOutFail[0] = "Error: TX HEX DATA incomplete";
+                    return TxPreimageOutFail;
+                }
+                else {
+                    searchFail = false;
+                    //Variables.ErroPreImagem = 0; //não houve erro
+                }
+
+
+            //}
 
             //preImage41parts = preImage41parts + "\"\\n\"Aqui\"\\n\"" + TXToSeach + "\n";
 //            preImage41parts = preImage41parts + TXToSeach + "\n";
