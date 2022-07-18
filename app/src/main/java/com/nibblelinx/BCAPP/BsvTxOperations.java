@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,9 +51,108 @@ public class BsvTxOperations {
     int dalyWhatsOnChain = 0;
 
     String TxHexData;
+    //Boolean threadEndReadHexBsvTx = false;
 
-    Boolean threadEndReadHexBsvTx = false;
+    Thread threadReadHexBsvTx = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+
+                TxHexData = JsonTaskTXIDNew(urlBaseTXID);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    });
+
+    private void renewThread()
+    {
+        threadReadHexBsvTx = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    TxHexData = JsonTaskTXIDNew(urlBaseTXID);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+
+
+    Thread[] threadArray = new Thread[256];
+    int threadArrayIndex = 0;
+
+    private void setThreadArray(int i)
+    {
+        for(int j=0; j<i; j++)
+        {
+            threadArray[j] = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    TxHexData = JsonTaskTXIDNew(urlBaseTXID);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        }
+    }
+
+
+    TimeCheckURL timerWoc01;// = new TimeCheckURL();
+
     public void readHexBsvTx(String TXID){
+
+        //timer.cancel();
+        //timer.purge();
+        //timer = new Timer();
+        urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
+        //timer.schedule(new TimeCheckURL(), 0, 5000);
+        //threadEndReadHexBsvTx = false;
+
+
+        //timer.schedule(new TimeCheckURL(), dalyWhatsOnChain, 5000);
+        //timer.schedule(timerWoc01 = new TimeCheckURL(), dalyWhatsOnChain, 5000);
+//        timer.schedule(timerWoc01, dalyWhatsOnChain, 5000);
+
+
+        threadReadHexBsvTx.start();
+
+        //threadArray[threadArrayIndex].start();
+
+    }
+
+    public void readHexBsvTx2(String TXID){
+
+        //timer.cancel();
+        //timer.purge();
+        //timer = new Timer();
+        urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
+        //timer.schedule(new TimeCheckURL(), 0, 5000);
+        //threadEndReadHexBsvTx = false;
+
+
+        //timer.schedule(new TimeCheckURL(), dalyWhatsOnChain, 5000);
+        //timer.schedule(timerWoc01 = new TimeCheckURL(), dalyWhatsOnChain, 5000);
+//        timer.schedule(timerWoc01, dalyWhatsOnChain, 5000);
+
+
+        //threadReadHexBsvTx.start();
+        threadArray[threadArrayIndex].start();
+
+    }
+
+    public void readHexBsvTxWOC(String TXID){
 
         //timer.cancel();
         //timer.purge();
@@ -62,18 +162,96 @@ public class BsvTxOperations {
         threadEndReadHexBsvTx = false;
 
 
-        timer.schedule(new TimeCheckURL(), dalyWhatsOnChain, 5000);
+        timer.schedule(new TimeCheckURLWOC(), dalyWhatsOnChain, 5000);
 
+        //threadReadHexBsvTx.start();
 
     }
 
-    //private String result = "";
 
-    class TimeCheckURL extends TimerTask
+    class TimeCheckURLWOC extends TimerTask
     {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void run()
         {
+            TxHexData = null;
+            //Variables.TxHexData = new JsonTaskTXID().execute(urlBaseTXID2);
+            threadReadHexBsvTx.start();
+            threadEndReadHexBsvTx = true;
+
+
+        }
+    }
+
+
+    public void timerCallWOC(){
+
+        //timer.cancel();
+        //timer.purge();
+        //timer = new Timer();
+        //urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
+        //timer.schedule(new TimeCheckURL(), 0, 5000);
+        //threadEndReadHexBsvTx = false;
+
+
+        wocTimer = 0;
+        timer.schedule(new TimerWOC(), dalyWhatsOnChain, 5000);
+
+        //threadReadHexBsvTx.start();
+
+    }
+
+    int wocTimer = 0;
+    class TimerWOC extends TimerTask
+    {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        public void run()
+        {
+            //threadReadHexBsvTx.start();
+            wocTimer ++;
+        }
+    }
+
+
+    //private String result = "";
+
+    Boolean threadEndReadHexBsvTx = false;
+
+    class TimeCheckURL extends TimerTask
+    {
+
+        Thread thread00 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    //Looper.prepare();
+
+                    ////////////////////////////////////////////////////////////
+                    //Resultado Armazenado em uma variável Global
+                    ////////////////////////////////////////////////////////////
+                    TxHexData = null;
+                    //Variables.TxHexData = new JsonTaskTXID().execute(urlBaseTXID2);
+                    TxHexData = new JsonTaskTXID().execute(urlBaseTXID);
+                    threadEndReadHexBsvTx = true;
+
+                    //  timer.cancel();
+                    //  timer.purge();
+                    //result = new JsonTaskTXID().execute(urlBaseTXID2);;
+                    //Looper.loop();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        public void run()
+        {
+            /*
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -95,6 +273,8 @@ public class BsvTxOperations {
 
                 }
             }).start();
+            */
+            thread00.start();
 
         }
     }
@@ -187,76 +367,54 @@ public class BsvTxOperations {
 
     }
 
+
+    //private static String JsonTaskTXIDNew(String theUrl) {
+    private String JsonTaskTXIDNew(String theUrl) {
+        StringBuilder content = new StringBuilder();
+        try {
+            URL url = new URL(theUrl);
+            URLConnection urlConnection = url.openConnection();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line + "\n");
+            }
+            bufferedReader.close();
+        } catch(Exception e) {
+            //e.printStackTrace();
+            return null;
+        }
+        return content.toString();
+    }
+
     //////////////////////////////////////////////////////////////////////////////////
     // Adress Unspent Inputs
     //////////////////////////////////////////////////////////////////////////////////
     String unsPentInputs;
+    //Boolean threadEndReadBsvAddsUnspent = false;
+    //int threadCounterReadBsvAddsUnspent = 0;
 
     public void readBsvAddsUnspent(String BSVADD){
 
-        //timer.cancel();
-        //timer.purge();
-        timer = new Timer();
-        urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/address/" + BSVADD +  "/unspent";
+         urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/address/" + BSVADD +  "/unspent";
 
-        /*
-        if(Variables.STREAMTT %2 ==0)
-            urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/address/" + BSVADD +  "/unspent";
-        else
-            urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/address/" + BSVADD +  "/unspent";
-
-        */
-
-        threadEndReadBsvAddsUnspent = false;
-
-
-        //timer.schedule(new TimeCheckURL(), 0, 5000);
-        timer.schedule(new TimeCheckURL2(), dalyWhatsOnChain, 5000);
+        //O Processo a seguir foi testado e não pode ser executado fora de uma thread
+        //timer.schedule(new TimeCheckURL2(), dalyWhatsOnChain, 5000);
+        threadreadBsvAddsUnspent.start();
     }
 
-    //private String result = "";
+    Thread threadreadBsvAddsUnspent = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
 
-    Boolean threadEndReadBsvAddsUnspent = false;
+                unsPentInputs = JsonTaskTXIDNew(urlBaseTXID);
 
-    class TimeCheckURL2 extends TimerTask
-    {
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        public void run()
-        {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    //Looper.prepare();
-
-                    ////////////////////////////////////////////////////////////
-                    //Resultado Armazenado em uma variável Global
-                    ////////////////////////////////////////////////////////////
-                    unsPentInputs = null;
-                    //Variables.TxHexData = new JsonTaskTXID().execute(urlBaseTXID2);
-
-                    unsPentInputs = new JsonTaskTXID().execute(urlBaseTXID);
-                    //Variables.threadM = true;
-                    threadEndReadBsvAddsUnspent = true;
-
-                    /*
-                    if(Variables.STREAMTT %2 ==0)
-                        unsPentInputs = new JsonTaskTXID2().execute(urlBaseTXID);
-                    else
-                        unsPentInputs = new JsonTaskTXID().execute(urlBaseTXID);
-                    */
-
-                    //unsPentInputs = "[{\"height\":740197,\"tx_pos\":1,\"tx_hash\":\"f31e32ccda4780dd863c79fb671b5560b417ff100e6de988ec178fc78acd2b65\",\"value\":50602}]";
-                    //result = new JsonTaskTXID().execute(urlBaseTXID2);;
-                    //Looper.loop();
-                    //    timer.cancel();
-                    //    timer.purge();
-
-                }
-            }).start();
-
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-    }
+    });
 
     String[] unspentIndex = new String[1000];
     String[] unspentValue = new String[1000];
@@ -650,23 +808,16 @@ public class BsvTxOperations {
     private String urlAdress = "https://api.whatsonchain.com/v1/bsv/main/tx/raw";
     private String urlAdress02 = "https://mapi.gorillapool.io/mapi/tx";
 
-    Boolean threadEndBroadcastHexBsvTx = false;
+    //Boolean threadEndBroadcastHexBsvTx = false;
 
-    //public void sendPost(final String TXIDin) {
-    public void broadcastHexBsvTx(final String TxHexBsv, int poolID) {
+    Thread threadBroadCast = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                URL url;
 
-        TxHexDataSent = null;
-        threadEndBroadcastHexBsvTx = false;
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-
-                    URL url;
-
-                    //poolID == 0 WhatsOnChain
-                    //poolID == 1 Gorilla Pool
+                //poolID == 0 WhatsOnChain
+                //poolID == 1 Gorilla Pool
 
                     /*switch (poolID){
                         case 0: url = new URL(urlAdress);
@@ -675,34 +826,34 @@ public class BsvTxOperations {
                     } */
 
 
-                    if(poolID == 0)
-                        url = new URL(urlAdress);
-                    else
-                        url = new URL(urlAdress02);
+                if(poolID == 0)
+                    url = new URL(urlAdress);
+                else
+                    url = new URL(urlAdress02);
 
 
 
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    //conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                //conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 
-                    //Whats On Chain
+                //Whats On Chain
 
-                    //conn.setRequestProperty("Content-Type", "text/plain;charset=UTF-8");
+                //conn.setRequestProperty("Content-Type", "text/plain;charset=UTF-8");
                 //    conn.setRequestProperty("Content-Type", "text/plain");
                 //    conn.setRequestProperty("Accept","application/json");
 
-                    //Content-Type: application/octet-stream
+                //Content-Type: application/octet-stream
 
 
 
-                    //Gorilla Pool
-                    conn.setRequestProperty("Content-Type", "application/json");
-                    conn.setRequestProperty("accept","text/plain");
+                //Gorilla Pool
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("accept","text/plain");
 
 
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
 
                     /*
                     JSONObject jsonParam = new JSONObject();
@@ -715,9 +866,9 @@ public class BsvTxOperations {
                     Log.i("JSON", jsonParam.toString());
                     */
 
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-                    //os.writeBytes(jsonParam.toString());
+                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                //os.writeBytes(jsonParam.toString());
 
                     /*
                     os.writeBytes("{\"txhex\": \"" +
@@ -729,10 +880,10 @@ public class BsvTxOperations {
                     */
 
 
-                    String TXJson;
+                String TXJson;
 
-                    //poolID == 0 WhatsOnChain
-                    //poolID == 1 Gorilla Pool
+                //poolID == 0 WhatsOnChain
+                //poolID == 1 Gorilla Pool
 
                     /*
                     switch (poolID){
@@ -747,18 +898,18 @@ public class BsvTxOperations {
                                 "\" }";
                     }
                     */
-                    if(poolID == 0) {
-                        TXJson = "{\"txhex\": \"" +
-                                //"hex..." +
-                                TxHexBsv +
-                                //HEXTX +
-                                "\" }";
-                    }
-                    else{
-                        TXJson = "{\"rawTx\": \"" +
-                                TxHexBsv +
-                                "\" }";
-                    }
+                if(poolID == 0) {
+                    TXJson = "{\"txhex\": \"" +
+                            //"hex..." +
+                            TxHexBsv +
+                            //HEXTX +
+                            "\" }";
+                }
+                else{
+                    TXJson = "{\"rawTx\": \"" +
+                            TxHexBsv +
+                            "\" }";
+                }
 
                     /*
 
@@ -776,41 +927,53 @@ public class BsvTxOperations {
                     */
 
 
-                    //os.writeBytes(TXJson01);
-                    //os.writeBytes(TXJson02);
-                    os.writeBytes(TXJson);
+                //os.writeBytes(TXJson01);
+                //os.writeBytes(TXJson02);
+                os.writeBytes(TXJson);
 
 
-                    ////////////////////////////////////////////////////////////
-                    //Resultado Verificqdo em uma variável Global
-                    ////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////
+                //Resultado Verificqdo em uma variável Global
+                ////////////////////////////////////////////////////////////
 
-                    //Variables.TxHexDataSent = conn.getResponseMessage();
-                    TxHexDataSent = conn.getResponseMessage();
-                    threadEndBroadcastHexBsvTx = true;//necessário
-                    //Get Message "OK" if successfull
-                    //Get Message "Bad Request" Oterwise
-
-
-                    //Variables.TxidDataSend = conn.getHeaderField("Content-Type");
+                //Variables.TxHexDataSent = conn.getResponseMessage();
+                TxHexDataSent = conn.getResponseMessage();
+//                threadEndBroadcastHexBsvTx = true;//necessário
+                //Get Message "OK" if successfull
+                //Get Message "Bad Request" Oterwise
 
 
-                    os.flush();
-                    os.close();
+                //Variables.TxidDataSend = conn.getHeaderField("Content-Type");
 
-                    //TxRec(TxidHex);
 
-                    //Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                    //Log.i("MSG" , conn.getResponseMessage());
+                os.flush();
+                os.close();
 
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                //TxRec(TxidHex);
+
+                //Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                //Log.i("MSG" , conn.getResponseMessage());
+
+                conn.disconnect();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }
+    });
 
-        thread.start();
+    String TxHexBsv = "";
+    int poolID;
+
+    //public void sendPost(final String TXIDin) {
+    public void broadcastHexBsvTx(final String TxHexBsv, int poolID) {
+
+        TxHexDataSent = null;
+//        threadEndBroadcastHexBsvTx = false;
+        this.TxHexBsv = TxHexBsv;
+        this.poolID = poolID;
+
+        threadBroadCast.start();
     }
 ///////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
@@ -1256,6 +1419,8 @@ public class BsvTxOperations {
         // or send us an email at support@taal.com
         dalyWhatsOnChain = 350;
 
+        //dalyWhatsOnChain = 500;
+
 
         //DEBUG
         //if(txHexDataIn != null) {
@@ -1264,7 +1429,15 @@ public class BsvTxOperations {
         //    return TxPreimageOutFail;
         //}
 
+        /////////////////////////////////////////////////
+        //Array de threads para este procedimento
+        // Funcionou bem para mostrar que as threads precisam ser renovadas
+        // a cada uso
+        /////////////////////////////////////////////////
+        //setThreadArray(nOfInputsCurrent);
+
         for(int i = 0; i < nOfInputsCurrent; i++) {
+        //for(int i = 1; i < nOfInputsCurrent; i++) {
 
             //txPartsCurrent
             String TxidTosearch =  SHA256G.LEformat(prvOutHASHCurrent[i]);
@@ -1289,18 +1462,44 @@ public class BsvTxOperations {
             //    return TxPreimageOutFail;
             //}
 
+            TxHexData = null;
+//            threadEndReadHexBsvTx = true;
+//            timerWoc01 = new TimeCheckURL();
+
+            //threadArrayIndex = i;
+
+            ////////////////////////////////////////////////////////////////////////
+            //O timer apresenta sempre um problema entre uma chamada e outra
+            // Não encontrei a maneira de lidar com o timer entre uma chamada e outra
+            // sem usar a força bruta e quebrar o while
+            // ele não permite consulta ao estado da thread
+            // e quebra ao tentar realizar
+            ////////////////////////////////////////////////////////////////////////
+            /*
+            timer = new Timer();
+            wocTimer = 0;
+            timer.schedule(new TimerWOC(), dalyWhatsOnChain, 5000);
+            while(wocTimer < 1)
+            {
                 TxHexData = null;
-                threadEndReadHexBsvTx = true;
-                readHexBsvTx(TxidTosearch);
+            }
+            timer.cancel();
+            timer.purge();
 
-                //Aguarda até que o dado seja lido da WhatsOnChain
-                //Aqui temos que respeitar o
-                //while (TxHexData == null)
-                //int inparPar = 0;
+            */
+
+            renewThread();
+            readHexBsvTx(TxidTosearch);
+            //readHexBsvTxWOC(TxidTosearch);
+
+            //Aguarda até que o dado seja lido da WhatsOnChain
+            //Aqui temos que respeitar o
+            //while (TxHexData == null)
+            //int inparPar = 0;
 
 
-                String waitHashing = "";
-            waitHashing = SHA256G.SHA256STR("ABC");
+//            String waitHashing = "";
+//            waitHashing = SHA256G.SHA256STR("ABC");
             /*
                 if(Variables.LastTXID != null)
                     waitHashing = SHA256G.SHA256STR(Variables.LastTXID);
@@ -1308,33 +1507,45 @@ public class BsvTxOperations {
                     waitHashing = SHA256G.SHA256STR("ABC");
                 */
 
-                long count = 0;
+//            long count = 0;
 
-                int flagFail = 0;
+//            int flagFail = 0;
 
-                while(!threadEndReadHexBsvTx) {
-                    TXToSeach = "";
+            //Tentativa 1: Array de Threads
+            //Tentativa 2: Time elapse Android
 
-                    if(waitHashing != null)
-                        waitHashing = SHA256G.SHA256STR(waitHashing);
-                    else
-                        waitHashing = SHA256G.SHA256STR("ABC");
 
-                    if(waitHashing != null)
-                    {
-                        count ++;
-                    }
+            //Funcionou uma vez
+            while(threadReadHexBsvTx.isAlive()){
+            //while(threadArray[i].isAlive()){
+            //while(timerWoc01.thread00.isAlive()){
 
-                    if(count == 40000) {
+            //while(!threadEndReadHexBsvTx) {
+                TXToSeach = "";
 
-                        flagFail = 1;
-                        break;
-                    }
-                      //  break;
+                /*
+                if(waitHashing != null)
+                    waitHashing = SHA256G.SHA256STR(waitHashing);
+                else
+                    waitHashing = SHA256G.SHA256STR("ABC");
+
+                if(waitHashing != null)
+                {
+                    count ++;
                 }
 
-                timer.cancel();
-                timer.purge();
+                if(count == 40000) {
+
+                    flagFail = 1;
+                    break;
+                }
+
+                */
+                //  break;
+            }
+
+//            timer.cancel();
+//            timer.purge();
 
             //DEBUG
             //if(txHexDataIn != null) {
@@ -1343,38 +1554,50 @@ public class BsvTxOperations {
             //    return TxPreimageOutFail;
             //}
 
-                //monitorar esta variável entre 2 transações;
-                //escrever o estado no inicio e no final da execução
+            //monitorar esta variável entre 2 transações;
+            //escrever o estado no inicio e no final da execução
 
-               if(flagFail == 1) {
+            //if(TxHexData != null && i==1) {
+            //    String[] TxPreimageOutFail = new String[1];
+            //    TxPreimageOutFail[0] = "Error: " + TxHexData;
+            //    return TxPreimageOutFail;
+            //}
 
-                   if(TxHexData == null) {
-                       String[] TxPreimageOutFail = new String[1];
-                       TxPreimageOutFail[0] = "Error: Time out reading TX HEX DATA";
-                       return TxPreimageOutFail;
-                   }
-                }
+            if(TxHexData == null) {
+                String[] TxPreimageOutFail = new String[1];
+                TxPreimageOutFail[0] = "Error: Time out reading TX HEX DATA";
+                return TxPreimageOutFail;
+            }
+            /*
 
-                TXToSeach = TxHexData;
+            if(flagFail == 1) {
 
-                //Debug Error:
-                //TXToSeach = TxHexData.substring(0,50);
-
-                if(TXToSeach.length() < 100) {
-                    searchFail = true;
-                    //Variables.ErroPreImagem = 1; //não conseguiu ler o input
-                    String [] TxPreimageOutFail = new String[1];
-                    //Não conseguiu ler toda a string
-                    TxPreimageOutFail[0] = "Error: TX HEX DATA incomplete";
+                if(TxHexData == null) {
+                    String[] TxPreimageOutFail = new String[1];
+                    TxPreimageOutFail[0] = "Error: Time out reading TX HEX DATA";
                     return TxPreimageOutFail;
                 }
-                else {
-                    searchFail = false;
-                    //Variables.ErroPreImagem = 0; //não houve erro
-                }
+            }
+            */
 
+            TXToSeach = TxHexData;
 
-            //}
+            //Debug Error:
+            //TXToSeach = TxHexData.substring(0,50);
+
+            if(TXToSeach.length() < 100) {
+                searchFail = true;
+                //Variables.ErroPreImagem = 1; //não conseguiu ler o input
+                String [] TxPreimageOutFail = new String[1];
+                //Não conseguiu ler toda a string
+                TxPreimageOutFail[0] = "Error: TX HEX DATA incomplete";
+                return TxPreimageOutFail;
+            }
+            else {
+                searchFail = false;
+                //Variables.ErroPreImagem = 0; //não houve erro
+            }
+
 
             //preImage41parts = preImage41parts + "\"\\n\"Aqui\"\\n\"" + TXToSeach + "\n";
 //            preImage41parts = preImage41parts + TXToSeach + "\n";

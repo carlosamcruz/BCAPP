@@ -141,9 +141,12 @@ public class Token extends AppCompatActivity {
 
         String newTX = txCreate.txBuilder(pvtkey, Variables.CompPKey,2 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
         String result = "";
-        if(newTX.substring(0,5).compareTo("Error")==0)
-            result = newTX;
-        else {
+
+        if(newTX.length()>5)
+            if(newTX.substring(0,5).compareTo("Error")==0)
+                result = newTX;
+
+        {
 
             Variables.LastTxHexData = newTX;
 
@@ -152,6 +155,8 @@ public class Token extends AppCompatActivity {
             Variables.LastTXID = bsvTxOp.TXID;
 
             result = txCreate.txBroadCast(newTX);
+
+            //result = newTX;
         }
 
         //result = txCreate.totalUnspent(BSVADD);

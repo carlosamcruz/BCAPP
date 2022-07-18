@@ -210,9 +210,16 @@ public class NFTText extends AppCompatActivity {
         String newTX = txCreate.txBuilder(pvtkey, Variables.CompPKey,1 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
         String result = "";
         //if(newTX.compareTo("Error 1")==0 || newTX.compareTo("Error 2")==0)
-        if(newTX.substring(0,5).compareTo("Error")==0)
-            result = newTX;
-        else {
+
+        if(newTX.length()>5)
+            if(newTX.substring(0,5).compareTo("Error")==0)
+                result = newTX;
+
+
+        //if(newTX.substring(0,5).compareTo("Error")==0)
+        //    result = newTX;
+        //else
+        {
 
             Variables.LastTxHexData = newTX;
 

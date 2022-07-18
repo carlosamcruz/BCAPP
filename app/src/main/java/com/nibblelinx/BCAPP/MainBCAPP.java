@@ -18,7 +18,6 @@ public class MainBCAPP extends AppCompatActivity {
 
     //public static Activity fa;
 
-
     int inicio = 0;
 
     @Override
@@ -192,7 +191,7 @@ public class MainBCAPP extends AppCompatActivity {
 
                             setAddValue();
 
-
+                            dialog.dismiss();
                         }
 
                     }
@@ -223,20 +222,54 @@ public class MainBCAPP extends AppCompatActivity {
     public void setAddValue()
     {
         Keygen pubKey = new Keygen();
-        BsvTxCreation txCreate = new BsvTxCreation();
+        //BsvTxCreation txCreate = new BsvTxCreation();
         String PUBKEY = pubKey.publicKeyHEX(Variables.MainPaymail);
         String BSVADD = pubKey.bsvWalletFull(PUBKEY, Variables.CompPKey);
         Variables.BSVWallet = BSVADD;
-        //BsvTxCreation txCreate = new BsvTxCreation();
-        txCreate = null;
-        txCreate = new BsvTxCreation();
+
+        //String SatBalance = "";
+
+        BsvTxCreation txCreate = new BsvTxCreation();
+
+        //BsvAddUnspent txCreate = new BsvAddUnspent();
+
+        //txCreate = null;
+        //txCreate = new BsvTxCreation();
         //Variables.STREAMTT ++;
+
+        //SatBalance = txCreate.totalUnspent(BSVADD);
+
+        //Para solucionar problema da Espera é bom colocar o comando dentro de uma thread
         Variables.SatBalance = txCreate.totalUnspent(BSVADD);
+
+        //txCreate = null;
+
+        /*
+        if(SatBalance.substring(0,5).compareTo("Error") == 0) {
+            return;
+        }
+
+         */
+
+
+        if(Variables.SatBalance == null) {
+
+            Toast.makeText(MainBCAPP.this, "Falha ao Ler o Valor", Toast.LENGTH_LONG).show();
+            //Toast.makeText(MainBCAPP.this, Variables.SatBalance, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+
+        //SatBalance = "Balance (Satoshis): " + SatBalance + " sats";
+
+
+
         //txCreate.totalUnspent(BSVADD);
         ((TextView) findViewById(R.id.TV_TEXT2)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
+        //((TextView) findViewById(R.id.TV_TEXT2)).setText(SatBalance);
         ((TextView) findViewById(R.id.TV_TEXT3)).setText(Variables.BSVWallet);
         //((TextView) findViewById(R.id.TV_TEXT4)).setText("Balance (Miritis): " + Long.valueOf(Variables.SatBalance)/1000 + " Miritis");
-
 
     }
 
@@ -268,6 +301,7 @@ public class MainBCAPP extends AppCompatActivity {
         //O contador deve ser resetado em OnResume, OnCreate, onUserInteraction de cada Activity
         Variables.userInteractionAct = Variables.MAXNOINTERACTIONTIME;
 
+
         if(inicio == 0)
             inicio = 1;
         else
@@ -279,6 +313,7 @@ public class MainBCAPP extends AppCompatActivity {
                //((TextView) findViewById(R.id.TV_TEXT4)).setText("Balance (Miritis): " + Long.valueOf(Variables.SatBalance) / 1000 + " Miritis");
            }
         }
+
 
         //((TextView) findViewById(R.id.TV_TEXT2)).setText("Balance: " + Variables.SatBalance + " sats");
         //((TextView) findViewById(R.id.TV_TEXT3)).setText(Variables.BSVWallet);

@@ -1,5 +1,7 @@
 package com.nibblelinx.BCAPP;
 
+import java.util.Timer;
+
 public class BsvTxCreation {
 
     public BsvTxOperations bsvTX = new BsvTxOperations();
@@ -16,30 +18,30 @@ public class BsvTxCreation {
         /////////////////////////////////////////////////////////////////////
         //Unspent TX treatment do Endereço da Chave privada Indicada pelo Usruário
         /////////////////////////////////////////////////////////////////////
-        //bsvTX.timer.cancel();
-        //bsvTX.timer.purge();
 
         bsvTX.unsPentInputs = null;
+        //bsvTX.timer = new Timer();
         bsvTX.readBsvAddsUnspent(BSVADD);
         String unspentTX = "";
 
-        //int j = 0;
+        //Primeiro
 
-        //Variables.threadM = false;
-        //while(bsvTX.unsPentInputs == null)
-        //while (!Variables.threadM)
-        while (!bsvTX.threadEndReadBsvAddsUnspent)
+        while (bsvTX.threadreadBsvAddsUnspent.isAlive())
         {
             unspentTX = "";
-            //j++;
         }
 
-        if(bsvTX.unsPentInputs == null)
-            return ("erro");
+        //if(bsvTX.unsPentInputs == null)
+        //    return ("erro");
 
         unspentTX = bsvTX.unsPentInputs;
-        bsvTX.timer.cancel();
-        bsvTX.timer.purge();
+        //bsvTX.timer.cancel();
+        //bsvTX.timer.purge();
+
+        if(bsvTX.unsPentInputs == null)
+            //return  "Error: Time out reading Unspent TX inputs" + " " + BSVADD;
+            return  "Error: reading Unspent TX inputs fail";
+
 
         /////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////
@@ -114,52 +116,31 @@ public class BsvTxCreation {
         bsvTX.unsPentInputs = null;
         bsvTX.readBsvAddsUnspent(BSVADD);
 
+        /*
         //Tratamento da quebra
         String waitHashing = "";
-
         waitHashing = SHA256G.SHA256STR("ABC");
-
-        /*
-        if(Variables.LastTXID != null)
-            waitHashing = SHA256G.SHA256STR(Variables.LastTXID);
-        else
-            waitHashing = SHA256G.SHA256STR("ABC");
-        */
-
         long count = 0;
-
         int flagFail = 0;
 
-        //while(bsvTX.unsPentInputs == null)
-        while(!bsvTX.threadEndReadBsvAddsUnspent)
+        */
+
+        while (bsvTX.threadreadBsvAddsUnspent.isAlive())
         {
             unspentTX = "";
-            if(waitHashing != null)
-                waitHashing = SHA256G.SHA256STR(waitHashing);
-            else
-                waitHashing = SHA256G.SHA256STR("ABC");
-
-            if(waitHashing != null)
-            {
-                count ++;
-            }
-
-            //if(count == 20000) {  // debug
-            //if(count == 13000) { //limit entre erro e debug
-            if(count == 40000) {
-
-                flagFail = 1;
-                break;
-            }
         }
+
         unspentTX = bsvTX.unsPentInputs;
-        bsvTX.timer.cancel();
-        bsvTX.timer.purge();
+        //bsvTX.timer.cancel();
+        //bsvTX.timer.purge();
 
-        if(flagFail == 1) {
-            if(bsvTX.unsPentInputs == null)
-                 return  "Error: Time out reading Unspent TX inputs";
-        }
+        if(bsvTX.unsPentInputs == null)
+            return  "Error: Time out reading Unspent TX inputs";
+
+
+        //if(bsvTX.unsPentInputs != null)
+        //    return  "Error: " + unspentTX;
+
 
 //////////Debug
         //unspentTX = "[{\"height\":748082,\"tx_pos\":1,\"tx_hash\":\"285ba37b6d402bac560929eaaa935b8e88aafa04206db5de1ed2731c24eaf66d\",\"value\":13698},{\"height\":748103,\"tx_pos\":0,\"tx_hash\":\"59a8155eb097e04715bd2f6920766b7a32fd0e2aa6d9b8bdf38f581c4cfd9fe4\",\"value\":1000},{\"height\":748132,\"tx_pos\":0,\"tx_hash\":\"6c4d93bd473fefc84bce4132e6294723913c564fd0a1c7d85ab9cce8a42bffc1\",\"value\":1000}]";
@@ -226,17 +207,31 @@ public class BsvTxCreation {
 
 
 
+        //if(OutputString != null)
+        //    return  "Error: " + OutputString;
         /////////////////////////////////////////////////////////////////////
         //Confecção das preImagenS dos inputs
         /////////////////////////////////////////////////////////////////////
+
+        //Delay da WhatsOnChain;
+        //bsvTX.timer = new Timer();
+        //bsvTX.timerCallWOC();
+
         String[] preimage = bsvTX.txPreImager41(preTX);
+
+        //bsvTX.timer.cancel();
+        //bsvTX.timer.purge();
+
+        //if(preimage [0] != null)
+          //     return  "Error: " + preimage [0] + preimage [1];
 
         //DEBUG
         //if(PVTKEY != null)
         //    return "Error 1";
         //if(preimage[0].compareTo("Error 1") == 0  || preimage[0].compareTo("Error 2") == 0)
-        if(preimage[0].substring(0,5).compareTo("Error") == 0)
-            return preimage[0];
+        if(preimage[0].length()>5)
+            if(preimage[0].substring(0,5).compareTo("Error") == 0)
+                return preimage[0];
 
         /////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////
@@ -309,40 +304,7 @@ public class BsvTxCreation {
         return newTX;
         /////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////
-/*
-        /////////////////////////////////////////////////////////////////////
-        //TXID da Transação
-        /////////////////////////////////////////////////////////////////////
-        TXID = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(newTX));
-        TXID = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(TXID));
-        TXID = SHA256G.LEformat(TXID);
 
-
-        /////////////////////////////////////////////////////
-        //ENVIO da Transação
-        /////////////////////////////////////////////////////
-
-        String txSent = null;
-        bsvTX.TxHexDataSent = null;
-
-        //Adaptar a função para o caso de falta de sinal de internet
-        bsvTX.broadcastHexBsvTx(newTX);
-
-        //Loop necessário para esperar a consulta a rede realizado pelo metodo acima
-        //while (bsvTX.TxHexDataSent == null)
-        while (!bsvTX.threadEndBroadcastHexBsvTx)
-            txSent = bsvTX.TxHexDataSent;
-
-        /////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////
-
-        if(bsvTX.TxHexDataSent.compareTo("OK")==0)
-            return TXID;
-        else
-            return bsvTX.TxHexDataSent;
-            //return newTX;
-
- */
     }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -398,33 +360,20 @@ public class BsvTxCreation {
         /////////////////////////////////////////
         /////////////////////////////////////////
 
+        /*
         String waitHashing = "";
         waitHashing = SHA256G.SHA256STR("ABC");
 
+
         long count = 0;
         int flagFail = 0;
+        */
 
 
         //Loop necessário para esperar a consulta a rede realizado pelo metodo acima
-        //while (bsvTX.TxHexDataSent == null)
-        while (!bsvTX.threadEndBroadcastHexBsvTx) {
+        while (bsvTX.threadBroadCast.isAlive()) {
             txSent = bsvTX.TxHexDataSent;
 
-            if(waitHashing != null)
-                waitHashing = SHA256G.SHA256STR(waitHashing);
-            else
-                waitHashing = SHA256G.SHA256STR("ABC");
-
-            if(waitHashing != null)
-            {
-                count ++;
-            }
-
-            if(count == 60000) {
-
-                flagFail = 1;
-                break;
-            }
         }
         //Esta tread não é chamada com timer
         //timer.cancel();
@@ -433,10 +382,9 @@ public class BsvTxCreation {
         //monitorar esta variável entre 2 transações;
         //escrever o estado no inicio e no final da execução
 
-        if(flagFail == 1) {
-            if(bsvTX.TxHexDataSent == null)
-                return "Error: Time out Broacasting";
-        }
+        if(bsvTX.TxHexDataSent == null)
+            return "Error: Time out Broacasting";
+
 
         /////////////////////////////////////////////////////
         /////////////////////////////////////////////////////
@@ -497,27 +445,47 @@ public class BsvTxCreation {
 
         String TXToSeach = "";
 
-        //while (searchFail) {
+        bsvTX.TxHexData = null;
+        bsvTX.readHexBsvTx(TXID);
 
-            bsvTX.TxHexData = null;
-            bsvTX.readHexBsvTx(TXID);
+        /*
+
+        String waitHashing = "";
+        waitHashing = SHA256G.SHA256STR("ABC");
+
+        long count = 0;
+        int flagFail = 0;
+
+        */
 
             //Aguarda até que o dado seja lido da WhatsOnChain
             //Aqui temos que respeitar o
-            //while (TxHexData == null)
-            while(!bsvTX.threadEndReadHexBsvTx)
-                TXToSeach = "";
 
-            TXToSeach = bsvTX.TxHexData;
 
-            if(TXToSeach.length() < 100 || TXToSeach == null)
-                searchFail = true;
-            else
-                searchFail = false;
+        //Ultimo
+        while(bsvTX.threadReadHexBsvTx.isAlive()) {
+            TXToSeach = "";
 
-            bsvTX.timer.cancel();
-            bsvTX.timer.purge();
-        //}
+        }
+
+        //bsvTX.timer.cancel();
+        //bsvTX.timer.purge();
+
+        TXToSeach = bsvTX.TxHexData;
+
+        if(bsvTX.TxHexData == null) {
+            //String[] TxPreimageOutFail = new String[1];
+            return  "Error: Time out reading TX HEX DATA";
+            //return TxPreimageOutFail;
+        }
+
+        if(TXToSeach.length() < 100) {
+            searchFail = true;
+            return "Error: TX HEX DATA incomplete";
+        }
+        else
+            searchFail = false;
+
 
         return TXToSeach;
     }
