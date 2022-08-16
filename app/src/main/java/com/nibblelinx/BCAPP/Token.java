@@ -57,6 +57,38 @@ public class Token extends AppCompatActivity {
         ((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
         ((TextView) findViewById(R.id.TV_TEXT3bsv)).setText(Variables.BSVWallet);
 
+        if(Variables.TokenType == 1)
+        {
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Owner Address:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setHint("TOR Token Value (Satoshis):");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Token Content:");
+            ((TextView) findViewById(R.id.buttonSEND)).setText("CREATE");
+        }
+        if(Variables.TokenType == 2)
+        {
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Owner Address:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setHint("ODR Token Value (Satoshis):");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Token Content:");
+            ((TextView) findViewById(R.id.buttonSEND)).setText("CREATE");
+        }
+
+        if(Variables.TokenType == 3)
+        {
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Address:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Script Hash:");
+            ((TextView) findViewById(R.id.buttonSEND)).setText("MELT");
+        }
+
+        if(Variables.TokenType == 4)
+        {
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Send to:");
+            //((TextView) findViewById(R.id.ET_LobbyAct_Value)).setHint("Number of Tokens:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Single Token (NFT)");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Script Hash:");
+            ((TextView) findViewById(R.id.buttonSEND)).setText("SEND");
+        }
+
 
         buttonSEND.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,25 +171,89 @@ public class Token extends AppCompatActivity {
 
         BsvTxCreation txCreate = new BsvTxCreation();
 
-        String newTX = txCreate.txBuilder(pvtkey, Variables.CompPKey,2 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
+        //String newTX = txCreate.txBuilder(pvtkey, Variables.CompPKey,2 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
+
+        //String SCRIPTHASH = "5c88edcd8ebaa34f16e97676cc3a11c0cfd2c1d9ad125e9e2023a923e4d12d65";
+        //String SCRIPTHASH = "262e2fd813023f6050e7e2753c06fd61edf3eda228573c1dda687e2dc6f28d39";
+        //String SCRIPTHASH = "53750ee980cc8f87ebf2888300a9b17367a85166eadbd1fdb81f9ad5445a7380";
+        //String SCRIPTHASH = "0fccc2cf5757bcf3b300aee7b16a2df250d49c5660785b54d768a83b8988d1ee";
+
+        // Problema em redimir outputs com OP_DROP;
+        //There was an issue with the broadcast:unexpected response code 500: 64: non-mandatory-script-verify-flag (Data push larger than necessary)
+        //Problema Relacionado a https://github.com/lbryio/lbrycrd/issues/242
+
+        //String SCRIPTHASH = "626fd899c047310f3843be5d72e22084234618c401ab83b951cb1e21194d2395";
+        // Problema em redimir outputs com OP_DROP;
+        // There was an issue with the broadcast:unexpected response code 500: 64: non-mandatory-script-verify-flag (Data push larger than necessary)
+        //Problema Relacionado a https://github.com/lbryio/lbrycrd/issues/242
+
+        //String SCRIPTHASH = "1baecdac8f41f4692a1aa94199e3dbb3032f4abe07a3608a21beb27a3d1dad2a";//funcionou
+
+        //String SCRIPTHASH = "9b9e01af809b9064bbbc9e55978a8bdb76589cf057a963c33f39ef1047de99b1"; // funcionou
+
+        String SCRIPTHASH = "9b7eaedbd83c0ec707820824750afa620e98c4a861298cf06980486c68e6fdce";
+
+        if(Variables.TokenType == 3)
+        {
+            SCRIPTHASH = data;
+            data = "";
+            nOR = 0;
+            OP_RETURNs[0] = null;
+            PayWallets[1] = PayWallets[0];
+
+            PayValues[0] = "0000000000000000";
+
+            if(SCRIPTHASH.length() != 64)
+            {
+                Toast.makeText(Token.this, "Wrong Script Hash!!!"
+                        , Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        if(Variables.TokenType == 4)
+        {
+            SCRIPTHASH = data;
+            data = "";
+            nOR = 1; //script
+            OP_RETURNs[0] = null;
+            //PayWallets[1] = PayWallets[0];
+
+            PayValues[0] = "0000000000000000";
+
+            if(SCRIPTHASH.length() != 64)
+            {
+                Toast.makeText(Token.this, "Wrong Script Hash!!!"
+                        , Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        int TXType = Variables.TokenType;
+
+        String newTX = txCreate.txBuilderV2(pvtkey, Variables.CompPKey,2 + nOR,
+                PayWallets,PayValues,OP_RETURNs, nOR, TXType, SCRIPTHASH);
         String result = "";
 
         if(newTX.length()>5)
-            if(newTX.substring(0,5).compareTo("Error")==0)
+            if(newTX.substring(0,5).compareTo("Error")==0) {
                 result = newTX;
+                Toast.makeText(Token.this, "Result: " + result
+                        , Toast.LENGTH_LONG).show();
+                return;
+            }
 
-        {
 
-            Variables.LastTxHexData = newTX;
+        Variables.LastTxHexData = newTX;
 
-            BsvTxOperations bsvTxOp = new BsvTxOperations();
-            bsvTxOp.txID(newTX);
-            Variables.LastTXID = bsvTxOp.TXID;
+        BsvTxOperations bsvTxOp = new BsvTxOperations();
+        bsvTxOp.txID(newTX);
+        Variables.LastTXID = bsvTxOp.TXID;
 
-            result = txCreate.txBroadCast(newTX);
+        result = txCreate.txBroadCast(newTX);
 
-            //result = newTX;
-        }
+        //result = newTX;
+
 
         //result = txCreate.totalUnspent(BSVADD);
 

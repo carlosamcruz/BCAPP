@@ -114,7 +114,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:ems="10"
-            android:hint="Mensagem:"
+            android:hint="Description (Optional):"
             android:inputType="textPersonName"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"

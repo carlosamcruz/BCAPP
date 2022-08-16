@@ -36,6 +36,10 @@ public class BsvTxOperations {
     //String urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
     String urlBaseTXID = "";
 
+
+    //Para recuperar o Script
+    //String urlBaseTXID2 = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID + "/out/0/hex";
+
     //Boolean isOnline;
 
     //Timer timer = new Timer();
@@ -117,6 +121,32 @@ public class BsvTxOperations {
         //timer.purge();
         //timer = new Timer();
         urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
+        //timer.schedule(new TimeCheckURL(), 0, 5000);
+        //threadEndReadHexBsvTx = false;
+
+
+        //timer.schedule(new TimeCheckURL(), dalyWhatsOnChain, 5000);
+        //timer.schedule(timerWoc01 = new TimeCheckURL(), dalyWhatsOnChain, 5000);
+//        timer.schedule(timerWoc01, dalyWhatsOnChain, 5000);
+
+
+        threadReadHexBsvTx.start();
+
+        //threadArray[threadArrayIndex].start();
+
+    }
+
+    public void readHexBsvTxSCRIP(String TXID){
+
+        //timer.cancel();
+        //timer.purge();
+        //timer = new Timer();
+
+        //urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
+
+        urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID + "/out/0/hex";
+
+
         //timer.schedule(new TimeCheckURL(), 0, 5000);
         //threadEndReadHexBsvTx = false;
 
@@ -403,6 +433,17 @@ public class BsvTxOperations {
         threadreadBsvAddsUnspent.start();
     }
 
+    public void readBsvSCRIPTUnspent(String SCRIPTHASH){
+
+        //urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/address/" + BSVADD +  "/unspent";
+
+        urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/script/" + SCRIPTHASH + "/unspent";
+
+        //O Processo a seguir foi testado e não pode ser executado fora de uma thread
+        //timer.schedule(new TimeCheckURL2(), dalyWhatsOnChain, 5000);
+        threadreadBsvAddsUnspent.start();
+    }
+
     Thread threadreadBsvAddsUnspent = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -415,6 +456,24 @@ public class BsvTxOperations {
             }
         }
     });
+
+    public void renewThreadUnspent()
+    {
+
+        threadreadBsvAddsUnspent = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    unsPentInputs = JsonTaskTXIDNew(urlBaseTXID);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
 
     String[] unspentIndex = new String[1000];
     String[] unspentValue = new String[1000];
@@ -500,6 +559,62 @@ public class BsvTxOperations {
         return totalString;
     }
 
+    /*
+    //private String ScriptTXID = "cafbd9718e9b7ee324014015789576b7eee10d3b63de70a3061a3c41f0d4ecda";
+    //private String ScriptTXID = "9dda331ceec2c8e259f3d599b7703b4a49aaffeec076f7a423cb17bd173b5e27";
+    private String ScriptTXID = "8a08ae7c4a48dd9b36440cc435389eb1e9b5a4e724b20100220d81ee40f8df02";
+    public String inputPreStringV2 (int nInputs, String SECsizeOut, String PUBKEYSEC)
+    {
+        String Version = "01000000";
+        //String nOfInputs = "01";
+
+        nInputs = 1;//Somente o output do Script
+        String nOfInputs = Integer.toHexString(nInputs);
+
+
+
+        while (nOfInputs.length() < 2)
+            nOfInputs = "0" + nOfInputs;
+
+        String inputSeq = "ffffffff";
+
+        String totalString = Version + nOfInputs;
+
+        // String inTxID = SHA256G.LEformat(toSpendTXID);
+        // String prvTxIndex = "01000000";
+
+        String derSecPAD =
+                "8a4730" +
+                        "44" +
+                        "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" +
+                        "41" +
+                        SECsizeOut + PUBKEYSEC;
+
+
+
+        for(int i = 0 ; i < nInputs; i ++)
+        {
+
+            int indexI = Integer.valueOf(unspentIndex[i]);
+
+            //String inputIndex = Integer.toHexString(indexI);
+            //String inputIndex = Integer.toHexString(1);
+            String inputIndex = Integer.toHexString(0);
+
+            while (inputIndex.length() < 8)
+                inputIndex = "0" + inputIndex;
+
+            //String ScriptTXID = "28759c36041943cbc4b4cbf98b12978cb821433e9a7a9f0fb21cfe6f83105b0c";
+            //String ScriptTXID = "cafbd9718e9b7ee324014015789576b7eee10d3b63de70a3061a3c41f0d4ecda";
+            totalString = totalString + SHA256G.LEformat(ScriptTXID)
+                    + SHA256G.LEformat(inputIndex) + derSecPAD + inputSeq;
+        }
+
+
+        return totalString;
+    }
+    */
+
     public String inputPosString (int nInputs, String SECsizeOut, String PUBKEYSEC, String[] derSecPAD)
     {
         String Version = "01000000";
@@ -541,6 +656,62 @@ public class BsvTxOperations {
 
         return totalString;
     }
+
+    /*
+    public String inputPosStringV2 (int nInputs, String SECsizeOut, String PUBKEYSEC, String[] derSecPAD)
+    {
+        String Version = "01000000";
+        //String nOfInputs = "01";
+
+        nInputs = 1;
+
+        String nOfInputs = Integer.toHexString(nInputs);
+
+        while (nOfInputs.length() < 2)
+            nOfInputs = "0" + nOfInputs;
+
+        String inputSeq = "ffffffff";
+
+        String totalString = Version + nOfInputs;
+
+        // String inTxID = SHA256G.LEformat(toSpendTXID);
+        // String prvTxIndex = "01000000";
+
+
+        //String ScriptTXID = "28759c36041943cbc4b4cbf98b12978cb821433e9a7a9f0fb21cfe6f83105b0c";
+        //String ScriptTXID = "cafbd9718e9b7ee324014015789576b7eee10d3b63de70a3061a3c41f0d4ecda";
+        //nInputs = 1;
+
+//        unspentValue[0] = "2000";
+//        unspentValue[1] = "0000";
+//        unspentValue[2] = "0000";
+//        unspentValue[3] = "0000";
+
+
+        for(int i = 0 ; i < nInputs; i ++)
+        {
+
+            int indexI = Integer.valueOf(unspentIndex[i]);
+
+            //String inputIndex = Integer.toHexString(indexI);
+            //String inputIndex = Integer.toHexString(1);
+            String inputIndex = Integer.toHexString(0);
+
+            while (inputIndex.length() < 8)
+                inputIndex = "0" + inputIndex;
+
+            //totalString = totalString + SHA256G.LEformat(unspentTXID[i]) + SHA256G.LEformat(inputIndex) + derSecPAD[i] + inputSeq;
+            totalString = totalString + SHA256G.LEformat(ScriptTXID)
+                    + SHA256G.LEformat(inputIndex) + derSecPAD[i] + inputSeq;
+        }
+
+
+        return totalString;
+    }
+
+     */
+
+
 
     public String OutputString(int nOutPuts, String[] PayWallets, String[] PayValues, int nORs, String[] OP_RETURNs, String inputPreString)
     {
@@ -586,8 +757,18 @@ public class BsvTxOperations {
                 //OP_RETURN size
                 ////////////////////////////////////////////
 
+                //Verificar se OP_RETURN aceita a otimização para dado com menos de 0x4c bytes
+                //Aparentemente funcionou
+
+                if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0x4b) {
+                    out1DataSizeType = "";
+                    //byteSizeout1size = "";
+                }
+
                 //if((out1Data.length() / 2)>=1 && (out1Data.length() / 2)<=256)
-                if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0xff) {
+
+                //if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0xff) {
+                else if((out1Data.length() / 2) >= 0x4c && (out1Data.length() / 2) <= 0xff) {
                     out1DataSizeType = "4c";
                     //byteSizeout1size = "";
                 }
@@ -655,6 +836,7 @@ public class BsvTxOperations {
                 }
                 //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
                 //Limit 99 kbytes por OP_RETURN
+                //Verificar se OP_RETURN a expansão até o limite máximo de 0xffffffff
                 else if ((Out1Script.length() / 2) >= 0x00010000 && (Out1Script.length() / 2) <= 0x000182b8) {
 
                     byteSizeout1size = "fe";
@@ -773,6 +955,1191 @@ public class BsvTxOperations {
         return  totalOutString;
     }
 
+    //Cria um Output OP_RETURN com OP_TRUE
+    public String OutputStringV2(int nOutPuts, String[] PayWallets, String[] PayValues, int nORs, String[] OP_RETURNs, String inputPreString, int tokenType)
+    {
+        String totalOutString = "";
+
+
+        //String nOuts = Integer.toHexString(nOutPuts);
+        String nOuts = Integer.toHexString(nOutPuts - 1);
+
+        while (nOuts.length() < 2)
+            nOuts = "0" + nOuts;
+
+        totalOutString = nOuts;
+
+        String out2Sat = ""; //Total - TXSize - fee
+        long totalSpent = 0;
+
+        //O ultimo output será sempre o retorno
+
+        String returnDataNew = ""; //somente 1 OP_RETURN
+        //String Out2Script = "";
+
+        for(int i = 0; i < nOutPuts; i ++)
+        {
+
+            if( i < nORs)
+            {
+                String outOpReturn = "0000000000000000";
+                String out1size = "00";
+                String out1ScriptType = "00" + "6a"; // OP_Return
+                String out1DataSizeType = "4c";//only one byte
+                String byteSizeout1size = "";
+                //String out1DataSizeType;
+                String out1DataSize = "00";//only one byte
+
+                //String out1Data = "2e2e2e617420746865206e616d65206f66204a65737573206576657279206b6e65652073686f756c6420626f772c206f66207468696e677320696e2068656176656e2c20616e64207468696e677320696e2065617274682c20616e64207468696e677320756e646572207468652065617274683b";
+                String out1Data = OP_RETURNs[i];
+
+                out1DataSize = Integer.toHexString(
+                        out1Data.length() / 2
+                );
+
+                if(out1DataSize.length() % 2 == 1)
+                    out1DataSize = "0" + out1DataSize;
+
+                ////////////////////////////////////////////
+                //OP_RETURN size
+                ////////////////////////////////////////////
+
+                //Verificar se OP_RETURN aceita a otimização para dado com menos de 0x4c bytes
+
+                //Verificar se OP_RETURN aceita a otimização para dado com menos de 0x4c bytes
+                //Aparentemente funcionou
+
+                if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0x4b) {
+                    out1DataSizeType = "";
+                    //byteSizeout1size = "";
+                }
+
+                //if((out1Data.length() / 2)>=1 && (out1Data.length() / 2)<=256)
+
+                //if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0xff) {
+                else if((out1Data.length() / 2) >= 0x4c && (out1Data.length() / 2) <= 0xff) {
+                    out1DataSizeType = "4c";
+                    //byteSizeout1size = "";
+                }
+
+                else if ((out1Data.length() / 2) >= 0x0100 && (out1Data.length() / 2) <= 0xffff) {
+                    out1DataSizeType = "4d";
+                    //byteSizeout1size = "fd";
+
+                    while (out1DataSize.length() < 4)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+
+
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                else if ((out1Data.length() / 2) >= 0x00010000 && (out1Data.length() / 2) <= 0x000182b8) {
+                    out1DataSizeType = "4e";
+                    //byteSizeout1size = "fe";
+
+                    while (out1DataSize.length() < 8)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+                }
+
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
+
+                //String Out1Script = "1976a914" + PayWallet160 + "88ac";
+                String Out1Script = out1ScriptType + out1DataSizeType + out1DataSize + out1Data;
+
+/*
+                out1size = Integer.toHexString(
+                        Out1Script.length() / 2
+                );
+
+                if(out1size.length() % 2 == 1)
+                    out1size = "0" + out1size;
+
+                //out1size = SHA256G.LEformat(out1size);
+
+
+                ////////////////////////////////////////////
+                //Ajuste do tamanho do Script e indicação do byte de tamanho em bytes
+                // Só pode ser indicado a partir desta posição para não dar conflito
+                // se o script ultrapassar os bytes indicados para os dados
+                ////////////////////////////////////////////
+
+                //if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xff) {
+                if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xfc) {
+                    //out1size = out1size;
+                    byteSizeout1size = "";
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                //else if ((Out1Script.length() / 2) >= 0x0100 && (Out1Script.length() / 2) <= 0xffff) {
+                else if ((Out1Script.length() / 2) >= 0x00fd && (Out1Script.length() / 2) <= 0xffff) {
+
+                    byteSizeout1size = "fd";
+
+                    while (out1size.length() < 4)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                else if ((Out1Script.length() / 2) >= 0x00010000 && (Out1Script.length() / 2) <= 0x000182b8) {
+
+                    byteSizeout1size = "fe";
+
+                    while (out1size.length() < 8)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+*/
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
+
+                ////////////////////////////////////////////////////////////////////////////
+                //Testes para dados com OP_TRUE OP_RETURN <DATA> e <DATA> OP_DROP
+                //  Para dados com até 256 caracteres
+                ////////////////////////////////////////////////////////////////////////////
+
+                //returnDataNew = Out1Script.substring(2); // uso do OP_RETURN com OP_TRUE
+
+                //returnDataNew = Out1Script.substring(4) + "75"; // com esta metodologia deu erro
+                // sem a otimzação prévia do tamanho do script de dado;
+
+                //Com o código otimizado para o menor formato de dado possível
+                // Remover o OP_FALSE OP_RETURN 0x00 0x6a
+                // Reconstruir o tamanho do Script no fim do processo
+//                returnDataNew = Out1Script.substring(4) + "75"; // Funcionou com a otimização
+
+                if(tokenType == 1)
+                    returnDataNew = Out1Script.substring(2); // uso do OP_RETURN com OP_TRUE
+                if (tokenType == 2)
+                    returnDataNew = Out1Script.substring(4) + "75"; // Funcionou com a otimização
+
+                //Funcionou - fazer os testes com cuidado para Dados maiores
+                //returnDataNew = Out1Script.substring(6) + "75";// for data with less than 4b bytes;
+
+                //returnDataNew = "75" + Out1Script.substring(4); // com esta metodologia deu erro;
+                //Problema Relacionado a https://github.com/lbryio/lbrycrd/issues/242
+
+
+                Out1Script = outOpReturn + out1size + Out1Script;
+
+                //returnDataNew = Out1Script;
+
+                //totalOutString = totalOutString + Out1Script;
+
+            }
+            else
+            {
+                Keygen pubKey = new Keygen();
+
+                int j = i - nORs;
+                //String out2Sat = "00c8000000000000"; //Total - TXSize - fee
+                //String out2Sat = "7bc7000000000000"; //Total - TXSize - fee
+                //String out2Sat = ""; //Total - TXSize - fee
+
+                String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                long ivalue = Integer.valueOf(PayValues[j]);
+
+                String paySTRFinal = "";
+                paySTRFinal = "1976a914" + PayWallet160 + "88ac";
+
+                if( i < nOutPuts -1 )
+                    totalSpent = totalSpent + ivalue;
+                    //totalSpent = 2000 + ivalue; // não utilizar
+                else
+                {
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //Neste ponto eh calculado o valor de retorno para a carteira original,
+                    // menos a taxa oferecida aos mineradores
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    //ivalue = ivalue - totalSpent - 1;
+                    //A taxa Minima para ser testada na Gorilla Pool, a WhatsOnChain também aceitou em 04/07/2022;
+                    // Transações enviadas entre 19:50 e 20:00 de 04/07/2022
+                    //2d046b7bc16cb5863482d293b6a5fd9738945bace98f93abfcb46ca40ab364ab
+                    //b564a1212d0d5b0a4c1333de640e8dec387a05b1ed5d1580efbd0d4cd4338d05
+                    //Gorilla Pool Minerou 2 Blocos as 20:30 3 20:35 de 04/07/2022 mas não levou as TXs
+                    //As transações foram removidas da MemPool depois de cerca de 30h
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    // Esta taxa pode ser interessantes para comunicar dados que não queremos que permaneçam na rede
+                    // Usar a MemPool como canal de comunicação
+                    /////////////////////////////////////////////////////////////////////////////////////
+
+                    String paySTR = "0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000";
+                    //paySTRFinal = "1976a914" + PayWallet160 + "88ac";
+                    //Out2Script = "1976a914" + PayWallet160 + "88ac";
+
+                    /*
+                    if(returnDataNew.length()>0)
+                    {
+                        String outputSize = Integer.toHexString(
+                                ("76a914" + PayWallet160 + "88ac" + returnDataNew).length() / 2
+                        );
+                        while (outputSize.length() < 2)
+                            outputSize = "0" + outputSize;
+
+                        paySTR = "0000000000000000" + outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew + "00000000";
+                        paySTRFinal = outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew;
+
+
+                        returnDataNew = "";
+                    }
+                    */
+
+
+
+
+
+                    ivalue = ivalue - totalSpent -
+                    //ivalue = 2000 - totalSpent -
+                    //ivalue = 1000 - totalSpent -
+                    //ivalue = 3000 - totalSpent -
+                            ((
+                                    inputPreString.length() +
+                                            totalOutString.length() +
+                                            //("0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000").length()
+                                            paySTR.length()
+                            )/2)
+                                    // / 2; //0.5 Satoshis por byte
+                                    / 20; //0.05 Satoshis por byte
+
+                    // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
+                    // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
+
+                    // / 30; //0.033 Satoshis por byte
+                    // 2 TX enviadas por volta de 19:35 de 03/07/2022
+                    // Gorilla Pool has mined the 2 TXx on 04/07/2022
+                    // https://whatsonchain.com/tx/03840ceecf29f079879b4b49ea96e879d9ff5ae69b5315944da95363ab746136
+                    // https://whatsonchain.com/tx/b0dc1711dda5994eb27eb3cff9de75fc9026d16ebad9077ba4b96386437f9bc0
+
+                    // / 40; //0.025 Satoshis por byte
+                    // TAAL não permite entrada de TX com taxa < 0.032 sat/byte
+                    // TX recusada pela TAAL em 03/07/2022
+                    //There was an issue with the broadcast:unexpected response code 500: 66: mempool min fee not met
+
+
+                    // / 200; //0.005 Satoshis por byte - funciona, mas ainda demora demais.
+                    // 0.005 sat/b demora cerca de 6 hora para ser minerado em 30/06/2022
+                    // Somente Gorilla Pool aceita TXs com estas taxas por enquanto (03/07/2022);
+                }
+
+                Variables.SatBalance = Long.toString(ivalue);
+                out2Sat = Long.toHexString(ivalue);
+
+                while (out2Sat.length() < 16)
+                    out2Sat = "0" + out2Sat;
+
+                out2Sat = SHA256G.LEformat(out2Sat);
+
+                //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                //String Out1Script = "1976a914" + "61079f5031a5b7e312d9fc5051fd7ce018fabc92" + "88ac";
+                //String Out2Script = "1976a914" + BSV160 + "88ac";
+
+
+                //String Out2Script = "1976a914" + PayWallet160 + "88ac";
+                //Out2Script = "1976a914" + PayWallet160 + "88ac";
+                //Variables.ScriptADD = paySTRFinal;
+
+                /*
+
+                //Teste de envio de SATOSHIS para token do MoneyButton
+
+                //String testeScript = "610773667040302e33226535346638666639306535302e6173736574406d6f6e6579627574746f6e2e636f6d14036d480462d6bc7b69b303cd6688e4bfb9e13a1314f05528b5ffe7e4bbcc12a6a5ec39afb9e889b99414ed7af4b6b613d5b38ca4b1f6ebd98ef2f5a6354a463044022015da9754c1cb6a6d3f0c663e7e56097905b6a2d4f87cbb3314703c3d177f780e0220115466bc532693fa83cba774b40e10d61dfd5a18690f877f08f3c575bfda3baa241d804c4bf719543f8153bf42c68e3163c4b0ab5908340b4423fd06d61459eb6500000000000000000000005d79577a75567a567a567a567a567a567a5c79567a75557a557a557a557a557a5b79557a75547a547a547a547a5a79547a75537a537a537a5979537a75527a527a5779527a75517a5879517a75615f7901008791635e79a9537987695f795f79ac696851790087916900790087916956795e798769011479a954798769011579011579ac69011279a955798769011379011379ac777777777777777777777777777777777777777777776a0b0100000000000000080000";
+                String testeScript = "fd9501610773667040302e33226535346638666639306535302e6173736574406d6f6e6579627574746f6e2e636f6d14036d480462d6bc7b69b303cd6688e4bfb9e13a1314f05528b5ffe7e4bbcc12a6a5ec39afb9e889b99414ed7af4b6b613d5b38ca4b1f6ebd98ef2f5a6354a463044022015da9754c1cb6a6d3f0c663e7e56097905b6a2d4f87cbb3314703c3d177f780e0220115466bc532693fa83cba774b40e10d61dfd5a18690f877f08f3c575bfda3baa241d804c4bf719543f8153bf42c68e3163c4b0ab5908340b4423fd06d61459eb6500000000000000000000005d79577a75567a567a567a567a567a567a5c79567a75557a557a557a557a557a5b79557a75547a547a547a547a5a79547a75537a537a537a5979537a75527a527a5779527a75517a5879517a75615f7901008791635e79a9537987695f795f79ac696851790087916900790087916956795e798769011479a954798769011579011579ac69011279a955798769011379011379ac777777777777777777777777777777777777777777776a0b0100000000000000080000";
+
+                if(returnDataNew.length()>0)
+                {
+                    paySTRFinal = testeScript;
+
+                    returnDataNew = "";
+                }
+                */
+
+
+
+                if(returnDataNew.length()>0)
+                {
+
+                    /*
+                    String outputSize = Integer.toHexString(
+                            ("76a914" + PayWallet160 + "88ac" + returnDataNew).length() / 2
+                    );
+                    while (outputSize.length() < 2)
+                        outputSize = "0" + outputSize;
+
+                    //paySTR = "0000000000000000" + outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew + "00000000";
+                    paySTRFinal = outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew;
+
+                    */
+
+                    ////////////////////////////////////////////
+                    ////////////////////////////////////////////
+
+                    String out1size = "00";
+                    String byteSizeout1size = "";
+                    //String Out1Script = "1976a914" + PayWallet160 + "88ac";
+                    String Out1Script = "76a914" + PayWallet160 + "88ac" + returnDataNew;
+
+                    out1size = Integer.toHexString(
+                            Out1Script.length() / 2
+                    );
+
+                    if(out1size.length() % 2 == 1)
+                        out1size = "0" + out1size;
+
+                    //out1size = SHA256G.LEformat(out1size);
+
+
+                    ////////////////////////////////////////////
+                    //Ajuste do tamanho do Script e indicação do byte de tamanho em bytes
+                    // Só pode ser indicado a partir desta posição para não dar conflito
+                    // se o script ultrapassar os bytes indicados para os dados
+                    ////////////////////////////////////////////
+
+                    //if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xff) {
+                    if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xfc) {
+                        //out1size = out1size;
+                        byteSizeout1size = "";
+
+                        out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                    }
+                    //else if ((Out1Script.length() / 2) >= 0x0100 && (Out1Script.length() / 2) <= 0xffff) {
+                    else if ((Out1Script.length() / 2) >= 0x00fd && (Out1Script.length() / 2) <= 0xffff) {
+
+                        byteSizeout1size = "fd";
+
+                        while (out1size.length() < 4)
+                            out1size = "0" + out1size;
+
+                        out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                    }
+                    //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                    //Limit 99 kbytes por OP_RETURN
+                    else if ((Out1Script.length() / 2) >= 0x00010000 && (Out1Script.length() / 2) <= 0x000182b8) {
+
+                        byteSizeout1size = "fe";
+
+                        while (out1size.length() < 8)
+                            out1size = "0" + out1size;
+
+                        out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                    }
+
+                    ////////////////////////////////////////////
+                    ////////////////////////////////////////////
+
+
+                    //paySTRFinal = outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew;
+
+                    //Out1Script = outOpReturn + out1size + Out1Script;
+
+                    paySTRFinal = out1size + Out1Script;
+
+
+
+                    returnDataNew = "";
+                }
+
+
+
+                String Out2Script = paySTRFinal;
+
+                totalOutString = totalOutString + out2Sat + Out2Script;
+
+            }
+
+
+        }
+
+        //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
+        String lockTime = "00000000";
+
+        //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
+
+        totalOutString = totalOutString + lockTime;// + out2Sat;//  + Long.toHexString(txFee);
+
+        //return  inputPreString + totalOutString;
+        return  totalOutString;
+    }
+
+
+    public String OutputStringV3(int nOutPuts, String[] PayWallets, String[] PayValues, int nORs, String[] OP_RETURNs,
+                                 String inputPreString)
+    {
+
+        //Just for melting tokens
+        String totalOutString = "";
+
+        PayValues[0] = PayValues[1];
+
+        nOutPuts = 1;
+
+        String nOuts = Integer.toHexString(nOutPuts);
+
+        while (nOuts.length() < 2)
+            nOuts = "0" + nOuts;
+
+        totalOutString = nOuts;
+
+        String out2Sat = ""; //Total - TXSize - fee
+        long totalSpent = 0;
+
+        //O ultimo output será sempre o retorno
+
+        for(int i = 0; i < nOutPuts; i ++)
+        {
+
+            if( i < nORs)
+            {
+                String outOpReturn = "0000000000000000";
+                String out1size = "00";
+                String out1ScriptType = "00" + "6a"; // OP_Return
+                String out1DataSizeType = "4c";//only one byte
+                String byteSizeout1size = "";
+                //String out1DataSizeType;
+                String out1DataSize = "00";//only one byte
+
+                //String out1Data = "2e2e2e617420746865206e616d65206f66204a65737573206576657279206b6e65652073686f756c6420626f772c206f66207468696e677320696e2068656176656e2c20616e64207468696e677320696e2065617274682c20616e64207468696e677320756e646572207468652065617274683b";
+                String out1Data = OP_RETURNs[i];
+
+                out1DataSize = Integer.toHexString(
+                        out1Data.length() / 2
+                );
+
+                if(out1DataSize.length() % 2 == 1)
+                    out1DataSize = "0" + out1DataSize;
+
+                ////////////////////////////////////////////
+                //OP_RETURN size
+                ////////////////////////////////////////////
+
+                //Verificar se OP_RETURN aceita a otimização para dado com menos de 0x4c bytes
+                //Aparentemente funcionou
+
+                if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0x4b) {
+                    out1DataSizeType = "";
+                    //byteSizeout1size = "";
+                }
+
+                //if((out1Data.length() / 2)>=1 && (out1Data.length() / 2)<=256)
+
+                //if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0xff) {
+                else if((out1Data.length() / 2) >= 0x4c && (out1Data.length() / 2) <= 0xff) {
+                    out1DataSizeType = "4c";
+                    //byteSizeout1size = "";
+                }
+                else if ((out1Data.length() / 2) >= 0x0100 && (out1Data.length() / 2) <= 0xffff) {
+                    out1DataSizeType = "4d";
+                    //byteSizeout1size = "fd";
+
+                    while (out1DataSize.length() < 4)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+
+
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                else if ((out1Data.length() / 2) >= 0x00010000 && (out1Data.length() / 2) <= 0x000182b8) {
+                    out1DataSizeType = "4e";
+                    //byteSizeout1size = "fe";
+
+                    while (out1DataSize.length() < 8)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+                }
+
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
+
+                //String Out1Script = "1976a914" + PayWallet160 + "88ac";
+                String Out1Script = out1ScriptType + out1DataSizeType + out1DataSize + out1Data;
+
+                out1size = Integer.toHexString(
+                        Out1Script.length() / 2
+                );
+
+                if(out1size.length() % 2 == 1)
+                    out1size = "0" + out1size;
+
+                //out1size = SHA256G.LEformat(out1size);
+
+
+                ////////////////////////////////////////////
+                //Ajuste do tamanho do Script e indicação do byte de tamanho em bytes
+                // Só pode ser indicado a partir desta posição para não dar conflito
+                // se o script ultrapassar os bytes indicados para os dados
+                ////////////////////////////////////////////
+
+                //if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xff) {
+                if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xfc) {
+                    //out1size = out1size;
+                    byteSizeout1size = "";
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                //else if ((Out1Script.length() / 2) >= 0x0100 && (Out1Script.length() / 2) <= 0xffff) {
+                else if ((Out1Script.length() / 2) >= 0x00fd && (Out1Script.length() / 2) <= 0xffff) {
+
+                    byteSizeout1size = "fd";
+
+                    while (out1size.length() < 4)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                //Verificar se OP_RETURN a expansão até o limite máximo de 0xffffffff
+                else if ((Out1Script.length() / 2) >= 0x00010000 && (Out1Script.length() / 2) <= 0x000182b8) {
+
+                    byteSizeout1size = "fe";
+
+                    while (out1size.length() < 8)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
+
+                Out1Script = outOpReturn + out1size + Out1Script;
+
+                totalOutString = totalOutString + Out1Script;
+
+            }
+            else
+            {
+                Keygen pubKey = new Keygen();
+
+                int j = i - nORs;
+
+                //String out2Sat = "00c8000000000000"; //Total - TXSize - fee
+                //String out2Sat = "7bc7000000000000"; //Total - TXSize - fee
+                //String out2Sat = ""; //Total - TXSize - fee
+
+                String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                long ivalue = Integer.valueOf(PayValues[j]);
+
+                if( i < nOutPuts -1 )
+                    totalSpent = totalSpent + ivalue;
+                else
+                {
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //Neste ponto eh calculado o valor de retorno para a carteira original,
+                    // menos a taxa oferecida aos mineradores
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    //ivalue = ivalue - totalSpent - 1;
+                    //A taxa Minima para ser testada na Gorilla Pool, a WhatsOnChain também aceitou em 04/07/2022;
+                    // Transações enviadas entre 19:50 e 20:00 de 04/07/2022
+                    //2d046b7bc16cb5863482d293b6a5fd9738945bace98f93abfcb46ca40ab364ab
+                    //b564a1212d0d5b0a4c1333de640e8dec387a05b1ed5d1580efbd0d4cd4338d05
+                    //Gorilla Pool Minerou 2 Blocos as 20:30 3 20:35 de 04/07/2022 mas não levou as TXs
+                    //As transações foram removidas da MemPool depois de cerca de 30h
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    // Esta taxa pode ser interessantes para comunicar dados que não queremos que permaneçam na rede
+                    // Usar a MemPool como canal de comunicação
+                    /////////////////////////////////////////////////////////////////////////////////////
+
+
+                    ivalue = ivalue - totalSpent -
+                            ((
+                                    inputPreString.length() +
+                                            totalOutString.length() +
+                                            ("0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000").length()
+                            )/2)
+                                    // / 2; //0.5 Satoshis por byte
+                                    / 20; //0.05 Satoshis por byte
+
+                    // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
+                    // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
+
+                    // / 30; //0.033 Satoshis por byte
+                    // 2 TX enviadas por volta de 19:35 de 03/07/2022
+                    // Gorilla Pool has mined the 2 TXx on 04/07/2022
+                    // https://whatsonchain.com/tx/03840ceecf29f079879b4b49ea96e879d9ff5ae69b5315944da95363ab746136
+                    // https://whatsonchain.com/tx/b0dc1711dda5994eb27eb3cff9de75fc9026d16ebad9077ba4b96386437f9bc0
+
+                    // / 40; //0.025 Satoshis por byte
+                    // TAAL não permite entrada de TX com taxa < 0.032 sat/byte
+                    // TX recusada pela TAAL em 03/07/2022
+                    //There was an issue with the broadcast:unexpected response code 500: 66: mempool min fee not met
+
+
+                    // / 200; //0.005 Satoshis por byte - funciona, mas ainda demora demais.
+                    // 0.005 sat/b demora cerca de 6 hora para ser minerado em 30/06/2022
+                    // Somente Gorilla Pool aceita TXs com estas taxas por enquanto (03/07/2022);
+                }
+
+                Variables.SatBalance = Long.toString(ivalue);
+                out2Sat = Long.toHexString(ivalue);
+
+                while (out2Sat.length() < 16)
+                    out2Sat = "0" + out2Sat;
+
+                out2Sat = SHA256G.LEformat(out2Sat);
+
+                //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                //String Out1Script = "1976a914" + "61079f5031a5b7e312d9fc5051fd7ce018fabc92" + "88ac";
+                //String Out2Script = "1976a914" + BSV160 + "88ac";
+                String Out2Script = "1976a914" + PayWallet160 + "88ac";
+
+                totalOutString = totalOutString + out2Sat + Out2Script;
+
+            }
+
+
+        }
+
+        //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
+        String lockTime = "00000000";
+
+
+        //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
+
+
+
+        totalOutString = totalOutString + lockTime;// + out2Sat;//  + Long.toHexString(txFee);
+
+        //return  inputPreString + totalOutString;
+        return  totalOutString;
+    }
+
+
+    public String OutputStringV4(int nOutPuts, String[] PayWallets, String[] PayValues, int nORs, String ScriptHEX,
+                                 String inputPreString, int tokenType)
+    {
+        String totalOutString = "";
+
+        //String nOuts = Integer.toHexString(nOutPuts);
+        String nOuts = Integer.toHexString(nOutPuts - 1);
+
+        while (nOuts.length() < 2)
+            nOuts = "0" + nOuts;
+
+        totalOutString = nOuts;
+
+        String out2Sat = ""; //Total - TXSize - fee
+        long totalSpent = 0;
+
+        //O ultimo output será sempre o retorno
+
+        String returnDataNew = ""; //somente 1 OP_RETURN
+        //String Out2Script = "";
+
+
+
+
+        for(int i = 0; i < nOutPuts; i ++)
+        {
+
+            if( i < nORs)
+            {
+                //Keygen pubKey = new Keygen();
+
+                //returnDataNew = ScriptHEX;
+                //returnDataNew = ScriptHEX.substring(0,6) + pubKey.addRMD(PayWallets[0]) +
+                //        ScriptHEX.substring(6+20, ScriptHEX.length());
+                returnDataNew = ScriptHEX.substring(6+40+4, ScriptHEX.length()-1);
+
+                //return  returnDataNew;
+
+            }
+            else
+            {
+                Keygen pubKey = new Keygen();
+
+                int j = i - nORs;
+                //String out2Sat = "00c8000000000000"; //Total - TXSize - fee
+                //String out2Sat = "7bc7000000000000"; //Total - TXSize - fee
+                //String out2Sat = ""; //Total - TXSize - fee
+
+                String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                long ivalue = Integer.valueOf(PayValues[j]);
+
+                String paySTRFinal = "";
+                paySTRFinal = "1976a914" + PayWallet160 + "88ac";
+
+                if( i < nOutPuts -1 )
+                    totalSpent = totalSpent + ivalue;
+                    //totalSpent = 2000 + ivalue; // não utilizar
+                else
+                {
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //Neste ponto eh calculado o valor de retorno para a carteira original,
+                    // menos a taxa oferecida aos mineradores
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    //ivalue = ivalue - totalSpent - 1;
+                    //A taxa Minima para ser testada na Gorilla Pool, a WhatsOnChain também aceitou em 04/07/2022;
+                    // Transações enviadas entre 19:50 e 20:00 de 04/07/2022
+                    //2d046b7bc16cb5863482d293b6a5fd9738945bace98f93abfcb46ca40ab364ab
+                    //b564a1212d0d5b0a4c1333de640e8dec387a05b1ed5d1580efbd0d4cd4338d05
+                    //Gorilla Pool Minerou 2 Blocos as 20:30 3 20:35 de 04/07/2022 mas não levou as TXs
+                    //As transações foram removidas da MemPool depois de cerca de 30h
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    // Esta taxa pode ser interessantes para comunicar dados que não queremos que permaneçam na rede
+                    // Usar a MemPool como canal de comunicação
+                    /////////////////////////////////////////////////////////////////////////////////////
+
+                    String paySTR = "0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000";
+                    //paySTRFinal = "1976a914" + PayWallet160 + "88ac";
+                    //Out2Script = "1976a914" + PayWallet160 + "88ac";
+
+
+                    ivalue = ivalue - totalSpent -
+                            //ivalue = 2000 - totalSpent -
+                            //ivalue = 1000 - totalSpent -
+                            //ivalue = 3000 - totalSpent -
+                            ((
+                                    inputPreString.length() +
+                                            totalOutString.length() +
+                                            //("0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000").length()
+                                            paySTR.length()
+                            )/2)
+                                    // / 2; //0.5 Satoshis por byte
+                                    / 20; //0.05 Satoshis por byte
+
+                    // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
+                    // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
+
+                    // / 30; //0.033 Satoshis por byte
+                    // 2 TX enviadas por volta de 19:35 de 03/07/2022
+                    // Gorilla Pool has mined the 2 TXx on 04/07/2022
+                    // https://whatsonchain.com/tx/03840ceecf29f079879b4b49ea96e879d9ff5ae69b5315944da95363ab746136
+                    // https://whatsonchain.com/tx/b0dc1711dda5994eb27eb3cff9de75fc9026d16ebad9077ba4b96386437f9bc0
+
+                    // / 40; //0.025 Satoshis por byte
+                    // TAAL não permite entrada de TX com taxa < 0.032 sat/byte
+                    // TX recusada pela TAAL em 03/07/2022
+                    //There was an issue with the broadcast:unexpected response code 500: 66: mempool min fee not met
+
+
+                    // / 200; //0.005 Satoshis por byte - funciona, mas ainda demora demais.
+                    // 0.005 sat/b demora cerca de 6 hora para ser minerado em 30/06/2022
+                    // Somente Gorilla Pool aceita TXs com estas taxas por enquanto (03/07/2022);
+                }
+
+                Variables.SatBalance = Long.toString(ivalue);
+                out2Sat = Long.toHexString(ivalue);
+
+                while (out2Sat.length() < 16)
+                    out2Sat = "0" + out2Sat;
+
+                out2Sat = SHA256G.LEformat(out2Sat);
+
+                //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                //String Out1Script = "1976a914" + "61079f5031a5b7e312d9fc5051fd7ce018fabc92" + "88ac";
+                //String Out2Script = "1976a914" + BSV160 + "88ac";
+
+
+                //String Out2Script = "1976a914" + PayWallet160 + "88ac";
+                //Out2Script = "1976a914" + PayWallet160 + "88ac";
+                //Variables.ScriptADD = paySTRFinal;
+
+
+
+                if(returnDataNew.length()>0)
+                {
+
+
+                    ////////////////////////////////////////////
+                    ////////////////////////////////////////////
+
+                    String out1size = "00";
+                    String byteSizeout1size = "";
+                    //String Out1Script = "1976a914" + PayWallet160 + "88ac";
+                    String Out1Script = "76a914" + PayWallet160 + "88ac" + returnDataNew;
+
+                    out1size = Integer.toHexString(
+                            Out1Script.length() / 2
+                    );
+
+                    if(out1size.length() % 2 == 1)
+                        out1size = "0" + out1size;
+
+                    //out1size = SHA256G.LEformat(out1size);
+
+
+                    ////////////////////////////////////////////
+                    //Ajuste do tamanho do Script e indicação do byte de tamanho em bytes
+                    // Só pode ser indicado a partir desta posição para não dar conflito
+                    // se o script ultrapassar os bytes indicados para os dados
+                    ////////////////////////////////////////////
+
+                    //if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xff) {
+                    if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xfc) {
+                        //out1size = out1size;
+                        byteSizeout1size = "";
+
+                        out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                    }
+                    //else if ((Out1Script.length() / 2) >= 0x0100 && (Out1Script.length() / 2) <= 0xffff) {
+                    else if ((Out1Script.length() / 2) >= 0x00fd && (Out1Script.length() / 2) <= 0xffff) {
+
+                        byteSizeout1size = "fd";
+
+                        while (out1size.length() < 4)
+                            out1size = "0" + out1size;
+
+                        out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                    }
+                    //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                    //Limit 99 kbytes por OP_RETURN
+                    else if ((Out1Script.length() / 2) >= 0x00010000 && (Out1Script.length() / 2) <= 0x000182b8) {
+
+                        byteSizeout1size = "fe";
+
+                        while (out1size.length() < 8)
+                            out1size = "0" + out1size;
+
+                        out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                    }
+
+                    ////////////////////////////////////////////
+                    ////////////////////////////////////////////
+
+
+                    //paySTRFinal = outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew;
+
+                    //Out1Script = outOpReturn + out1size + Out1Script;
+
+                    paySTRFinal = out1size + Out1Script;
+
+
+
+                    returnDataNew = "";
+                }
+
+
+
+                String Out2Script = paySTRFinal;
+
+                totalOutString = totalOutString + out2Sat + Out2Script;
+
+            }
+
+
+        }
+
+        //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
+        String lockTime = "00000000";
+
+        //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
+
+        totalOutString = totalOutString + lockTime;// + out2Sat;//  + Long.toHexString(txFee);
+
+        //return  inputPreString + totalOutString;
+        return  totalOutString;
+    }
+
+    //Cria um Output OP_DROP
+    public String OutputStringV5(int nOutPuts, String[] PayWallets, String[] PayValues, int nORs, String[] OP_RETURNs, String inputPreString)
+    {
+        String totalOutString = "";
+
+
+        //String nOuts = Integer.toHexString(nOutPuts);
+        String nOuts = Integer.toHexString(nOutPuts - 1);
+
+        while (nOuts.length() < 2)
+            nOuts = "0" + nOuts;
+
+        totalOutString = nOuts;
+
+        String out2Sat = ""; //Total - TXSize - fee
+        long totalSpent = 0;
+
+        //O ultimo output será sempre o retorno
+
+        String returnDataNew = ""; //somente 1 OP_RETURN
+        //String Out2Script = "";
+
+        for(int i = 0; i < nOutPuts; i ++)
+        {
+
+            if( i < nORs)
+            {
+                String outOpReturn = "0000000000000000";
+                String out1size = "00";
+                String out1ScriptType = "00" + "6a"; // OP_Return
+                String out1DataSizeType = "4c";//only one byte
+                String byteSizeout1size = "";
+                //String out1DataSizeType;
+                String out1DataSize = "00";//only one byte
+
+                //String out1Data = "2e2e2e617420746865206e616d65206f66204a65737573206576657279206b6e65652073686f756c6420626f772c206f66207468696e677320696e2068656176656e2c20616e64207468696e677320696e2065617274682c20616e64207468696e677320756e646572207468652065617274683b";
+                String out1Data = OP_RETURNs[i];
+
+                out1DataSize = Integer.toHexString(
+                        out1Data.length() / 2
+                );
+
+                if(out1DataSize.length() % 2 == 1)
+                    out1DataSize = "0" + out1DataSize;
+
+                ////////////////////////////////////////////
+                //OP_RETURN size
+                ////////////////////////////////////////////
+
+                //if((out1Data.length() / 2)>=1 && (out1Data.length() / 2)<=256)
+                if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0xff) {
+                    out1DataSizeType = "4c";
+                    //byteSizeout1size = "";
+                }
+                else if ((out1Data.length() / 2) >= 0x0100 && (out1Data.length() / 2) <= 0xffff) {
+                    out1DataSizeType = "4d";
+                    //byteSizeout1size = "fd";
+
+                    while (out1DataSize.length() < 4)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+
+
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                else if ((out1Data.length() / 2) >= 0x00010000 && (out1Data.length() / 2) <= 0x000182b8) {
+                    out1DataSizeType = "4e";
+                    //byteSizeout1size = "fe";
+
+                    while (out1DataSize.length() < 8)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+                }
+
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
+
+                //String Out1Script = "1976a914" + PayWallet160 + "88ac";
+                String Out1Script = out1ScriptType + out1DataSizeType + out1DataSize + out1Data;
+
+                out1size = Integer.toHexString(
+                        Out1Script.length() / 2
+                );
+
+                if(out1size.length() % 2 == 1)
+                    out1size = "0" + out1size;
+
+                //out1size = SHA256G.LEformat(out1size);
+
+
+                ////////////////////////////////////////////
+                //Ajuste do tamanho do Script e indicação do byte de tamanho em bytes
+                // Só pode ser indicado a partir desta posição para não dar conflito
+                // se o script ultrapassar os bytes indicados para os dados
+                ////////////////////////////////////////////
+
+                //if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xff) {
+                if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xfc) {
+                    //out1size = out1size;
+                    byteSizeout1size = "";
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                //else if ((Out1Script.length() / 2) >= 0x0100 && (Out1Script.length() / 2) <= 0xffff) {
+                else if ((Out1Script.length() / 2) >= 0x00fd && (Out1Script.length() / 2) <= 0xffff) {
+
+                    byteSizeout1size = "fd";
+
+                    while (out1size.length() < 4)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                else if ((Out1Script.length() / 2) >= 0x00010000 && (Out1Script.length() / 2) <= 0x000182b8) {
+
+                    byteSizeout1size = "fe";
+
+                    while (out1size.length() < 8)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
+
+                returnDataNew = Out1Script.substring(4)+"75";
+                Out1Script = outOpReturn + out1size + Out1Script;
+
+                //returnDataNew = Out1Script;
+
+                //totalOutString = totalOutString + Out1Script;
+
+            }
+            else
+            {
+                Keygen pubKey = new Keygen();
+
+                int j = i - nORs;
+                //String out2Sat = "00c8000000000000"; //Total - TXSize - fee
+                //String out2Sat = "7bc7000000000000"; //Total - TXSize - fee
+                //String out2Sat = ""; //Total - TXSize - fee
+
+                String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                long ivalue = Integer.valueOf(PayValues[j]);
+
+                String paySTRFinal = "";
+                paySTRFinal = "1976a914" + PayWallet160 + "88ac";
+
+                if( i < nOutPuts -1 )
+                    totalSpent = totalSpent + ivalue;
+                    //totalSpent = 2000 + ivalue; // não utilizar
+                else
+                {
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //Neste ponto eh calculado o valor de retorno para a carteira original,
+                    // menos a taxa oferecida aos mineradores
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    //ivalue = ivalue - totalSpent - 1;
+                    //A taxa Minima para ser testada na Gorilla Pool, a WhatsOnChain também aceitou em 04/07/2022;
+                    // Transações enviadas entre 19:50 e 20:00 de 04/07/2022
+                    //2d046b7bc16cb5863482d293b6a5fd9738945bace98f93abfcb46ca40ab364ab
+                    //b564a1212d0d5b0a4c1333de640e8dec387a05b1ed5d1580efbd0d4cd4338d05
+                    //Gorilla Pool Minerou 2 Blocos as 20:30 3 20:35 de 04/07/2022 mas não levou as TXs
+                    //As transações foram removidas da MemPool depois de cerca de 30h
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    // Esta taxa pode ser interessantes para comunicar dados que não queremos que permaneçam na rede
+                    // Usar a MemPool como canal de comunicação
+                    /////////////////////////////////////////////////////////////////////////////////////
+
+                    String paySTR = "0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000";
+                    //paySTRFinal = "1976a914" + PayWallet160 + "88ac";
+                    //Out2Script = "1976a914" + PayWallet160 + "88ac";
+
+                    /*
+                    if(returnDataNew.length()>0)
+                    {
+                        String outputSize = Integer.toHexString(
+                                ("76a914" + PayWallet160 + "88ac" + returnDataNew).length() / 2
+                        );
+                        while (outputSize.length() < 2)
+                            outputSize = "0" + outputSize;
+
+                        paySTR = "0000000000000000" + outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew + "00000000";
+                        paySTRFinal = outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew;
+
+
+                        returnDataNew = "";
+                    }
+                    */
+
+
+
+
+
+                    ivalue = ivalue - totalSpent -
+                            //ivalue = 2000 - totalSpent -
+                            //ivalue = 1000 - totalSpent -
+                            //ivalue = 3000 - totalSpent -
+                            ((
+                                    inputPreString.length() +
+                                            totalOutString.length() +
+                                            //("0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000").length()
+                                            paySTR.length()
+                            )/2)
+                                    // / 2; //0.5 Satoshis por byte
+                                    / 20; //0.05 Satoshis por byte
+
+                    // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
+                    // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
+
+                    // / 30; //0.033 Satoshis por byte
+                    // 2 TX enviadas por volta de 19:35 de 03/07/2022
+                    // Gorilla Pool has mined the 2 TXx on 04/07/2022
+                    // https://whatsonchain.com/tx/03840ceecf29f079879b4b49ea96e879d9ff5ae69b5315944da95363ab746136
+                    // https://whatsonchain.com/tx/b0dc1711dda5994eb27eb3cff9de75fc9026d16ebad9077ba4b96386437f9bc0
+
+                    // / 40; //0.025 Satoshis por byte
+                    // TAAL não permite entrada de TX com taxa < 0.032 sat/byte
+                    // TX recusada pela TAAL em 03/07/2022
+                    //There was an issue with the broadcast:unexpected response code 500: 66: mempool min fee not met
+
+
+                    // / 200; //0.005 Satoshis por byte - funciona, mas ainda demora demais.
+                    // 0.005 sat/b demora cerca de 6 hora para ser minerado em 30/06/2022
+                    // Somente Gorilla Pool aceita TXs com estas taxas por enquanto (03/07/2022);
+                }
+
+                Variables.SatBalance = Long.toString(ivalue);
+                out2Sat = Long.toHexString(ivalue);
+
+                while (out2Sat.length() < 16)
+                    out2Sat = "0" + out2Sat;
+
+                out2Sat = SHA256G.LEformat(out2Sat);
+
+                //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                //String Out1Script = "1976a914" + "61079f5031a5b7e312d9fc5051fd7ce018fabc92" + "88ac";
+                //String Out2Script = "1976a914" + BSV160 + "88ac";
+
+
+                //String Out2Script = "1976a914" + PayWallet160 + "88ac";
+                //Out2Script = "1976a914" + PayWallet160 + "88ac";
+                //Variables.ScriptADD = paySTRFinal;
+
+                if(returnDataNew.length()>0)
+                {
+                    String outputSize = Integer.toHexString(
+                            ("76a914" + PayWallet160 + "88ac" + returnDataNew).length() / 2
+                    );
+                    while (outputSize.length() < 2)
+                        outputSize = "0" + outputSize;
+
+                    //paySTR = "0000000000000000" + outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew + "00000000";
+                    paySTRFinal = outputSize + "76a914" + PayWallet160 + "88ac" + returnDataNew;
+
+
+                    returnDataNew = "";
+                }
+
+                String Out2Script = paySTRFinal;
+
+                totalOutString = totalOutString + out2Sat + Out2Script;
+
+            }
+
+
+        }
+
+        //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
+        String lockTime = "00000000";
+
+        //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
+
+        totalOutString = totalOutString + lockTime;// + out2Sat;//  + Long.toHexString(txFee);
+
+        //return  inputPreString + totalOutString;
+        return  totalOutString;
+    }
 
 
     ////////////////////////////////////////////////////////////////
@@ -1325,6 +2692,7 @@ public class BsvTxOperations {
         //String TXVersion = "01000000";
         String TXVersion = txPartsCurrent[0];
 
+
         //       preImage41parts = preImage41parts + TXVersion + "\n";
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1406,6 +2774,7 @@ public class BsvTxOperations {
 //            preImage41parts = preImage41parts + prevOutID[i] + "\n";
         }
 
+
 /////////////////////////////////////////////////////////////
 /// Inicio da busca por cada TX anterior
 /////////////////////////////////////////////////////////////
@@ -1435,6 +2804,8 @@ public class BsvTxOperations {
         // a cada uso
         /////////////////////////////////////////////////
         //setThreadArray(nOfInputsCurrent);
+
+
 
         for(int i = 0; i < nOfInputsCurrent; i++) {
         //for(int i = 1; i < nOfInputsCurrent; i++) {
@@ -1664,6 +3035,7 @@ public class BsvTxOperations {
 
         }
 
+
 /////////////////////////////////////////////////////////////
 /// Fim da busca por cada TX anterior
 /////////////////////////////////////////////////////////////
@@ -1725,6 +3097,7 @@ public class BsvTxOperations {
         txID(txHexDataIn);
 
         String [] TxPreimageOut = new String[nOfInputsCurrent];
+
 
         for(int i = 0; i < nOfInputsCurrent; i++ )
             TxPreimageOut[i] =

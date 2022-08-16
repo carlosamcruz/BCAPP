@@ -31,6 +31,11 @@ public class MainBCAPP extends AppCompatActivity {
         Button buttonMS7 = (Button) findViewById(R.id.buttonMS7);
         Button buttonMS8 = (Button) findViewById(R.id.buttonMS8);
 
+        Button buttonMS9 = (Button) findViewById(R.id.buttonMS9);
+        Button buttonMS10 = (Button) findViewById(R.id.buttonMS10);
+        Button buttonMS11 = (Button) findViewById(R.id.buttonMS11);
+        Button buttonMS12 = (Button) findViewById(R.id.buttonMS12);
+
         //fa = this;
 
 
@@ -121,15 +126,118 @@ public class MainBCAPP extends AppCompatActivity {
                 }
                 else {
 
+                    Variables.TokenType = 0;
                     Intent it = new Intent(MainBCAPP.this, Token.class);
                     startActivity(it);
-
                 }
 
 
 
             }
         });
+
+        buttonMS9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+                else if(Variables.SatBalance.compareTo("0")==0)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                    Variables.TokenType = 1;
+                    Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+                }
+
+
+
+            }
+        });
+
+
+        buttonMS10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+                else if(Variables.SatBalance.compareTo("0")==0)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                    Variables.TokenType = 2;
+                    Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+                }
+
+
+
+            }
+        });
+
+
+        buttonMS11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+                /*else if(Variables.SatBalance.compareTo("0")==0)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }*/
+                else {
+
+                    Variables.TokenType = 4;
+                    Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+                }
+
+
+
+            }
+        });
+
+        buttonMS12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+                /*else if(Variables.SatBalance.compareTo("0")==0)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }*/
+                else {
+
+                    Variables.TokenType = 3;
+                    Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+                }
+
+
+
+            }
+        });
+
 
         buttonMS8.setOnClickListener(new View.OnClickListener() {
             @Override
