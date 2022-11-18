@@ -67,6 +67,17 @@ public class NFTText extends AppCompatActivity {
             @Override
             public void onClick(final View view) {
 
+                if(Variables.ditactic == true)
+                {
+                    //didacticPrint();
+
+                    final String text = ((EditText) findViewById(R.id.ET_TEXTOST)).getText().toString();
+                    int numberOfZeros = Integer.valueOf(text);
+                    didacticPoW(numberOfZeros);
+
+
+                }else
+
                 if(descInput) {
 
                     if (state) {
@@ -146,6 +157,100 @@ public class NFTText extends AppCompatActivity {
         Toast.makeText(this, "TEXT DATA!!!", Toast.LENGTH_SHORT).show();
     }
 
+
+    public void didacticPoW(int numZeros) {
+
+        //((EditText) findViewById(R.id.ET_TEXTOST)).setText("PVT Key: " + Variables.MainPaymail);
+
+        long nonce = 0;
+        //String base = "Texto qualquer1";
+
+        String base = "00000895e2c2a19ec3906a6e87f63bdd90554ea83a7ae078bb0495c23aa6f832 INFO BLOCK; Tx1 abcd; Tx3 cef5463; Tx2 123456; ;... Txn efabc456";
+        //String result = SHA256G.SHA256STR(base);
+        String result = "";
+
+        int cont = 0;
+        int cont2 = 0;
+
+        do {
+            cont2 ++;
+            cont = 0;
+            result = SHA256G.SHA256STR(base + nonce);
+            result = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(result));
+
+            for (int i = 0; i < numZeros; i++) {
+                if (result.charAt(i) == '0')
+                    cont++;
+            }
+            nonce++;
+
+        } while (cont < numZeros && nonce < 0x7fffffffffffffffL);
+        //} while (cont2 <= 100);
+
+
+        ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                "Result: \n" + result +
+                "\n\nNonce: " + (nonce - 1) +
+                "\n\nBase: " + base +
+                "\n\nNZeros: " + numZeros +
+                "\n\nTZeros: " + 4*numZeros
+               // "\n\nCont: " + cont
+               // "\n\nCont2: " + cont2
+                //"\n\nChar 63: " + result.charAt(63)
+        );
+
+        //((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
+    }
+
+    public void didacticPrint() {
+
+        //((EditText) findViewById(R.id.ET_TEXTOST)).setText("PVT Key: " + Variables.MainPaymail);
+        Keygen pubKey = new Keygen();
+
+        String PUBKEY = pubKey.publicKeyHEX(Variables.MainPaymail); //PVTKEY - string Hexadecimal de 64 elementos.
+
+        String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, Variables.CompPKey);
+        String BSVADD = pubKey.bsvWalletFull(PUBKEY, Variables.CompPKey);
+
+        ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                "PVT Key: \n" + Variables.MainPaymail +
+                "\n\nPVT Key BI: \n" + Variables.dPvtKey +
+                "\n\nPub Key X BI: \n" + Variables.dPubKX +
+                "\n\nPub Key Y BI: \n" + Variables.dPubKY +
+                "\n\nPub Key Uncomp: \n" + Variables.dPubKUnComp +
+                "\n\nPub Key Comp: \n" + Variables.dPubKComp +
+                "\n\nSHA256(Pub Key Uncomp): \n" + Variables.dSha256UnComp +
+                "\n\nSHA256(Pub Key Comp): \n" + Variables.dSha256Comp +
+                "\n\nRMD160(SHA256(Pub Key Uncomp)): \n" + Variables.dRMP160UnComp +
+                "\n\nRMD160(SHA256(Pub Key Comp)): \n" + Variables.dRMP160Comp +
+
+                "\n\nBVRMD160(SHA256(Pub Key Uncomp)): \n" + Variables.d00RMP160UnComp +
+                "\n\nBVRMD160(SHA256(Pub Key Comp)): \n" + Variables.d00RMP160Comp +
+
+                "\n\n2SHA256(BVRMD160(SHA256(Pub Key Uncomp))): \n" + Variables.dHashMD160UnComp +
+                "\n\n2SHA256(BVRMD160(SHA256(Pub Key Comp))): \n" + Variables.dHashMD160Comp +
+
+                "\n\nCHECKSUM UnComp: \n" + Variables.dHashMD160UnComp.substring(0, 8) +
+                "\n\nCHECKSUM Comp: \n" + Variables.dHashMD160Comp.substring(0, 8) +
+                "\n\n00 + RMD160 + CHECKSUM UnComp: \n" +"00"+ Variables.dRMP160UnComp + Variables.dHashMD160UnComp.substring(0, 8)  +
+                "\n\n00 + RMD160 + CHECKSUM Comp: \n" +"00"+ Variables.dRMP160Comp + Variables.dHashMD160Comp.substring(0, 8) +
+
+                "\n\nBI(00 + RMD160 + CHECKSUM UnComp): \n" + Variables.dCSRMD160UnCompBi +
+                "\n\nBI(00 + RMD160 + CHECKSUM Comp): \n" + Variables.dCSRMD160CompBi +
+
+                "\n\nBase58(BI(00 + RMD160 + CHECKSUM UnComp))Pre: \n" + Variables.dAddUnCompPre +
+                "\n\nBas58(BI(00 + RMD160 + CHECKSUM Comp))Pre: \n" + Variables.dAddCompPre +
+
+                "\n\nBase58(BI(00 + RMD160 + CHECKSUM UnComp))LZ: \n" + Variables.dAddUnCompLZ +
+                "\n\nBas58(BI(00 + RMD160 + CHECKSUM Comp))LZ: \n" + Variables.dAddCompLZ +
+
+                "\n\nBase58(BI(00 + RMD160 + CHECKSUM UnComp)): \n" + Variables.dAddUnComp +
+                "\n\nBas58(BI(00 + RMD160 + CHECKSUM Comp)): \n" + Variables.dAddComp
+
+        );
+
+        //((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
+    }
 
     public void sendTX(byte[] newTextChar)
     {

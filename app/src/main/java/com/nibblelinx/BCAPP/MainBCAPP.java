@@ -32,9 +32,15 @@ public class MainBCAPP extends AppCompatActivity {
         Button buttonMS8 = (Button) findViewById(R.id.buttonMS8);
 
         Button buttonMS9 = (Button) findViewById(R.id.buttonMS9);
-        Button buttonMS10 = (Button) findViewById(R.id.buttonMS10);
+        Button buttonMS10 = (Button) findViewById(R.id.buttonMS10); //Criar ODR Token
         Button buttonMS11 = (Button) findViewById(R.id.buttonMS11);
         Button buttonMS12 = (Button) findViewById(R.id.buttonMS12);
+        Button buttonMS13 = (Button) findViewById(R.id.buttonMS13);
+        Button buttonMS14 = (Button) findViewById(R.id.buttonMS14);
+        Button buttonMS15 = (Button) findViewById(R.id.buttonMS15);
+        Button buttonMS16 = (Button) findViewById(R.id.buttonMS16);
+        Button buttonMS17 = (Button) findViewById(R.id.buttonMS17); //Specific UTXOs
+        Button buttonMS18 = (Button) findViewById(R.id.buttonMS18); //Criacao de TRUE Tokens para ensino
 
         //fa = this;
 
@@ -59,6 +65,8 @@ public class MainBCAPP extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                Variables.ditactic = false;
+
                 //if(Variables.MainPaymail.compareTo("")==0)
                 if(Variables.MainPaymail.length() != 64)
                 {
@@ -67,6 +75,26 @@ public class MainBCAPP extends AppCompatActivity {
                 else if(Variables.SatBalance.compareTo("0")==0)
                 {
                     Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                    Intent it = new Intent(MainBCAPP.this, NFTText.class);
+                    startActivity(it);
+
+                }
+            }
+        });
+
+        buttonMS13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Variables.ditactic = true;
+
+                //if(Variables.MainPaymail.compareTo("")==0)
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
                 }
                 else {
 
@@ -110,6 +138,38 @@ public class MainBCAPP extends AppCompatActivity {
             }
         });
 
+        buttonMS14.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+
+                else {
+
+                    Keygen pubKey = new Keygen();
+                    //Boolean CompPKey = false;
+                    //Variables.CompPKey = false;
+
+                    String PUBKEY = pubKey.publicKeyHEX(Variables.MainPaymail);//Variables.MainPaymail hex 64 elementos
+                    //String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, Variables.CompPKey);
+                    String BSVADD = pubKey.bsvWalletFull(PUBKEY, Variables.CompPKey);
+
+
+                    Intent it = new Intent(MainBCAPP.this, BcListen.class);
+                    Variables.MyNFTs = false;
+                    //Este é o endereço para os dados serão enviados
+                    //Deste endereço os dados também serão lidos
+                    //É importante você ter o controle sobre este endereço
+                    //Ou seja, que faça parte de uma das carteiras das quais você tem acesso
+                    it.putExtra("NFTIndex", BSVADD);
+                    startActivity(it);
+                }
+            }
+        });
+
 
         buttonMS7.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +196,89 @@ public class MainBCAPP extends AppCompatActivity {
             }
         });
 
+        //SEND P2PK
+        buttonMS15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+                else if(Variables.SatBalance.compareTo("0")==0)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                    Variables.TokenType = 5; //P2PK
+                    Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+                }
+
+
+
+            }
+        });
+
+        //SPEND P2PK
+        buttonMS16.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+                /*
+                else if(Variables.SatBalance.compareTo("0")==0)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }
+                */
+                else {
+
+                    Variables.TokenType = 6; //SPEND P2PK
+                    Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+                }
+
+
+
+            }
+        });
+
+        //Specific UTXOs
+        buttonMS17.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+                /*
+                else if(Variables.SatBalance.compareTo("0")==0)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }
+                */
+                else {
+
+                    Variables.TokenType = 7; //UTXO
+                    Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+                }
+
+
+
+            }
+        });
+
+        //Criar TOR Token
         buttonMS9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,7 +304,7 @@ public class MainBCAPP extends AppCompatActivity {
             }
         });
 
-
+        //Criar ODR Token
         buttonMS10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,6 +356,7 @@ public class MainBCAPP extends AppCompatActivity {
             }
         });
 
+        //Melt Tokens
         buttonMS12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -228,7 +372,33 @@ public class MainBCAPP extends AppCompatActivity {
                 }*/
                 else {
 
-                    Variables.TokenType = 3;
+                    Variables.TokenType = 3; //Melt Tokens
+                    Intent it = new Intent(MainBCAPP.this, Token.class);
+                    startActivity(it);
+                }
+
+
+
+            }
+        });
+
+        //Create True Tokens
+        buttonMS18.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                if(Variables.MainPaymail.length() != 64)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
+                }
+                /*else if(Variables.SatBalance.compareTo("0")==0)
+                {
+                    Toast.makeText(MainBCAPP.this, "Informe uma Carteira com Fundos!!!", Toast.LENGTH_LONG).show();
+                }*/
+                else {
+
+                    Variables.TokenType = 8; //Create Tokens
                     Intent it = new Intent(MainBCAPP.this, Token.class);
                     startActivity(it);
                 }

@@ -1,5 +1,7 @@
 package com.nibblelinx.BCAPP;
 
+import java.math.BigInteger;
+
 public class Variables {
 
     static String LastRawDecriptData = "";
@@ -19,7 +21,41 @@ public class Variables {
     static int ErroPreImagem = 0; //0 sem erro;
     static int TokenType = 0;
     //static String ScriptADD= "";
+    static String DEBUG = "";
+    static String UTXOSET = "";
 
+    //Didactic
+    static Boolean ditactic = false;
+    static BigInteger dPvtKey = BigInteger.valueOf(0);
+    static BigInteger dPubKX = BigInteger.valueOf(0);
+    static BigInteger dPubKY = BigInteger.valueOf(0);
+    static String dPubKUnComp = "";
+    static String dPubKComp = "";
+
+    static String dSha256UnComp = "";
+    static String dSha256Comp = "";
+
+    static String dRMP160UnComp = "";
+    static String dRMP160Comp = "";
+
+    static String d00RMP160UnComp = "";
+    static String d00RMP160Comp = "";
+
+    static String dHashMD160UnComp = "";
+    static String dHashMD160Comp = "";
+
+
+    static BigInteger dCSRMD160UnCompBi = BigInteger.valueOf(0);
+    static BigInteger dCSRMD160CompBi = BigInteger.valueOf(0);
+
+    static String dAddUnCompPre = "";
+    static String dAddCompPre = "";
+
+    static String dAddUnCompLZ = "";
+    static String dAddCompLZ = "";
+
+    static String dAddUnComp = "";
+    static String dAddComp = "";
 
     static int ntries = 0;
 

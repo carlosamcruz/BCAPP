@@ -559,6 +559,48 @@ public class BsvTxOperations {
         return totalString;
     }
 
+    public String inputPreStringP2PK (int nInputs, String SECsizeOut, String PUBKEYSEC)
+    {
+        String Version = "01000000";
+        //String nOfInputs = "01";
+        String nOfInputs = Integer.toHexString(nInputs);
+
+        while (nOfInputs.length() < 2)
+            nOfInputs = "0" + nOfInputs;
+
+        String inputSeq = "ffffffff";
+
+        String totalString = Version + nOfInputs;
+
+        // String inTxID = SHA256G.LEformat(toSpendTXID);
+        // String prvTxIndex = "01000000";
+
+        String derSecPAD =
+                //"8a4730" +
+                "484730" +
+                        "44" +
+                        "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" +
+                        "41";// +
+                        //SECsizeOut + PUBKEYSEC;
+
+
+        for(int i = 0 ; i < nInputs; i ++)
+        {
+
+            int indexI = Integer.valueOf(unspentIndex[i]);
+
+            String inputIndex = Integer.toHexString(indexI);
+
+            while (inputIndex.length() < 8)
+                inputIndex = "0" + inputIndex;
+
+            totalString = totalString + SHA256G.LEformat(unspentTXID[i]) + SHA256G.LEformat(inputIndex) + derSecPAD + inputSeq;
+        }
+
+
+        return totalString;
+    }
+
     /*
     //private String ScriptTXID = "cafbd9718e9b7ee324014015789576b7eee10d3b63de70a3061a3c41f0d4ecda";
     //private String ScriptTXID = "9dda331ceec2c8e259f3d599b7703b4a49aaffeec076f7a423cb17bd173b5e27";
@@ -918,23 +960,38 @@ public class BsvTxOperations {
                                     // / 200; //0.005 Satoshis por byte - funciona, mas ainda demora demais.
                                     // 0.005 sat/b demora cerca de 6 hora para ser minerado em 30/06/2022
                                     // Somente Gorilla Pool aceita TXs com estas taxas por enquanto (03/07/2022);
+
+                    //Tem que haver pelo menos 1 sat de taxa;
+                    //if(ivalue<0)
+                    //    ivalue = ivalue - totalSpent;
                 }
 
-                Variables.SatBalance = Long.toString(ivalue);
-                out2Sat = Long.toHexString(ivalue);
+                if(ivalue>0) { //se nao houver troco, nao executa no final
 
-                while (out2Sat.length() < 16)
-                    out2Sat = "0" + out2Sat;
+                    Variables.SatBalance = Long.toString(ivalue);
+                    out2Sat = Long.toHexString(ivalue);
 
-                out2Sat = SHA256G.LEformat(out2Sat);
+                    while (out2Sat.length() < 16)
+                        out2Sat = "0" + out2Sat;
 
-                //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+                    out2Sat = SHA256G.LEformat(out2Sat);
 
-                //String Out1Script = "1976a914" + "61079f5031a5b7e312d9fc5051fd7ce018fabc92" + "88ac";
-                //String Out2Script = "1976a914" + BSV160 + "88ac";
-                String Out2Script = "1976a914" + PayWallet160 + "88ac";
+                    //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
 
-                totalOutString = totalOutString + out2Sat + Out2Script;
+                    //String Out1Script = "1976a914" + "61079f5031a5b7e312d9fc5051fd7ce018fabc92" + "88ac";
+                    //String Out2Script = "1976a914" + BSV160 + "88ac";
+                    String Out2Script = "1976a914" + PayWallet160 + "88ac";
+
+                    totalOutString = totalOutString + out2Sat + Out2Script;
+                }
+                else{
+                    nOuts = Integer.toHexString(nOutPuts - 1);
+
+                    while (nOuts.length() < 2)
+                        nOuts = "0" + nOuts;
+
+                    totalOutString = nOuts + totalOutString.substring(2);
+                }
 
             }
 
@@ -955,7 +1012,7 @@ public class BsvTxOperations {
         return  totalOutString;
     }
 
-    //Cria um Output OP_RETURN com OP_TRUE
+    //Cria um Output OP_RETURN com OP_TRUE e OP_DROP
     public String OutputStringV2(int nOutPuts, String[] PayWallets, String[] PayValues, int nORs, String[] OP_RETURNs, String inputPreString, int tokenType)
     {
         String totalOutString = "";
@@ -1356,8 +1413,6 @@ public class BsvTxOperations {
                 totalOutString = totalOutString + out2Sat + Out2Script;
 
             }
-
-
         }
 
         //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
@@ -1373,7 +1428,7 @@ public class BsvTxOperations {
 
 
     public String OutputStringV3(int nOutPuts, String[] PayWallets, String[] PayValues, int nORs, String[] OP_RETURNs,
-                                 String inputPreString)
+                                 String inputPreString, int TXType)
     {
 
         //Just for melting tokens
@@ -1530,7 +1585,18 @@ public class BsvTxOperations {
                 //String out2Sat = "7bc7000000000000"; //Total - TXSize - fee
                 //String out2Sat = ""; //Total - TXSize - fee
 
-                String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+                //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                String PayWallet160 = "";
+
+                if(TXType == 8 && j == 0)
+                {
+                    PayWallet160 = PDPUtils.strToHEXStr(PayWallets[j]);
+                }
+                else
+                {
+                    PayWallet160 = pubKey.addRMD(PayWallets[j]);
+                }
 
                 long ivalue = Integer.valueOf(PayValues[j]);
 
@@ -1598,7 +1664,27 @@ public class BsvTxOperations {
 
                 //String Out1Script = "1976a914" + "61079f5031a5b7e312d9fc5051fd7ce018fabc92" + "88ac";
                 //String Out2Script = "1976a914" + BSV160 + "88ac";
-                String Out2Script = "1976a914" + PayWallet160 + "88ac";
+                String Out2Script = "";
+
+                if(TXType == 8)//Only 1 Byte Size Total a string precisa ser < 253
+                {
+                    String sizeSCR = Integer.toHexString(PayWallet160.length()/2);
+
+                    while (sizeSCR.length() < 2)
+                        sizeSCR = "0" + sizeSCR;
+
+                    Out2Script = "51" + sizeSCR + PayWallet160 + "75"; //OP_DROP
+
+                    sizeSCR = Integer.toHexString(Out2Script.length()/2);
+
+                    while (sizeSCR.length() < 2)
+                        sizeSCR = "0" + sizeSCR;
+
+                    Out2Script = sizeSCR + Out2Script;
+
+                }
+                else
+                    Out2Script = "1976a914" + PayWallet160 + "88ac";
 
                 totalOutString = totalOutString + out2Sat + Out2Script;
 
@@ -2141,6 +2227,276 @@ public class BsvTxOperations {
         return  totalOutString;
     }
 
+    public String OutputStringV6(int nOutPuts, String[] PayWallets, String[] PayValues, int nORs, String[] OP_RETURNs, String inputPreString)
+    {
+        String totalOutString = "";
+
+
+        String nOuts = Integer.toHexString(nOutPuts);
+
+        while (nOuts.length() < 2)
+            nOuts = "0" + nOuts;
+
+        totalOutString = nOuts;
+
+        String out2Sat = ""; //Total - TXSize - fee
+        long totalSpent = 0;
+
+        //O ultimo output será sempre o retorno
+
+        for(int i = 0; i < nOutPuts; i ++)
+        {
+
+            if( i < nORs)
+            {
+                String outOpReturn = "0000000000000000";
+                String out1size = "00";
+                String out1ScriptType = "00" + "6a"; // OP_Return
+                String out1DataSizeType = "4c";//only one byte
+                String byteSizeout1size = "";
+                //String out1DataSizeType;
+                String out1DataSize = "00";//only one byte
+
+                //String out1Data = "2e2e2e617420746865206e616d65206f66204a65737573206576657279206b6e65652073686f756c6420626f772c206f66207468696e677320696e2068656176656e2c20616e64207468696e677320696e2065617274682c20616e64207468696e677320756e646572207468652065617274683b";
+                String out1Data = OP_RETURNs[i];
+
+                out1DataSize = Integer.toHexString(
+                        out1Data.length() / 2
+                );
+
+                if(out1DataSize.length() % 2 == 1)
+                    out1DataSize = "0" + out1DataSize;
+
+                ////////////////////////////////////////////
+                //OP_RETURN size
+                ////////////////////////////////////////////
+
+                //Verificar se OP_RETURN aceita a otimização para dado com menos de 0x4c bytes
+                //Aparentemente funcionou
+
+                if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0x4b) {
+                    out1DataSizeType = "";
+                    //byteSizeout1size = "";
+                }
+
+                //if((out1Data.length() / 2)>=1 && (out1Data.length() / 2)<=256)
+
+                //if((out1Data.length() / 2) >= 0x01 && (out1Data.length() / 2) <= 0xff) {
+                else if((out1Data.length() / 2) >= 0x4c && (out1Data.length() / 2) <= 0xff) {
+                    out1DataSizeType = "4c";
+                    //byteSizeout1size = "";
+                }
+                else if ((out1Data.length() / 2) >= 0x0100 && (out1Data.length() / 2) <= 0xffff) {
+                    out1DataSizeType = "4d";
+                    //byteSizeout1size = "fd";
+
+                    while (out1DataSize.length() < 4)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+
+
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                else if ((out1Data.length() / 2) >= 0x00010000 && (out1Data.length() / 2) <= 0x000182b8) {
+                    out1DataSizeType = "4e";
+                    //byteSizeout1size = "fe";
+
+                    while (out1DataSize.length() < 8)
+                        out1DataSize = "0" + out1DataSize;
+
+                    out1DataSize = SHA256G.LEformat(out1DataSize);
+                }
+
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
+
+                //String Out1Script = "1976a914" + PayWallet160 + "88ac";
+                String Out1Script = out1ScriptType + out1DataSizeType + out1DataSize + out1Data;
+
+                out1size = Integer.toHexString(
+                        Out1Script.length() / 2
+                );
+
+                if(out1size.length() % 2 == 1)
+                    out1size = "0" + out1size;
+
+                //out1size = SHA256G.LEformat(out1size);
+
+
+                ////////////////////////////////////////////
+                //Ajuste do tamanho do Script e indicação do byte de tamanho em bytes
+                // Só pode ser indicado a partir desta posição para não dar conflito
+                // se o script ultrapassar os bytes indicados para os dados
+                ////////////////////////////////////////////
+
+                //if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xff) {
+                if((Out1Script.length() / 2) >= 0x01 && (Out1Script.length() / 2) <= 0xfc) {
+                    //out1size = out1size;
+                    byteSizeout1size = "";
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                //else if ((Out1Script.length() / 2) >= 0x0100 && (Out1Script.length() / 2) <= 0xffff) {
+                else if ((Out1Script.length() / 2) >= 0x00fd && (Out1Script.length() / 2) <= 0xffff) {
+
+                    byteSizeout1size = "fd";
+
+                    while (out1size.length() < 4)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+                //else if ((out1Data.length() / 2) >= 0x10000 && (out1Data.length() / 2) <= 0xffffffff)
+                //Limit 99 kbytes por OP_RETURN
+                //Verificar se OP_RETURN a expansão até o limite máximo de 0xffffffff
+                else if ((Out1Script.length() / 2) >= 0x00010000 && (Out1Script.length() / 2) <= 0x000182b8) {
+
+                    byteSizeout1size = "fe";
+
+                    while (out1size.length() < 8)
+                        out1size = "0" + out1size;
+
+                    out1size = byteSizeout1size + SHA256G.LEformat(out1size);
+                }
+
+                ////////////////////////////////////////////
+                ////////////////////////////////////////////
+
+                Out1Script = outOpReturn + out1size + Out1Script;
+
+                totalOutString = totalOutString + Out1Script;
+
+            }
+            else
+            {
+                Keygen pubKey = new Keygen();
+
+                int j = i - nORs;
+                //String out2Sat = "00c8000000000000"; //Total - TXSize - fee
+                //String out2Sat = "7bc7000000000000"; //Total - TXSize - fee
+                //String out2Sat = ""; //Total - TXSize - fee
+
+                String PayWallet160;
+                if(i == 0)
+                    PayWallet160 = PayWallets[j];
+                else
+                    PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                long ivalue = Integer.valueOf(PayValues[j]);
+
+                if( i < nOutPuts -1 )
+                    totalSpent = totalSpent + ivalue;
+                else
+                {
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //Neste ponto eh calculado o valor de retorno para a carteira original,
+                    // menos a taxa oferecida aos mineradores
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    //ivalue = ivalue - totalSpent - 1;
+                    //A taxa Minima para ser testada na Gorilla Pool, a WhatsOnChain também aceitou em 04/07/2022;
+                    // Transações enviadas entre 19:50 e 20:00 de 04/07/2022
+                    //2d046b7bc16cb5863482d293b6a5fd9738945bace98f93abfcb46ca40ab364ab
+                    //b564a1212d0d5b0a4c1333de640e8dec387a05b1ed5d1580efbd0d4cd4338d05
+                    //Gorilla Pool Minerou 2 Blocos as 20:30 3 20:35 de 04/07/2022 mas não levou as TXs
+                    //As transações foram removidas da MemPool depois de cerca de 30h
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    // Esta taxa pode ser interessantes para comunicar dados que não queremos que permaneçam na rede
+                    // Usar a MemPool como canal de comunicação
+                    /////////////////////////////////////////////////////////////////////////////////////
+
+
+                    ivalue = ivalue - totalSpent -
+                            ((
+                                    inputPreString.length() +
+                                            totalOutString.length() +
+                                            ("0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000").length()
+                            )/2)
+                                    // / 2; //0.5 Satoshis por byte
+                                    / 20; //0.05 Satoshis por byte
+
+                    // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
+                    // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
+
+                    // / 30; //0.033 Satoshis por byte
+                    // 2 TX enviadas por volta de 19:35 de 03/07/2022
+                    // Gorilla Pool has mined the 2 TXx on 04/07/2022
+                    // https://whatsonchain.com/tx/03840ceecf29f079879b4b49ea96e879d9ff5ae69b5315944da95363ab746136
+                    // https://whatsonchain.com/tx/b0dc1711dda5994eb27eb3cff9de75fc9026d16ebad9077ba4b96386437f9bc0
+
+                    // / 40; //0.025 Satoshis por byte
+                    // TAAL não permite entrada de TX com taxa < 0.032 sat/byte
+                    // TX recusada pela TAAL em 03/07/2022
+                    //There was an issue with the broadcast:unexpected response code 500: 66: mempool min fee not met
+
+
+                    // / 200; //0.005 Satoshis por byte - funciona, mas ainda demora demais.
+                    // 0.005 sat/b demora cerca de 6 hora para ser minerado em 30/06/2022
+                    // Somente Gorilla Pool aceita TXs com estas taxas por enquanto (03/07/2022);
+
+                    //Tem que haver pelo menos 1 sat de taxa;
+                    //if(ivalue<0)
+                    //    ivalue = ivalue - totalSpent;
+                }
+
+                if(ivalue>0) { //se nao houver troco, nao executa no final
+
+                    Variables.SatBalance = Long.toString(ivalue);
+                    out2Sat = Long.toHexString(ivalue);
+
+                    while (out2Sat.length() < 16)
+                        out2Sat = "0" + out2Sat;
+
+                    out2Sat = SHA256G.LEformat(out2Sat);
+
+                    //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
+
+                    //String Out1Script = "1976a914" + "61079f5031a5b7e312d9fc5051fd7ce018fabc92" + "88ac";
+                    //String Out2Script = "1976a914" + BSV160 + "88ac";
+                    String Out2Script;
+                    if(i == 0) {
+
+                        if(PayWallet160.length()/2 == 0x41)
+                            Out2Script = "4341" + PayWallet160 + "ac";
+                        else
+                            Out2Script = "2321" + PayWallet160 + "ac";
+                    }
+                    else
+                        Out2Script = "1976a914" + PayWallet160 + "88ac";
+
+                    totalOutString = totalOutString + out2Sat + Out2Script;
+                }
+                else{
+                    nOuts = Integer.toHexString(nOutPuts - 1);
+
+                    while (nOuts.length() < 2)
+                        nOuts = "0" + nOuts;
+
+                    totalOutString = nOuts + totalOutString.substring(2);
+                }
+
+            }
+
+
+        }
+
+        //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
+        String lockTime = "00000000";
+
+
+        //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
+
+
+
+        totalOutString = totalOutString + lockTime;// + out2Sat;//  + Long.toHexString(txFee);
+
+        //return  inputPreString + totalOutString;
+        return  totalOutString;
+    }
+
 
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
@@ -2486,23 +2842,50 @@ public class BsvTxOperations {
 
                 //signDER[j] = signDER[j] + txHexParts[txPartIndex-1];
 
+                //Scrip < 50 nao tem Chave Publica
+
                 signDER[j] = txHexParts[txPartIndex - 1];
 
-                //Tamanho da chave publica SEC da operacao
-                txHexParts[txPartIndex] = txHexData.substring(0, 2);
-                txHexData = txHexData.substring(2);
-                txPartIndex = txPartIndex + 1;
+                /*
+                //DEBUG para P2PK
 
-                pubKeySEC[j] = txHexParts[txPartIndex - 1];
+                Variables.DEBUG = Integer.decode("0x" + txHexParts[txPartIndex - 3]).toString() +
+                " = " + txHexParts[txPartIndex - 2].length()/2 + " + " + txHexParts[txPartIndex - 1].length()/2;
 
-                int pkNBytes = Integer.decode("0x" + txHexParts[txPartIndex - 1]) * 2;
+                if(Variables.DEBUG != null)
+                    return txHexParts;
 
-                //Chave Publica SEC da operacao
-                txHexParts[txPartIndex] = txHexData.substring(0, pkNBytes);
-                txHexData = txHexData.substring(pkNBytes);
-                txPartIndex = txPartIndex + 1;
+                */
 
-                pubKeySEC[j] = pubKeySEC[j] + txHexParts[txPartIndex - 1];
+
+                //Neste caso sera P2PK
+                //if(Integer.decode("0x" + txHexParts[txPartIndex - 3]) < 0x50)
+                if(Integer.decode("0x" + txHexParts[txPartIndex - 3]) ==
+                        //Integer.decode("0x" + txHexParts[txPartIndex - 2] + Integer.decode("0x" + txHexParts[txPartIndex - 1])))
+                        txHexParts[txPartIndex - 2].length()/2 + txHexParts[txPartIndex - 1].length()/2)
+                {
+                    pubKeySEC[j] = "";
+                }
+                else
+
+                {
+
+                    //Tamanho da chave publica SEC da operacao
+                    txHexParts[txPartIndex] = txHexData.substring(0, 2);
+                    txHexData = txHexData.substring(2);
+                    txPartIndex = txPartIndex + 1;
+
+                    pubKeySEC[j] = txHexParts[txPartIndex - 1];
+
+                    int pkNBytes = Integer.decode("0x" + txHexParts[txPartIndex - 1]) * 2;
+
+                    //Chave Publica SEC da operacao
+                    txHexParts[txPartIndex] = txHexData.substring(0, pkNBytes);
+                    txHexData = txHexData.substring(pkNBytes);
+                    txPartIndex = txPartIndex + 1;
+
+                    pubKeySEC[j] = pubKeySEC[j] + txHexParts[txPartIndex - 1];
+                }
             }
 
             //Sequencia do Input da Operacao
@@ -2635,18 +3018,32 @@ public class BsvTxOperations {
     public String [] txPreImager41 (String txHexDataIn)
     //public String [] txPreImager41x (String txHexDataIn)
     {
+
+        /*
+        //DEBUG
+        if(txHexDataIn != null) {
+            String [] TxPreimageOutFail = new String[1];
+            TxPreimageOutFail[0] = "Error 1";
+            return TxPreimageOutFail;
+        }
+        */
+
         //Vamos precisar das partes da TX atual
+        //Ajustar TX para PK2K
         String [] txPartsCurrent = txParts(txHexDataIn);
 
         int totalElementsCurrent = this.totalElements;
 
 
+        /*
         //DEBUG
-        //if(txHexDataIn != null) {
-        //    String [] TxPreimageOutFail = new String[1];
-        //    TxPreimageOutFail[0] = "Error 1";
-        //    return TxPreimageOutFail;
-        //}
+        if(txHexDataIn != null) {
+            String [] TxPreimageOutFail = new String[1];
+            TxPreimageOutFail[0] = "Error 1";
+            return TxPreimageOutFail;
+        }
+        */
+
 
         //Vamos precisar dos outputs da TX atual
         //O elemento muda quando uma nova busca é realizada.
@@ -2723,6 +3120,15 @@ public class BsvTxOperations {
 //        preImage41parts = preImage41parts + prvOutHASH + "\n";
 
 
+        //DEBUG
+        /*
+        if(txHexDataIn != null) {
+            String [] TxPreimageOutFail = new String[1];
+            TxPreimageOutFail[0] = "Error 1";
+            return TxPreimageOutFail;
+        }
+        */
+
         prvOutHASH = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(prvOutHASH));
         //prvOut Double HASH
         prvOutHASH = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(prvOutHASH));
@@ -2752,6 +3158,8 @@ public class BsvTxOperations {
         String inSeqDHash;
         inSeqDHash = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(inSeq));
         inSeqDHash = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(inSeqDHash));
+
+
 
         ////////////////////////////////////////////////////////////////////////////////
         //Step 4: The identifier of the output being spent (32-byte hash + 4-byte little endian)
@@ -2833,6 +3241,15 @@ public class BsvTxOperations {
             //    return TxPreimageOutFail;
             //}
 
+            //DEBUG
+            /*
+            if(i == 1) {
+                String [] TxPreimageOutFail = new String[1];
+                TxPreimageOutFail[0] = "Error 1";
+                return TxPreimageOutFail;
+            }
+            /*
+
             TxHexData = null;
 //            threadEndReadHexBsvTx = true;
 //            timerWoc01 = new TimeCheckURL();
@@ -2859,6 +3276,10 @@ public class BsvTxOperations {
 
             */
 
+
+
+
+
             renewThread();
             readHexBsvTx(TxidTosearch);
             //readHexBsvTxWOC(TxidTosearch);
@@ -2868,6 +3289,14 @@ public class BsvTxOperations {
             //while (TxHexData == null)
             //int inparPar = 0;
 
+            //DEBUG
+            /*
+            if(i == 1) {
+                String [] TxPreimageOutFail = new String[1];
+                TxPreimageOutFail[0] = "Error 1";
+                return TxPreimageOutFail;
+            }
+            */
 
 //            String waitHashing = "";
 //            waitHashing = SHA256G.SHA256STR("ABC");
@@ -2915,6 +3344,18 @@ public class BsvTxOperations {
                 //  break;
             }
 
+            /*
+            //DEBUG
+            if(i == 1) {
+                String [] TxPreimageOutFail = new String[1];
+                TxPreimageOutFail[0] = "Error 1";
+                return TxPreimageOutFail;
+            }
+            */
+
+            //DEBUG
+
+
 //            timer.cancel();
 //            timer.purge();
 
@@ -2953,6 +3394,15 @@ public class BsvTxOperations {
 
             TXToSeach = TxHexData;
 
+            /*
+            //DEBUG
+            if(i == 1) {
+                String [] TxPreimageOutFail = new String[1];
+                TxPreimageOutFail[0] = "Error 1";
+                return TxPreimageOutFail;
+            }
+            */
+
             //Debug Error:
             //TXToSeach = TxHexData.substring(0,50);
 
@@ -2969,14 +3419,38 @@ public class BsvTxOperations {
                 //Variables.ErroPreImagem = 0; //não houve erro
             }
 
+            /*
+            //DEBUG
+            if(i == 1) {
+                String [] TxPreimageOutFail = new String[1];
+                TxPreimageOutFail[0] = "Error 1";
+                return TxPreimageOutFail;
+            }
+            */
+
 
             //preImage41parts = preImage41parts + "\"\\n\"Aqui\"\\n\"" + TXToSeach + "\n";
 //            preImage41parts = preImage41parts + TXToSeach + "\n";
 
+
+
             //String [] TxPartsHere = txParts2(TXToSeach);
-            String [] TxPartsHere = txParts(TXToSeach);
+
+            //Esta funcao teve que ser corrigida para P2PK
+
+            String [] TxPartsHere = txParts(TXToSeach); //esta tendo problemas com P2PK
+
             //txPartsCurrent = txParts2(TXToSeach);
 
+
+            /*
+            //DEBUG P2PK
+            if(i == 1) {
+                String [] TxPreimageOutFail = new String[1];
+                TxPreimageOutFail[0] = "Error 1";
+                return TxPreimageOutFail;
+            }
+            */
 
             ///////////////////////////////////////////////
             //Output to Search
@@ -3033,7 +3507,29 @@ public class BsvTxOperations {
 
             inSeqNumber[i] = inSeqCurrent[i];
 
+            //DEBUG
+            /*
+            if(txHexDataIn != null) {
+                String [] TxPreimageOutFail = new String[1];
+                TxPreimageOutFail[0] = "Error 1";
+                return TxPreimageOutFail;
+            }
+            */
+
+
+
         }
+
+        /*
+        //DEBUG
+
+        if(txHexDataIn != null) {
+            String [] TxPreimageOutFail = new String[1];
+            TxPreimageOutFail[0] = "Error 1";
+            return TxPreimageOutFail;
+        }
+
+        */
 
 
 /////////////////////////////////////////////////////////////

@@ -26,48 +26,6 @@
             app:layout_constraintVertical_bias="0.884"
             app:layout_constraintHorizontal_bias="0.531"/>
     -->
-    <TextView
-            android:id="@+id/TV_TEXT"
-            android:layout_width="177dp"
-            android:layout_height="36dp"
-            android:gravity="center"
-            android:text="Main BCHAIN App"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="24dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.047"
-    />
-    <TextView
-            android:id="@+id/TV_TEXT21"
-            android:layout_width="177dp"
-            android:layout_height="36dp"
-            android:gravity="center"
-            android:text="Token Section"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="24dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.375"
-    />
-    <TextView
-            android:id="@+id/TV_TEXT2"
-            android:layout_width="266dp"
-            android:layout_height="36dp"
-            android:gravity="center"
-            android:text="Satoshis:"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="24dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.947"
-            app:layout_constraintHorizontal_bias="0.503"/>
     <!--
     <Button
             android:text="Money Button"
@@ -80,6 +38,78 @@
             app:layout_constraintVertical_bias="0.499"/>
     -->
     <TextView
+            android:id="@+id/TV_TEXT"
+            android:layout_width="177dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:text="Main BCHAIN App"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.026"
+    />
+
+
+    <TextView
+            android:id="@+id/TV_TEXT21"
+            android:layout_width="110dp"
+            android:layout_height="41dp"
+            android:gravity="center"
+            android:text="Tokens"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.47"
+            app:layout_constraintHorizontal_bias="0.498"/>
+    <TextView
+            android:id="@+id/TV_TEXT5"
+            android:layout_width="110dp"
+            android:layout_height="41dp"
+            android:gravity="center"
+            android:text="P2PK"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.319"
+            app:layout_constraintHorizontal_bias="0.498"/>
+    <TextView
+            android:id="@+id/TV_TEXT4"
+            android:layout_width="162dp"
+            android:layout_height="39dp"
+            android:gravity="center"
+            android:text="Miscellaneous"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.718"
+            app:layout_constraintHorizontal_bias="0.502"/>
+    <TextView
+            android:id="@+id/TV_TEXT2"
+            android:layout_width="266dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:text="Satoshis:"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.991"
+            app:layout_constraintHorizontal_bias="0.537"/>
+    <TextView
             android:id="@+id/TV_TEXT3"
             android:layout_width="362dp"
             android:layout_height="60dp"
@@ -91,8 +121,9 @@
             android:layout_marginBottom="24dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.847"
+            app:layout_constraintVertical_bias="0.91"
             app:layout_constraintHorizontal_bias="0.673"/>
+
     <Button
             android:text="WRITE BC"
             android:layout_width="wrap_content"
@@ -100,9 +131,8 @@
             android:id="@+id/buttonMS1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.226"
-            app:layout_constraintVertical_bias="0.132"/>
-
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.089"
+            app:layout_constraintVertical_bias="0.106"/>
     <Button
             android:text="READ BC"
             android:layout_width="wrap_content"
@@ -110,8 +140,9 @@
             android:id="@+id/buttonMS2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.792"
-            app:layout_constraintVertical_bias="0.132"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.907"
+            app:layout_constraintVertical_bias="0.106"/>
+
     <Button
             android:text="PVT KEY"
             android:layout_width="wrap_content"
@@ -120,18 +151,52 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.792"
-            app:layout_constraintVertical_bias="0.255"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.91"
+            app:layout_constraintVertical_bias="0.21"/>
     <Button
             android:text="SEND SATS"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonMS7"
 
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.206"
-            app:layout_constraintVertical_bias="0.255"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.098"
+            app:layout_constraintVertical_bias="0.21"/>
+    <Button
+            android:text="SEND P2PK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMS15"
+
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.092"
+            app:layout_constraintVertical_bias="0.357"/>
+    <Button
+            android:text="P2PK SPEND"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMS16"
+
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.904"
+            app:layout_constraintVertical_bias="0.357"/>
+    <Button
+            android:text="SPEC UTXOS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMS17"
+
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintVertical_bias="0.21"/>
     <Button
             android:text="TOR TOKEN"
             android:layout_width="wrap_content"
@@ -140,8 +205,8 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.198"
-            app:layout_constraintVertical_bias="0.459"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.092"
+            app:layout_constraintVertical_bias="0.523"/>
     <Button
             android:text="ODR TOKEN"
             android:layout_width="wrap_content"
@@ -150,8 +215,8 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.819"
-            app:layout_constraintVertical_bias="0.459"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.906"
+            app:layout_constraintVertical_bias="0.523"/>
     <Button
             android:text="SEND TOKEN"
             android:layout_width="wrap_content"
@@ -160,8 +225,8 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.187"
-            app:layout_constraintVertical_bias="0.578"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.095"
+            app:layout_constraintVertical_bias="0.61"/>
     <Button
             android:text="MELT TOKEN"
             android:layout_width="wrap_content"
@@ -170,8 +235,18 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.842"
-            app:layout_constraintVertical_bias="0.578"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.904"
+            app:layout_constraintVertical_bias="0.61"/>
+    <Button
+            android:text="2TR Token"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMS18"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintVertical_bias="0.61"/>
     <Button
             android:text="TX Verify"
             android:layout_width="wrap_content"
@@ -180,8 +255,28 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.514"
-            app:layout_constraintVertical_bias="0.692"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.489"
+            app:layout_constraintVertical_bias="0.106"/>
+    <Button
+            android:text="LISTEN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMS14"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.102"
+            app:layout_constraintVertical_bias="0.752"/>
+    <Button
+            android:text="DIDACTIC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMS13"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.91"
+            app:layout_constraintVertical_bias="0.752"/>
     <!-- <WebView
              android:id="@+id/webview2"
              android:layout_width="match_parent"

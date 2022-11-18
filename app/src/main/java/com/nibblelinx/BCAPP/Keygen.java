@@ -115,11 +115,16 @@ public class Keygen {
             cont = cont.multiply(BigInteger.valueOf(0x10));
         }
 
+        Variables.dPvtKey = SecretKey;
+
         // Chave MOD P
         SecretKey = keys.modp(SecretKey, keys.p);
 
         BigInteger [] point = new BigInteger[2];
         point = keys.eccnP(SecretKey, keys.Gx, keys.Gy);
+
+        Variables.dPubKX = point[0];
+        Variables.dPubKY = point[1];
 
         for(int i = 43 ; i>0; i--)
         {
@@ -1274,6 +1279,7 @@ public class Keygen {
         RIPEMDoutj = SHA256G.HashStrToByte2(RIPEMDout);
         RIPEMDout2j = SHA256G.HashStrToByte2(RIPEMDout2);
 
+
         //in_len = sizeof(pRIPEMD160);
         //in_len2 = sizeof(pRIPEMD1602);
 
@@ -1289,6 +1295,10 @@ public class Keygen {
             pRIPEMD1602 [i] = RIPEMDout2j[i-1];
         }
 
+        Variables.d00RMP160UnComp = SHA256G.ByteToStrHex(pRIPEMD1602);
+        Variables.d00RMP160Comp = SHA256G.ByteToStrHex(pRIPEMD160);
+
+
         //SHAS256 (PREFIX + RIPEMD(SHA256(COMPRESSED PUB KEY)))
         //mbedtls_sha256(pRIPEMD160, in_len, SHA256out, 0);
         SHA256out = SHA256G.SHA256bytes(pRIPEMD160);
@@ -1300,6 +1310,8 @@ public class Keygen {
         //in_len = sizeof(SHA256out);
         //in_len2 = sizeof(SHA256out2);
 
+
+
         //SHA256 (SHAS256 (PREFIX + RIPEMD(SHA256(COMPRESSED PUB KEY))))
         //mbedtls_sha256(SHA256out, in_len, SHA256out, 0);
         SHA256out = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(SHA256out));
@@ -1308,6 +1320,9 @@ public class Keygen {
         SHA256out2 = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(SHA256out2));
 
         //pubkeyCOD = SHA256out2;
+
+        Variables.dHashMD160UnComp = SHA256out2;
+        Variables.dHashMD160Comp = SHA256out;
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -1363,6 +1378,9 @@ public class Keygen {
             VPCcont2 = VPCcont2.multiply(BigInteger.valueOf(256));
         }
 
+        Variables.dCSRMD160UnCompBi = VPC2;
+        Variables.dCSRMD160CompBi = VPC;
+
         //pubkeyCOD = VPC2.toString();
 
 ////////////////////////////////////////////////////////////////////
@@ -1401,6 +1419,9 @@ public class Keygen {
             li2 ++;
         }
 
+        Variables.dAddUnCompPre = String.valueOf(BTCaddr2);
+        Variables.dAddCompPre = String.valueOf(BTCaddr);
+
         //pubkeyCOD = String.valueOf(BTCaddr2);
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -1424,6 +1445,9 @@ public class Keygen {
             lzeros2++;
             li2++;
         }
+
+        Variables.dAddUnCompLZ = String.valueOf(BTCaddr2);
+        Variables.dAddCompLZ = String.valueOf(BTCaddr);
 
         //pubkeyCOD = String.valueOf(BTCaddr2);
 
@@ -1466,6 +1490,9 @@ public class Keygen {
         /*
          */
 //        return pubkeyCOD;
+
+        Variables.dAddUnComp = String.valueOf(BTCaddrUNC);
+        Variables.dAddComp = String.valueOf(BTCaddrCOMP);
 
         if(Compressed)
             return String.valueOf(BTCaddrCOMP);
@@ -1668,8 +1695,16 @@ public class Keygen {
         //mbedtls_sha256(cSHA, in_len, SHA256out, 0);
 
         SHA256out = SHA256G.SHA256bytes(cSHA);
+
+
         //mbedtls_sha256(cSHA2, in_len2, SHA256out2, 0);
         SHA256out2 = SHA256G.SHA256bytes(cSHA2);
+
+        Variables.dPubKUnComp = SHA256G.ByteToStrHex(cSHA2);
+        Variables.dPubKComp = SHA256G.ByteToStrHex(cSHA);
+
+        Variables.dSha256UnComp = SHA256out2;
+        Variables.dSha256Comp = SHA256out;
 
         //pubkeyCOD = SHA256out2;
 
@@ -1694,6 +1729,10 @@ public class Keygen {
         byte[] SHA256out2b;// = new char[SHA256out2.length()/2];
         SHA256outb = SHA256G.HashStrToByte2(SHA256out);
         SHA256out2b = SHA256G.HashStrToByte2(SHA256out2);
+
+
+
+
         char[] SHA256outc = new char[SHA256out.length()/2];
         char[] SHA256out2c = new char[SHA256out2.length()/2];
         for (int i=0;i<SHA256out.length()/2 ; i++) SHA256outc [i] = (char) (SHA256outb[i] & 0xFF);
@@ -1703,11 +1742,15 @@ public class Keygen {
         //RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out.toCharArray(), SHA256out.length()));
         RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256outc, SHA256out.length()/2));
 
+        Variables.dRMP160Comp = RIPEMDout;
+
         //mbedtls_ripemd160(SHA256out2, in_len2, RIPEMDout2);
 
         //RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2.toCharArray(), SHA256out2.length()));
         RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2c, SHA256out2.length()/2));
 //        pubkeyCOD = RIPEMDout2;
+
+        Variables.dRMP160UnComp = RIPEMDout2;
 
 
         if(Compressed)

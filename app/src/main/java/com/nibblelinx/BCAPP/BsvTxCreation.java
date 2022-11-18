@@ -366,10 +366,12 @@ public class BsvTxCreation {
 
         bsvTX.unsPentInputs = null;
 
-        if(TXtype < 3)
-            bsvTX.readBsvAddsUnspent(BSVADD);
-        else
-            bsvTX.readBsvSCRIPTUnspent(SCRIPTHASH);
+        if(Variables.UTXOSET.compareTo("") ==0)
+        {
+            if (TXtype < 3 || TXtype == 5)
+                bsvTX.readBsvAddsUnspent(BSVADD);
+            else
+                bsvTX.readBsvSCRIPTUnspent(SCRIPTHASH);
 
         /*
         //Tratamento da quebra
@@ -380,47 +382,47 @@ public class BsvTxCreation {
 
         */
 
-        while (bsvTX.threadreadBsvAddsUnspent.isAlive()) {
-            unspentTX = "";
-        }
-
-        unspentTX = bsvTX.unsPentInputs;
-        //bsvTX.timer.cancel();
-        //bsvTX.timer.purge();
-
-        if (bsvTX.unsPentInputs == null)
-            return "Error: Time out reading Unspent TX inputs";
-
-
-        //if(bsvTX.unsPentInputs != null)
-         //   return  "Error: " + unspentTX;
-
-        //Para Enviar Token
-        if(TXtype == 4)
-        {
-            //return "Error: Time out reading Unspent TX inputs";
-
-            bsvTX.renewThreadUnspent();
-
-            bsvTX.unsPentInputs = null;
-            bsvTX.readBsvAddsUnspent(BSVADD);
-
             while (bsvTX.threadreadBsvAddsUnspent.isAlive()) {
-                //unspentTX = "";
+                unspentTX = "";
             }
 
-
-
-            unspentTX = unspentTX + bsvTX.unsPentInputs;
+            unspentTX = bsvTX.unsPentInputs;
             //bsvTX.timer.cancel();
             //bsvTX.timer.purge();
 
             if (bsvTX.unsPentInputs == null)
                 return "Error: Time out reading Unspent TX inputs";
 
+            //if(bsvTX.unsPentInputs != null)
+            //   return  "Error: " + unspentTX;
 
-            //return "Error: Time out reading Unspent TX inputs";
+            //Para Enviar Token
+            if (TXtype == 4) {
+                //return "Error: Time out reading Unspent TX inputs";
 
+                bsvTX.renewThreadUnspent();
+
+                bsvTX.unsPentInputs = null;
+                bsvTX.readBsvAddsUnspent(BSVADD);
+
+                while (bsvTX.threadreadBsvAddsUnspent.isAlive()) {
+                    //unspentTX = "";
+                }
+
+                unspentTX = unspentTX + bsvTX.unsPentInputs;
+                //bsvTX.timer.cancel();
+                //bsvTX.timer.purge();
+
+                if (bsvTX.unsPentInputs == null)
+                    return "Error: Time out reading Unspent TX inputs";
+
+                //return "Error: Time out reading Unspent TX inputs";
+            }
+        }
+        else
+        {
+            unspentTX = Variables.UTXOSET;
+            Variables.UTXOSET = "";
         }
 
 
@@ -464,8 +466,13 @@ public class BsvTxCreation {
         //Confecção da String de Input
         /////////////////////////////////////////////////////////////////////
         String inputString = "";
-        if(TXtype < 3) {
-            inputString = bsvTX.inputPreString(nInp, SECsizeOut, PUBKEYSEC);
+
+
+        //if(TXtype < 3 || TXtype == 5) {
+        if(TXtype == 6) {
+            //return "Error";
+            inputString = bsvTX.inputPreStringP2PK(nInp, SECsizeOut, PUBKEYSEC);
+            //inputString = bsvTX.inputPreString(nInp, SECsizeOut, PUBKEYSEC);
         }else
             inputString = bsvTX.inputPreString(nInp, SECsizeOut, PUBKEYSEC);
         /////////////////////////////////////////////////////////////////////
@@ -479,19 +486,33 @@ public class BsvTxCreation {
         /////////////////////////////////////////////////////////////////////
         if(TXtype == 0) {
             OutputString = bsvTX.OutputString(nOfOutputs, PayWallets, PayValues, numberOfOPRETURNS, OP_RETURNs, inputString);
+            //return OutputString;
         }
+
+        //Criar TOR Token
         if(TXtype == 1) {
             OutputString = bsvTX.OutputStringV2(nOfOutputs, PayWallets, PayValues, numberOfOPRETURNS, OP_RETURNs, inputString, TXtype);
         }
 
+        //Criar ODR Token
         if(TXtype == 2) {
             OutputString = bsvTX.OutputStringV2(nOfOutputs, PayWallets, PayValues, numberOfOPRETURNS, OP_RETURNs, inputString, TXtype);
         }
 
-        if(TXtype == 3) {
-            OutputString = bsvTX.OutputStringV3(nOfOutputs, PayWallets, PayValues, numberOfOPRETURNS, OP_RETURNs, inputString);
+        //Tanto para desfazer Token quanto para Transferir P2PK
+        if(TXtype == 3 || TXtype == 6 || TXtype == 8) {
+            OutputString = bsvTX.OutputStringV3(nOfOutputs, PayWallets, PayValues, numberOfOPRETURNS, OP_RETURNs, inputString, TXtype);
+            //return OutputString;
+            //return "ops";
         }
 
+        //Cria P2PK
+        if(TXtype == 5) {
+
+            //return "Error: Time out reading Unspent TX inputs";
+            OutputString = bsvTX.OutputStringV6(nOfOutputs, PayWallets, PayValues, numberOfOPRETURNS, OP_RETURNs, inputString);
+            //return OutputString;
+        }
 
 
         //Verificar o OP_RETURN
@@ -518,6 +539,9 @@ public class BsvTxCreation {
 
         preTX = inputString + OutputString;
 
+        //DEBUG
+        //if(TXtype == 6)
+        //    return preTX;
 
         //return "Error: Time out reading Unspent TX inputs";
 
@@ -541,6 +565,15 @@ public class BsvTxCreation {
         //bsvTX.timerCallWOC();
 
         String[] preimage = bsvTX.txPreImager41(preTX);
+
+        //if(TXtype == 6)
+            //return preTX;
+            //return preTX + "\n\n"+ Variables.DEBUG;
+            //return Variables.DEBUG;
+
+
+        //DEBUG de P2PK
+        //if(TXtype==5) return preTX;
 
         //bsvTX.timer.cancel();
         //bsvTX.timer.purge();
@@ -608,13 +641,23 @@ public class BsvTxCreation {
             //int DERsizeHEX = DERsize;
             DERsizeOut[i] = Integer.toHexString(DERsize[i]);
 
+            if(TXtype == 6) //Apenas para P2PK
+            {
+                inputScriptSize[i] = Integer.toHexString(
+                        (DERsizeOut[i] + signDER41[i]).length() / 2);
 
-            inputScriptSize[i] = Integer.toHexString(
-                    (DERsizeOut[i] + signDER41[i] + SECsizeOut + PUBKEYSEC).length() / 2);
+                inputScript[i] = inputScriptSize[i] +
+                        DERsizeOut[i] + signDER41[i];
+            }
+            else
+            {
+                inputScriptSize[i] = Integer.toHexString(
+                        (DERsizeOut[i] + signDER41[i] + SECsizeOut + PUBKEYSEC).length() / 2);
 
-            inputScript[i] = inputScriptSize[i] +
-                    DERsizeOut[i] + signDER41[i] +
-                    SECsizeOut + PUBKEYSEC;
+                inputScript[i] = inputScriptSize[i] +
+                        DERsizeOut[i] + signDER41[i] +
+                        SECsizeOut + PUBKEYSEC;
+            }
         }
 
         /////////////////////////////////////////////////////////////////////

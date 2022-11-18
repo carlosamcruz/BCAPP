@@ -72,9 +72,10 @@ public class Token extends AppCompatActivity {
             ((TextView) findViewById(R.id.buttonSEND)).setText("CREATE");
         }
 
+        //Melt Token
         if(Variables.TokenType == 3)
         {
-            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Address:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("P2PKH Receiver Address:");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Script Hash:");
             ((TextView) findViewById(R.id.buttonSEND)).setText("MELT");
@@ -89,6 +90,37 @@ public class Token extends AppCompatActivity {
             ((TextView) findViewById(R.id.buttonSEND)).setText("SEND");
         }
 
+        //P2PK
+        if(Variables.TokenType == 5)
+        {
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Send to Public Key:");
+
+        }
+
+        if(Variables.TokenType == 6)
+        {
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("P2PKH Receiver Address:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Public Key Script Hash:");
+            ((TextView) findViewById(R.id.buttonSEND)).setText("SEND");
+        }
+
+        if(Variables.TokenType == 7)
+        {
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("UTXO SET:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Nothing");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setText("Nothing");
+            ((TextView) findViewById(R.id.buttonSEND)).setText("LOAD");
+        }
+
+        //Criar True Tokens para Ensino
+        if(Variables.TokenType == 8)
+        {
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("True Token Script:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Script Hash:");
+            ((TextView) findViewById(R.id.buttonSEND)).setText("CREATE");
+        }
 
         buttonSEND.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,17 +131,14 @@ public class Token extends AppCompatActivity {
                 sendTX();
                 ((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
                 ((TextView) findViewById(R.id.TV_TEXT3bsv)).setText(Variables.BSVWallet);
-
-
             }
         });
-
-
     }
 
     //public void sendTX(String PVTKEY, String Wallet, String Value, String DATA)
     public void sendTX()
     {
+
 
         //EditText PVTKEY = (EditText) findViewById(R.id.ET_LobbyAct_PVTKEY);
         EditText SendTo = (EditText) findViewById(R.id.ET_LobbyAct_SentTo);
@@ -129,7 +158,26 @@ public class Token extends AppCompatActivity {
         //String data = "Teste N";
         //String data = "Teste N TTT t";//bad request
 
+        if(Variables.TokenType == 7)
+        {
+            BsvTxOperations bsvTX = new BsvTxOperations();
+            Variables.UTXOSET = SendTo.getText().toString();
+            int nInp = bsvTX.unspentUTXO(Variables.UTXOSET);
 
+            if(nInp > 0) {
+
+                Toast.makeText(Token.this, nInp + " UTXOs loaded."
+                        , Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                Variables.UTXOSET = "";
+                Toast.makeText(Token.this, "No UTXO loaded"
+                        , Toast.LENGTH_LONG).show();
+            }
+
+            return;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
         //Preparação das Chaves
@@ -193,7 +241,8 @@ public class Token extends AppCompatActivity {
 
         String SCRIPTHASH = "9b7eaedbd83c0ec707820824750afa620e98c4a861298cf06980486c68e6fdce";
 
-        if(Variables.TokenType == 3)
+        //Melt Token ou Send P2PK
+        if(Variables.TokenType == 3 || Variables.TokenType == 6 || Variables.TokenType == 8)
         {
             SCRIPTHASH = data;
             data = "";
@@ -230,6 +279,16 @@ public class Token extends AppCompatActivity {
         }
 
         int TXType = Variables.TokenType;
+
+
+        /*
+        if(TXType==5) {
+
+            Toast.makeText(Token.this, "Result: " + PayWallets[0]
+                    , Toast.LENGTH_LONG).show();
+            return;
+        }
+        */
 
         String newTX = txCreate.txBuilderV2(pvtkey, Variables.CompPKey,2 + nOR,
                 PayWallets,PayValues,OP_RETURNs, nOR, TXType, SCRIPTHASH);
