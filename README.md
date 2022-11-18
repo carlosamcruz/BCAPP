@@ -15,13 +15,15 @@ TX VERIFY - displays the TXID and hexadecimal body of the last TX send to the Me
 SEND P2PK - send satoshis to an public key in SEC format and an optional description;
 SPEND P2PK - send all the satoshis from a P2PK script hash to an P2PKH address;
 
-TOR TOKEN - creates a Token controled by your P2PKH address PVT KEY  
+TOR TOKEN - creates a Token controled by your P2PKH address PVT KEY, the UTXO merges the pulbic key script and data inserted through OP_TRUE OP_RETURN opcodes;
+ODR TOKEN - creates a Token controled by your P2PKH address PVT KEY, the UTXO merges the pulbic key script and data inserted through OP_PUSHDATA1, or OP_PUSHDATA2, or OP_PUSHDATA4 and OP_DROP opcodes;
+SEND TOKEN - tranfer a single TOR TOKEN or ODR TOKEN to another P2PKH address through its script hash;
+MELT TOKEN - melts a single TOR TOKEN or ODR TOKEN and send its backed satoshis to the indicated P2PKH address through its script hash;
+2TR TOKEN - creates a TRUE TOKEN from a TOR TOKEN or ODR TOKEN, such token is an open access token for teaching purposes, where anyone can use the satoshis on it; 
 
+LISTEN - listens the blockchain to search for new TX in a specific address and send datas throug it to. Intended for new applications building purposes.
+DIDACTIC - just to diplay some internal results as a debuger for the developer;
 
-
-
-This wallet is able to handle compressed and uncompressed Bitcoin addresses and deal with OP_RETURN data.
-The wallet is also able to create, transfer and melt some types of Tokens backed by satoshis.
 
 The code of all JAVA classes of the project are open, nevertheless they are still poorly documented, and it is not neatly written as well.
 Though template worked well on our tests, we do not warrant it to be free of bugs or any malfunctionality whatsoever. Therefore, use at your own risk.
