@@ -492,6 +492,7 @@ public class BsvTxCreation {
         //Criar TOR Token
         if(TXtype == 1) {
             OutputString = bsvTX.OutputStringV2(nOfOutputs, PayWallets, PayValues, numberOfOPRETURNS, OP_RETURNs, inputString, TXtype);
+            //return OutputString;
         }
 
         //Criar ODR Token
@@ -540,7 +541,7 @@ public class BsvTxCreation {
         preTX = inputString + OutputString;
 
         //DEBUG
-        //if(TXtype == 6)
+        //if(TXtype == 1)
         //    return preTX;
 
         //return "Error: Time out reading Unspent TX inputs";
@@ -566,7 +567,7 @@ public class BsvTxCreation {
 
         String[] preimage = bsvTX.txPreImager41(preTX);
 
-        //if(TXtype == 6)
+        //if(TXtype == 1)
             //return preTX;
             //return preTX + "\n\n"+ Variables.DEBUG;
             //return Variables.DEBUG;

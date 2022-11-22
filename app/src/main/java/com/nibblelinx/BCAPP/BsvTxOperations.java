@@ -2777,7 +2777,6 @@ public class BsvTxOperations {
         for (int i=0, j=0; i < nOfInputs; i++)
         //for (int i=0; i < 1; i++)
         {
-
             //TXID da transacao anterior em LE
             txHexParts[txPartIndex] = txHexData.substring(0, 64);
             txHexData = txHexData.substring(64);
@@ -2799,6 +2798,15 @@ public class BsvTxOperations {
             txHexData = txHexData.substring(2);
             txPartIndex = txPartIndex + 1;
 
+
+            //True Token
+            if(txHexParts[txPartIndex-1].compareTo("00") == 0)
+            {
+                signDER[j] = "";
+                pubKeySEC[j] = "";
+
+            }
+            else
 
             //https://wiki.bitcoinsv.io/index.php/Opcodes_used_in_Bitcoin_Script
             //"fc" não entra aqui, pois não é necessário para OP_RETURN < 256 bytes
@@ -3045,6 +3053,7 @@ public class BsvTxOperations {
         */
 
 
+
         //Vamos precisar dos outputs da TX atual
         //O elemento muda quando uma nova busca é realizada.
         //String [] txOutPutsCurrent = this.txHexOutputs;
@@ -3080,6 +3089,15 @@ public class BsvTxOperations {
             inSeqCurrent[i] = this.inSeq[i];
 
 
+        /*
+        //DEBUG
+        if(txHexDataIn != null) {
+            String [] TxPreimageOutFail = new String[1];
+            TxPreimageOutFail[0] = "Error 1";
+            return TxPreimageOutFail;
+        }
+
+        */
         //https://www.reference.cash/protocol/blockchain/transaction/transaction-signing
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -3110,6 +3128,8 @@ public class BsvTxOperations {
         //    TxPreimageOutFail[0] = "Error 1";
         //    return TxPreimageOutFail;
         //}
+
+
 
         for(int i=0; i<nOfInputsCurrent; i++)
             //prvOutHASH = prvOutHASH + this.prvOutHASH[i] + this.pvOutIndex[i];
@@ -3183,6 +3203,15 @@ public class BsvTxOperations {
         }
 
 
+        /*
+        //DEBUG
+        if(txHexDataIn != null) {
+            String [] TxPreimageOutFail = new String[1];
+            TxPreimageOutFail[0] = "Error 1";
+            return TxPreimageOutFail;
+        }
+        */
+
 /////////////////////////////////////////////////////////////
 /// Inicio da busca por cada TX anterior
 /////////////////////////////////////////////////////////////
@@ -3214,6 +3243,14 @@ public class BsvTxOperations {
         //setThreadArray(nOfInputsCurrent);
 
 
+        /*
+        //DEBUG
+        if(txHexDataIn != null) {
+            String [] TxPreimageOutFail = new String[1];
+            TxPreimageOutFail[0] = "Error 1";
+            return TxPreimageOutFail;
+        }
+        */
 
         for(int i = 0; i < nOfInputsCurrent; i++) {
         //for(int i = 1; i < nOfInputsCurrent; i++) {
@@ -3438,7 +3475,21 @@ public class BsvTxOperations {
 
             //Esta funcao teve que ser corrigida para P2PK
 
+
+
+
             String [] TxPartsHere = txParts(TXToSeach); //esta tendo problemas com P2PK
+
+            /*
+            if(txHexDataIn != null  && i == 2) {
+                String [] TxPreimageOutFail = new String[1];
+                TxPreimageOutFail[0] = "Error 1";
+                return TxPreimageOutFail;
+            }
+            */
+
+
+
 
             //txPartsCurrent = txParts2(TXToSeach);
 
@@ -3508,13 +3559,16 @@ public class BsvTxOperations {
             inSeqNumber[i] = inSeqCurrent[i];
 
             //DEBUG
+
             /*
-            if(txHexDataIn != null) {
+            if(txHexDataIn != null  && i == 2) {
                 String [] TxPreimageOutFail = new String[1];
                 TxPreimageOutFail[0] = "Error 1";
                 return TxPreimageOutFail;
             }
+
             */
+
 
 
 
