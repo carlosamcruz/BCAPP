@@ -37,6 +37,8 @@
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintVertical_bias="0.499"/>
     -->
+
+
     <TextView
             android:id="@+id/TV_TEXT"
             android:layout_width="177dp"
@@ -51,8 +53,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.026"
     />
-
-
     <TextView
             android:id="@+id/TV_TEXT21"
             android:layout_width="110dp"
@@ -110,6 +110,7 @@
             app:layout_constraintVertical_bias="0.991"
             app:layout_constraintHorizontal_bias="0.537"/>
     <TextView
+            android:textIsSelectable="true"
             android:id="@+id/TV_TEXT3"
             android:layout_width="362dp"
             android:layout_height="60dp"
@@ -266,7 +267,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.102"
-            app:layout_constraintVertical_bias="0.752"/>
+            app:layout_constraintVertical_bias="0.763"/>
     <Button
             android:text="DIDACTIC"
             android:layout_width="wrap_content"
@@ -276,7 +277,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.91"
-            app:layout_constraintVertical_bias="0.752"/>
+            app:layout_constraintVertical_bias="0.763"/>
+    <Button
+            android:text="PASSWORD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMS19"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.507"
+            app:layout_constraintVertical_bias="0.763"/>
     <!-- <WebView
              android:id="@+id/webview2"
              android:layout_width="match_parent"

@@ -27,7 +27,7 @@ public class MainBCAPP extends AppCompatActivity {
         Button buttonMS1 = (Button) findViewById(R.id.buttonMS1);
         Button buttonMS2 = (Button) findViewById(R.id.buttonMS2);
        // Button buttonMS4 = (Button) findViewById(R.id.buttonMS4);
-        Button buttonMS6 = (Button) findViewById(R.id.buttonMS6);
+        Button buttonMS6 = (Button) findViewById(R.id.buttonMS6); //PVT KEY
         Button buttonMS7 = (Button) findViewById(R.id.buttonMS7);
         Button buttonMS8 = (Button) findViewById(R.id.buttonMS8);
 
@@ -41,6 +41,7 @@ public class MainBCAPP extends AppCompatActivity {
         Button buttonMS16 = (Button) findViewById(R.id.buttonMS16);
         Button buttonMS17 = (Button) findViewById(R.id.buttonMS17); //Specific UTXOs
         Button buttonMS18 = (Button) findViewById(R.id.buttonMS18); //Criacao de TRUE Tokens para ensino
+        Button buttonMS19 = (Button) findViewById(R.id.buttonMS19); //PassWord
 
         //fa = this;
 
@@ -430,6 +431,7 @@ public class MainBCAPP extends AppCompatActivity {
             }
         });
 
+        //PVT KEY
         buttonMS6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -494,7 +496,157 @@ public class MainBCAPP extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+
+        //Senha
+        buttonMS19.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String senha = MyPass
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(MainBCAPP.this);
+                //dialog.setTitle("BANCO DE DADOS PESSOAL");
+                dialog.setTitle("PassWord");
+                dialog.setMessage("Insert your PassWord:");
+
+
+                /////////////////////////////////////////////////////
+                //PIN
+                /////////////////////////////////////////////////////
+                final EditText ETdialog_PIN;
+                ETdialog_PIN = new EditText(MainBCAPP.this);
+                LinearLayout layout = new LinearLayout(MainBCAPP.this);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                ETdialog_PIN.setHint("Min 8 char");
+                ETdialog_PIN.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); // phone 3
+                //ETdialog_PIN.setInputType(InputType.TYPE_CLASS_TEXT); // phone 3
+                layout.addView(ETdialog_PIN);
+                dialog.setView(layout);
+                /////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////
+
+
+                dialog.setPositiveButton("Uncomp", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Variables.MainPaymail = ETdialog_PIN.getText().toString();
+
+                        //if(Variables.MainPaymail.length() == 64) {
+                        if(Variables.MainPaymail.length() >= 8) {
+
+                            Variables.CompPKey = false;
+
+                            ChaveDaSenha();
+                            setAddValue();
+
+                            dialog.dismiss();
+                        }
+
+                    }
+                });
+                dialog.setNegativeButton("Comp", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Variables.MainPaymail = ETdialog_PIN.getText().toString();
+
+                        //if(Variables.MainPaymail.length() == 64) {
+                        if(Variables.MainPaymail.length() >= 8) {
+                            //Keygen pubKey = new Keygen();
+
+                            Variables.CompPKey = true;
+
+                            ChaveDaSenha();
+                            setAddValue();
+
+                        }
+
+                    }
+                });
+
+                dialog.setNeutralButton("SHOW PVT KEY", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Variables.MainPaymail = ETdialog_PIN.getText().toString();
+
+                        if(Variables.MainPaymail.length() >= 8) {
+
+                            ChaveDaSenha();
+                            showPVTKEY();
+                        }
+
+                    }
+                });
+
+
+                dialog.create();
+                dialog.show();
+            }
+        });
+
+
+
     }
+
+    private void ChaveDaSenha()
+    {
+        Variables.MainPaymail = SHA256G.SHA256STR(Variables.MainPaymail);
+
+        if(Variables.MainPaymail == null)
+        {
+            Toast.makeText(MainBCAPP.this, "Senha Invalida!!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Variables.MainPaymail = SHA256G.LEformat(Variables.MainPaymail);
+        Variables.MainPaymail = SHA256G.SHA256bytes( SHA256G.HashStrToByte2(Variables.MainPaymail));
+
+        //Toast.makeText(MainBCAPP.this, Variables.MainPaymail, Toast.LENGTH_LONG).show();
+
+        //QRCODE = false;
+        //setAddValue();
+    }
+
+    private void showPVTKEY()
+    {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MainBCAPP.this);
+        //dialog.setTitle("BANCO DE DADOS PESSOAL");
+        dialog.setTitle("Private Key");
+        dialog.setMessage("Private Key from PassWord:");
+
+
+        /////////////////////////////////////////////////////
+        //PIN
+        /////////////////////////////////////////////////////
+        final EditText ETdialog_PIN;
+        ETdialog_PIN = new EditText(MainBCAPP.this);
+        LinearLayout layout = new LinearLayout(MainBCAPP.this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        ETdialog_PIN.setText(Variables.MainPaymail);
+        //ETdialog_PIN.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); // phone 3
+        //ETdialog_PIN.setInputType(InputType.TYPE_CLASS_TEXT); // phone 3
+        layout.addView(ETdialog_PIN);
+        dialog.setView(layout);
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+
+
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+
+            }
+        });
+
+        dialog.create();
+        dialog.show();
+    }
+
+
     //Boolean CompPKey = true;
 
     public void setAddValue()
