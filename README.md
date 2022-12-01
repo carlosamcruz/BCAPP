@@ -33,10 +33,11 @@ Features of this Android DAPP Template per Button:
 
 13) 2TR TOKEN - creates a TRUE TOKEN from a TOR TOKEN or ODR TOKEN, such token is an open access token for teaching purposes, where anyone can use the satoshis on it; 
 
+14) PASSWORD - insert a passwork of at least 8 char and get the related PVT KEY of that password or access your Compressed or Uncompressed P2PKH Bitcoin Address related to that password;
 
-14) LISTEN - listens the blockchain to search for new TX in a specific address and send datas throug it to. Intended for new applications building purposes.
+15) LISTEN - listens the blockchain to search for new TX in a specific address and send datas throug it to. Intended for new applications building purposes.
 
-15) DIDACTIC - just to diplay some internal results as a debugger for the developer;
+16) DIDACTIC - just to diplay some internal results as a debugger for the developer;
 
 
 The code of all JAVA classes of the project are open, nevertheless they are still poorly documented, and it is not neatly written as well.
