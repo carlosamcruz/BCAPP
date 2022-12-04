@@ -541,7 +541,7 @@ public class BsvTxCreation {
         preTX = inputString + OutputString;
 
         //DEBUG
-        //if(TXtype == 1)
+        //if(TXtype == 5)
         //    return preTX;
 
         //return "Error: Time out reading Unspent TX inputs";

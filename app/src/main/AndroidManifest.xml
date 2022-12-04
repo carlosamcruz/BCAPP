@@ -53,7 +53,11 @@ https://stackoverflow.com/questions/12131025/android-preventing-webview-reload-o
         <activity
                 android:name="com.nibblelinx.BCAPP.MainBCAPP"
                 android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                android:exported = "true"
+
+        >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

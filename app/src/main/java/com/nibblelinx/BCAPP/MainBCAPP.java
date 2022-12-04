@@ -90,6 +90,7 @@ public class MainBCAPP extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                /*
                 Variables.ditactic = true;
 
                 //if(Variables.MainPaymail.compareTo("")==0)
@@ -103,6 +104,8 @@ public class MainBCAPP extends AppCompatActivity {
                     startActivity(it);
 
                 }
+                */
+                Toast.makeText(MainBCAPP.this, "Disabled!!!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -143,6 +146,7 @@ public class MainBCAPP extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                /*
                 if(Variables.MainPaymail.length() != 64)
                 {
                     Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
@@ -168,6 +172,8 @@ public class MainBCAPP extends AppCompatActivity {
                     it.putExtra("NFTIndex", BSVADD);
                     startActivity(it);
                 }
+                */
+                Toast.makeText(MainBCAPP.this, "Disabled!!!", Toast.LENGTH_LONG).show();
             }
         });
 

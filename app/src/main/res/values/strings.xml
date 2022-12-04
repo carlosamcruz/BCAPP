@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BLOCKCHAIN APP</string>
+    <string name="app_name">Satoshi To Peer</string>
     <string name="site_app">BCAPP.COM</string>
     <string name="action_settings">Settings</string>
     <string name="action_share_text">Compartilhar Dados</string>

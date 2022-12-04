@@ -93,7 +93,7 @@ public class Token extends AppCompatActivity {
         //P2PK
         if(Variables.TokenType == 5)
         {
-            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Send to Public Key:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Public Key:");
 
         }
 

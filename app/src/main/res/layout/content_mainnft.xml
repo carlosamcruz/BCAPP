@@ -44,7 +44,7 @@
             android:layout_width="177dp"
             android:layout_height="36dp"
             android:gravity="center"
-            android:text="Main BCHAIN App"
+            android:text="Main Sat 2 Peer"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -166,7 +166,7 @@
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.098"
             app:layout_constraintVertical_bias="0.21"/>
     <Button
-            android:text="SEND P2PK"
+            android:text="To PBKEY"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonMS15"
@@ -177,7 +177,7 @@
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.092"
             app:layout_constraintVertical_bias="0.357"/>
     <Button
-            android:text="P2PK SPEND"
+            android:text="SPEND PBKEY"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonMS16"

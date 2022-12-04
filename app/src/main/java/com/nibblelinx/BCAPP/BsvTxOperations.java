@@ -2368,6 +2368,8 @@ public class BsvTxOperations {
 
                 totalOutString = totalOutString + Out1Script;
 
+                //return totalOutString;
+
             }
             else
             {
@@ -2379,12 +2381,21 @@ public class BsvTxOperations {
                 //String out2Sat = ""; //Total - TXSize - fee
 
                 String PayWallet160;
-                if(i == 0)
+
+                //if(i == 0)
+                if(j == 0)
                     PayWallet160 = PayWallets[j];
                 else
                     PayWallet160 = pubKey.addRMD(PayWallets[j]);
 
+                //if(i == 1)
+                //    return totalOutString + " ASDFG: "+ nORs;
+
+
                 long ivalue = Integer.valueOf(PayValues[j]);
+
+
+
 
                 if( i < nOutPuts -1 )
                     totalSpent = totalSpent + ivalue;
@@ -2457,7 +2468,8 @@ public class BsvTxOperations {
                     //String Out1Script = "1976a914" + "61079f5031a5b7e312d9fc5051fd7ce018fabc92" + "88ac";
                     //String Out2Script = "1976a914" + BSV160 + "88ac";
                     String Out2Script;
-                    if(i == 0) {
+                    //if(i == 0) {
+                    if(j == 0) {
 
                         if(PayWallet160.length()/2 == 0x41)
                             Out2Script = "4341" + PayWallet160 + "ac";
@@ -2477,6 +2489,8 @@ public class BsvTxOperations {
 
                     totalOutString = nOuts + totalOutString.substring(2);
                 }
+
+                //return totalOutString;
 
             }
 
