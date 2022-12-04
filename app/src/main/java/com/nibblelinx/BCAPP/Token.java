@@ -57,16 +57,19 @@ public class Token extends AppCompatActivity {
         ((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
         ((TextView) findViewById(R.id.TV_TEXT3bsv)).setText(Variables.BSVWallet);
 
+        //TOR creation
         if(Variables.TokenType == 1)
         {
-            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Owner Address:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Owner Address (P2PKH):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setHint("TOR Token Value (Satoshis):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Token Content:");
             ((TextView) findViewById(R.id.buttonSEND)).setText("CREATE");
         }
+
+        //ODR creation
         if(Variables.TokenType == 2)
         {
-            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Owner Address:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Owner Address (P2PKH):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setHint("ODR Token Value (Satoshis):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Token Content:");
             ((TextView) findViewById(R.id.buttonSEND)).setText("CREATE");
@@ -75,36 +78,39 @@ public class Token extends AppCompatActivity {
         //Melt Token
         if(Variables.TokenType == 3)
         {
-            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("P2PKH Receiver Address:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Address (P2PKH):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Script Hash:");
             ((TextView) findViewById(R.id.buttonSEND)).setText("MELT");
         }
 
+        //Send Token
         if(Variables.TokenType == 4)
         {
-            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Send to:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Address (P2PKH):");
             //((TextView) findViewById(R.id.ET_LobbyAct_Value)).setHint("Number of Tokens:");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Single Token (NFT)");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Script Hash:");
             ((TextView) findViewById(R.id.buttonSEND)).setText("SEND");
         }
 
-        //P2PK
+        //P2PK Creation
         if(Variables.TokenType == 5)
         {
-            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Public Key:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Public Key (SEC Format):");
 
         }
 
+        //P2PK Transfer
         if(Variables.TokenType == 6)
         {
-            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("P2PKH Receiver Address:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Address (P2PKH):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
-            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Public Key Script Hash:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Pub Key Script Hash:");
             ((TextView) findViewById(R.id.buttonSEND)).setText("SEND");
         }
 
+        //UTXO SET
         if(Variables.TokenType == 7)
         {
             ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("UTXO SET:");
@@ -278,6 +284,19 @@ public class Token extends AppCompatActivity {
             }
         }
 
+        //Basic test format Test - need to be improved
+        if(Variables.TokenType == 5)
+        {
+            if(    PayWallets[0].substring(0,2).compareTo("02") != 0
+                && PayWallets[0].substring(0,2).compareTo("03") != 0
+                && PayWallets[0].substring(0,2).compareTo("04") != 0 )
+            {
+                Toast.makeText(Token.this,"Wrong Format"
+                        , Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
         int TXType = Variables.TokenType;
 
 
@@ -309,9 +328,9 @@ public class Token extends AppCompatActivity {
         bsvTxOp.txID(newTX);
         Variables.LastTXID = bsvTxOp.TXID;
 
-        result = txCreate.txBroadCast(newTX);
+        //result = txCreate.txBroadCast(newTX);
 
-        //result = newTX;
+        result = newTX;
 
 
         //result = txCreate.totalUnspent(BSVADD);
