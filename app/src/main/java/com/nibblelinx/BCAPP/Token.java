@@ -328,9 +328,9 @@ public class Token extends AppCompatActivity {
         bsvTxOp.txID(newTX);
         Variables.LastTXID = bsvTxOp.TXID;
 
-        //result = txCreate.txBroadCast(newTX);
+        result = txCreate.txBroadCast(newTX);
 
-        result = newTX;
+        //result = newTX;
 
 
         //result = txCreate.totalUnspent(BSVADD);

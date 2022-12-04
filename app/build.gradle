@@ -8,8 +8,8 @@ android {
         applicationId "com.nibblelinx.bcapp"
         minSdkVersion 16
         targetSdkVersion 31
-        versionCode 5
-        versionName "1.0005"
+        versionCode 6
+        versionName "1.0006"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
