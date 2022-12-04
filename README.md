@@ -18,9 +18,9 @@ Features of this Android DAPP Template per Button:
 06) TX VERIFY - displays the TXID and hexadecimal body of the last TX send to the Mempool;
 
 
-07) SEND P2PK - send satoshis to an public key in SEC format and an optional description;
+07) TO PBKEY - send satoshis to an public key in SEC format and an optional description;
 
-08) SPEND P2PK - send all the satoshis from a P2PK script hash to an P2PKH address;
+08) SPEND PBKEY - send all the satoshis from a P2PK script hash to an P2PKH address;
 
 
 09) TOR TOKEN - creates a Token controled by your P2PKH address PVT KEY, the UTXO merges the pulbic key script and data inserted through OP_TRUE OP_RETURN opcodes;
