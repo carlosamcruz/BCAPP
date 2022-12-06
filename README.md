@@ -13,7 +13,7 @@ Features of this Android DAPP Template per Button:
      
      It is possible to send the same ammount of Satoshis to many different address, by creating a lists like this:
      
-     1add1...; 1add2....; 1add3; ... 1addn;
+     1add1...; 1add2....; 1add3; ...; 1addn;
      
      The code allows up to 250 different addresses at the same time, but it was not teste with this limit;
 
