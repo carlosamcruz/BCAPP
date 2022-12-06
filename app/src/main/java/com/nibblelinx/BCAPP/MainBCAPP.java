@@ -28,7 +28,7 @@ public class MainBCAPP extends AppCompatActivity {
         Button buttonMS2 = (Button) findViewById(R.id.buttonMS2);
        // Button buttonMS4 = (Button) findViewById(R.id.buttonMS4);
         Button buttonMS6 = (Button) findViewById(R.id.buttonMS6); //PVT KEY
-        Button buttonMS7 = (Button) findViewById(R.id.buttonMS7);
+        Button buttonMS7 = (Button) findViewById(R.id.buttonMS7); //Send SAT
         Button buttonMS8 = (Button) findViewById(R.id.buttonMS8);
 
         Button buttonMS9 = (Button) findViewById(R.id.buttonMS9);
@@ -178,6 +178,7 @@ public class MainBCAPP extends AppCompatActivity {
         });
 
 
+        //Send SAT
         buttonMS7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

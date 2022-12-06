@@ -141,6 +141,8 @@ public class Token extends AppCompatActivity {
         });
     }
 
+    int nOutMax = 254;
+
     //public void sendTX(String PVTKEY, String Wallet, String Value, String DATA)
     public void sendTX()
     {
@@ -202,17 +204,84 @@ public class Token extends AppCompatActivity {
         //User Data Input
         /////////////////////////////////////////////////////////////////////
 
-        String [] PayWallets = new String[10];
-        String [] PayValues = new String[10];
-        String [] OP_RETURNs = new String[10];
+        //nOutMax = 254
 
-        //PayWallets[0] = "1B69q3ZY6VsuKwCinvbB5tkKWLjHWfGz1J"; //MoneyButton
-        PayWallets[0] = sendTo; //Carteira para onde esta sendo enviado
-        PayWallets[1] = BSVADD;
-        //PayValues[0] = "1000";
-        PayValues[0] = sats;
-        //...at the name of Jesus every knee should bow, of things in heaven, and things in earth, and things under the earth;
-        //OP_RETURNs[0] = "2e2e2e617420746865206e616d65206f66204a65737573206576657279206b6e65652073686f756c6420626f772c206f66207468696e677320696e2068656176656e2c20616e64207468696e677320696e2065617274682c20616e64207468696e677320756e646572207468652065617274683b";
+        String [] PayWallets = new String[nOutMax];
+        String [] PayValues = new String[nOutMax];
+        String [] OP_RETURNs = new String[nOutMax];
+
+
+        int nOutputs = 2; //default
+        int nInp = 1;
+
+        /*
+        if(Variables.TokenType == 0)
+        {
+            Toast.makeText(Token.this, "Debut!!!"
+                    , Toast.LENGTH_LONG).show();
+            return;
+        }
+        */
+
+        /////////////////////////////////////////////////////////////////////
+        //Verifica se existem multiplos endereços para pagamento
+        //O valor enviado será o mesmo para todos;
+        //Ate 150 funcionou bem, acima de 150 ate 190 erro intermitente
+        /////////////////////////////////////////////////////////////////////
+        if(sendTo.indexOf(";") != -1) {
+
+            int i = 0;
+
+            do {
+                i = sendTo.indexOf(";");
+
+                if (i == -1)
+                    PayWallets[nInp - 1] = sendTo.substring(sendTo.indexOf("1"));
+                else {
+                    PayWallets[nInp - 1] = sendTo.substring(sendTo.indexOf("1"), i);
+                    sendTo = sendTo.substring(i + 1);
+                }
+
+                PayValues[nInp - 1] = sats;
+                nInp++;
+            }
+            while (i != -1 && sendTo.length()>0);
+            PayWallets[nInp - 1] = BSVADD;
+            nOutputs = nInp;
+        }
+        else
+        {
+            //PayWallets[0] = "1B69q3ZY6VsuKwCinvbB5tkKWLjHWfGz1J"; //MoneyButton
+            PayWallets[0] = sendTo; //Carteira para onde esta sendo enviado
+            PayWallets[1] = BSVADD;
+            //PayValues[0] = "1000";
+            PayValues[0] = sats;
+            //...at the name of Jesus every knee should bow, of things in heaven, and things in earth, and things under the earth;
+            //OP_RETURNs[0] = "2e2e2e617420746865206e616d65206f66204a65737573206576657279206b6e65652073686f756c6420626f772c206f66207468696e677320696e2068656176656e2c20616e64207468696e677320696e2065617274682c20616e64207468696e677320756e646572207468652065617274683b";
+        }
+
+        /*
+
+        if(Variables.TokenType == 0)
+        {
+            Toast.makeText(Token.this, "Debut!!!"
+                    , Toast.LENGTH_LONG).show();
+            return;
+        }
+        */
+
+/*
+        if(nInp > 0)
+        {
+            //result = newTX;
+
+            Toast.makeText(Token.this, "Result: " + PayWallets[0] +" "+ PayWallets[1]
+                    , Toast.LENGTH_LONG).show();
+            return;
+        }
+        */
+
+
 
         int nOR = 0;
         if(data.length() > 0) {
@@ -309,7 +378,7 @@ public class Token extends AppCompatActivity {
         }
         */
 
-        String newTX = txCreate.txBuilderV2(pvtkey, Variables.CompPKey,2 + nOR,
+        String newTX = txCreate.txBuilderV2(pvtkey, Variables.CompPKey,nOutputs + nOR,
                 PayWallets,PayValues,OP_RETURNs, nOR, TXType, SCRIPTHASH);
         String result = "";
 
@@ -333,6 +402,7 @@ public class Token extends AppCompatActivity {
         //result = newTX;
 
 
+        //Nao usar esta linhar de qualquer jeito
         //result = txCreate.totalUnspent(BSVADD);
 
         Toast.makeText(Token.this, "Result: " + result

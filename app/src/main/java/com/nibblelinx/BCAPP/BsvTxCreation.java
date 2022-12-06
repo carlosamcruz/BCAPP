@@ -485,6 +485,7 @@ public class BsvTxCreation {
         //Confecção da String de Output
         /////////////////////////////////////////////////////////////////////
         if(TXtype == 0) {
+            //return OutputString;
             OutputString = bsvTX.OutputString(nOfOutputs, PayWallets, PayValues, numberOfOPRETURNS, OP_RETURNs, inputString);
             //return OutputString;
         }
