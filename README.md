@@ -10,6 +10,9 @@ Features of this Android DAPP Template per Button:
 02) WRITE BC - attach text data to an unspendable 0 sat UTXO using OP_FALSE OP_RETURN and send it in a transaction to the Bitcoin MemPool;
 
 03) SEND SATS - send satoshis to any P2PKH Bitcoin address, and if you want it attaches an optional description to the transaction as an unspendable 0 sat UTXO using OP_FALSE OP_RETURN;
+     It is possible to send the same ammount of Satoshis to many different address, by creating a lists like this:
+     1add1...; 1add2....; 1add3; ... 1addn;
+     The code allows up to 250 different addresses at the same time, but it was not teste with this limit;
 
 04) READ BC - reads from the blockchain TXID related to your P2PKH address and display the data if there is found unspendable 0 sat UTXO using OP_FALSE OP_RETURN;
 
