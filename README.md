@@ -16,6 +16,8 @@ Features of this Android DAPP Template per Button:
      1add1...; 1add2....; 1add3; ...; 1addn;
      
      The code allows up to 250 different addresses at the same time, but it was not teste with this limit;
+     
+     The Chage Wallet Address option is the address to where you can send the change of a previous address during a transaction. You can use this option when you don´t want to use the previous address anymore.
 
 
 04) READ BC - reads from the blockchain TXID related to your P2PKH address and display the data if there is found unspendable 0 sat UTXO using OP_FALSE OP_RETURN;
