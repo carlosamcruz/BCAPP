@@ -23,6 +23,7 @@ public class Token extends AppCompatActivity {
     //Notes banco;
     String myPassword;
     String myUser;
+    String changeWallet = "";
 
 
     @Override
@@ -47,12 +48,14 @@ public class Token extends AppCompatActivity {
         EditText SendTo = (EditText) findViewById(R.id.ET_LobbyAct_SentTo);
         EditText Satoshis = (EditText) findViewById(R.id.ET_LobbyAct_Value);
         EditText Data = (EditText) findViewById(R.id.ET_LobbyAct_Data);
+        EditText ChangeWallet = (EditText) findViewById(R.id.ET_LobbyAct_CHWLLET);
 
 
         //String pvtkey = PVTKEY.getText().toString();
         String sendTo = SendTo.getText().toString();
         String sats = Satoshis.getText().toString();
         String data = Data.getText().toString();
+        changeWallet = ChangeWallet.getText().toString();
 
         ((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
         ((TextView) findViewById(R.id.TV_TEXT3bsv)).setText(Variables.BSVWallet);
@@ -63,6 +66,7 @@ public class Token extends AppCompatActivity {
             ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Owner Address (P2PKH):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setHint("TOR Token Value (Satoshis):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Token Content:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_CHWLLET)).setText("Nothing");
             ((TextView) findViewById(R.id.buttonSEND)).setText("CREATE");
         }
 
@@ -72,6 +76,7 @@ public class Token extends AppCompatActivity {
             ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Owner Address (P2PKH):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setHint("ODR Token Value (Satoshis):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Token Content:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_CHWLLET)).setText("Nothing");
             ((TextView) findViewById(R.id.buttonSEND)).setText("CREATE");
         }
 
@@ -81,6 +86,7 @@ public class Token extends AppCompatActivity {
             ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Address (P2PKH):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Script Hash:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_CHWLLET)).setText("Nothing");
             ((TextView) findViewById(R.id.buttonSEND)).setText("MELT");
         }
 
@@ -91,6 +97,7 @@ public class Token extends AppCompatActivity {
             //((TextView) findViewById(R.id.ET_LobbyAct_Value)).setHint("Number of Tokens:");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Single Token (NFT)");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Script Hash:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_CHWLLET)).setText("Nothing");
             ((TextView) findViewById(R.id.buttonSEND)).setText("SEND");
         }
 
@@ -98,6 +105,7 @@ public class Token extends AppCompatActivity {
         if(Variables.TokenType == 5)
         {
             ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Public Key (SEC Format):");
+            ((TextView) findViewById(R.id.ET_LobbyAct_CHWLLET)).setText("Nothing");
 
         }
 
@@ -107,6 +115,7 @@ public class Token extends AppCompatActivity {
             ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Address (P2PKH):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Pub Key Script Hash:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_CHWLLET)).setText("Nothing");
             ((TextView) findViewById(R.id.buttonSEND)).setText("SEND");
         }
 
@@ -116,6 +125,7 @@ public class Token extends AppCompatActivity {
             ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("UTXO SET:");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Nothing");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setText("Nothing");
+            ((TextView) findViewById(R.id.ET_LobbyAct_CHWLLET)).setText("Nothing");
             ((TextView) findViewById(R.id.buttonSEND)).setText("LOAD");
         }
 
@@ -125,6 +135,7 @@ public class Token extends AppCompatActivity {
             ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("True Token Script:");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
             ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Script Hash:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_CHWLLET)).setText("Nothing");
             ((TextView) findViewById(R.id.buttonSEND)).setText("CREATE");
         }
 
@@ -152,6 +163,7 @@ public class Token extends AppCompatActivity {
         EditText SendTo = (EditText) findViewById(R.id.ET_LobbyAct_SentTo);
         EditText Satoshis = (EditText) findViewById(R.id.ET_LobbyAct_Value);
         EditText Data = (EditText) findViewById(R.id.ET_LobbyAct_Data);
+        EditText ChangeWallet = (EditText) findViewById(R.id.ET_LobbyAct_CHWLLET);
 
         //String pvtkey = PVTKEY.getText().toString();
 
@@ -165,6 +177,7 @@ public class Token extends AppCompatActivity {
         //String data = "Teste de mensagem mais longa.";
         //String data = "Teste N";
         //String data = "Teste N TTT t";//bad request
+        changeWallet = ChangeWallet.getText().toString();
 
         if(Variables.TokenType == 7)
         {
@@ -198,6 +211,18 @@ public class Token extends AppCompatActivity {
 
         String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, Variables.CompPKey);
         String BSVADD = pubKey.bsvWalletFull(PUBKEY, Variables.CompPKey);
+
+        //Enviar o Troco para a Change Wallet
+        //if(Variables.TokenType == 0 && changeWallet.substring(0,1).compareTo("1") == 0)
+        if(Variables.TokenType == 0 && changeWallet.length() > 25)
+        //if(Variables.TokenType == 0)
+        {
+            if(changeWallet.substring(0,1).compareTo("1") == 0)
+                BSVADD = changeWallet;
+
+            //Toast.makeText(Token.this, BSVADD, Toast.LENGTH_LONG).show();
+            //return;
+        }
 
 
         /////////////////////////////////////////////////////////////////////
