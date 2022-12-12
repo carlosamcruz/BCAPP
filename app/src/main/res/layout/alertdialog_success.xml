@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#377770"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            android:text="Success"
+            android:textAllCaps="true"
+            android:textColor="@color/TextColorLight"
+            android:textSize="@dimen/TextSizeNormal" />
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            android:text="Transaction ID (TXID)"
+            android:textAllCaps="false"
+            android:textColor="@color/TextColorLight"
+            android:textSize="16sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="12dp"
+
+            android:textColorHint="@color/colorPrimaryDark"
+            app:boxBackgroundColor="#033C34"
+            app:boxStrokeColor="@color/colorPrimaryDark"
+
+    >
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/InputTXID"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/TextColorLight"
+                android:gravity="center"
+                android:inputType="text"
+                android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+        <Button
+                android:id="@+id/ButtonConfirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OK"
+                android:textAllCaps="true"
+                android:textColor="@color/Black"
+                app:strokeColor="@color/White" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

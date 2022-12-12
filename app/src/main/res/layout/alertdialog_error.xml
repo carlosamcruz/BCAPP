@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/BackgroundColor"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            android:text="Error"
+            android:textAllCaps="true"
+            android:textColor="@color/Black"
+            android:textSize="@dimen/TextSizeSmall" />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+
+            android:gravity="center"
+            android:text="Try Again"
+            android:textAllCaps="false"
+            android:textColor="@color/Black"
+            android:textSize="16sp" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+        <Button
+                android:id="@+id/ButtonTryAgain"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ok"
+                android:textAllCaps="true"
+                android:textColor="@color/Black"
+                app:strokeColor="@color/White" />
+
+    </LinearLayout>
+
+</LinearLayout>

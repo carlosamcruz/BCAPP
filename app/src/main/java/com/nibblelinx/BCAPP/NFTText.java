@@ -5,14 +5,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import androidx.annotation.RequiresApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 //////////////////////////////////////////////////////////////////
 //OPERACOES COM ARQUIVOS
@@ -106,19 +110,19 @@ public class NFTText extends AppCompatActivity {
                         if (x == 1) {
 
                             //new DecBackGround2().execute(SHA256G.HashStrToByte2(text));
-                            result = null;
+                            result2 = null;
                             new DecBackGround2().onPreExecute();
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
 
-                                    result = new DecBackGround2().execute(SHA256G.HashStrToByte2(text));
+                                    result2 = new DecBackGround2().execute(SHA256G.HashStrToByte2(text));
 
                                     //Para a execução na thread pricipal
                                     runOnUiThread(new Runnable() {
                                         public void run() {
                                             // do onPostExecute stuff
-                                            new DecBackGround2().onPostExecute(result);
+                                            new DecBackGround2().onPostExecute(result2);
                                         }
                                     });
                                 }
@@ -148,7 +152,8 @@ public class NFTText extends AppCompatActivity {
                                 newTextChar[j] = (byte) (text.charAt(i) & 0xFF);
                             }
                         }
-                        sendTX(newTextChar);
+                        //sendTX(newTextChar);
+                        sendTXNEW(newTextChar);
                     }
                 }
             }
@@ -251,6 +256,394 @@ public class NFTText extends AppCompatActivity {
 
         //((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
     }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Thread Work
+////////////////////////////////////////////////////////////////////////////////////////
+
+    //final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Token.this, R.style.ThemeOverlay_App_MaterialAlertDialog);
+    private AlertDialog.Builder alertDialogBuilder;// = new AlertDialog.Builder(Token.this, R.style.ThemeOverlay_App_MaterialAlertDialog);
+    public void createAlertDialog(int id, String res) {
+        LayoutInflater inflater = getLayoutInflater();
+        View view = null;
+
+        if (id == 1) {
+            view = inflater.inflate(R.layout.alertdialog_error, null);
+        } else if (id == 2) {
+            view = inflater.inflate(R.layout.alertdialog_success, null);
+            //view = inflater.inflate(R.layout.alertdialog_wait, null);
+            //((TextView) findViewById(R.id.DisplayTXID)).setText("ABC");
+        }
+
+        if (view == null) {
+            return;
+        }
+
+        if(alertDialogBuilder != null)
+            alertDialogBuilder = null;
+
+        //final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Token.this, R.style.ThemeOverlay_App_MaterialAlertDialog);
+        alertDialogBuilder = new AlertDialog.Builder(NFTText.this);
+        alertDialogBuilder.setView(view);
+
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        //((TextView) findViewById(R.id.DisplayTXID)).setText("TXID: "+res);
+
+        alertDialog.show();
+
+        switch (id) {
+            case 1:
+                Button buttonTryAgain = alertDialog.findViewById(R.id.ButtonTryAgain);
+                buttonTryAgain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        //ScannerQrCode();
+                    }
+                });
+                break;
+
+            case 2:
+
+                //setContentView(R.layout.alertdialog_success);
+                Button buttonConfirm = alertDialog.findViewById(R.id.ButtonConfirm);
+
+                //((TextView) findViewById(R.id.DisplayTXID2)).setText("ABC");
+                //TextInputEditText inputTXID2 = alertDialog.findViewById(R.id.DisplayTXID);
+                TextInputEditText inputTXID = alertDialog.findViewById(R.id.InputTXID);
+                inputTXID.setText(res);
+                //inputTXID2.setText("abcd");
+
+                buttonConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
+    private AlertDialog alertDialogWait;
+    public void DialogWait(int STATE) {
+        LayoutInflater inflater = getLayoutInflater();
+        View view = null;
+
+        view = inflater.inflate(R.layout.alertdialog_wait, null);
+
+        if (view == null) {
+            return;
+        }
+
+        if(STATE == 0) {
+            //final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Token.this, R.style.ThemeOverlay_App_MaterialAlertDialog);
+            alertDialogBuilder = new AlertDialog.Builder(NFTText.this);
+            alertDialogBuilder.setView(view);
+
+            alertDialogWait = alertDialogBuilder.create();
+            alertDialogWait.show();
+
+            TextInputEditText inputTXID = alertDialogWait.findViewById(R.id.InputPhase);
+
+            //inputTXID.setText("Phase " + Variables.TxPhases);
+
+
+            switch (Variables.TxPhases) {
+                case 1:
+                    inputTXID.setText("Iniciando a Criação da Transação ... ");
+                    break;
+
+                case 2:
+                    inputTXID.setText("Verificando Entradas da Transação ... ");
+                    break;
+
+                case 3:
+                    inputTXID.setText("Criando as Saídas da Transação ... ");
+                    break;
+
+                case 4:
+                    inputTXID.setText("Criando Pre-Imagens da Transação ... ");
+                    break;
+
+                case 5:
+                    inputTXID.setText("Assinando Input " + Variables.TxPhasesNinp
+                            + " de " + Variables.TxPhasesNinpTotal + " (Aguarde!!!)");
+                    break;
+
+                case 6:
+                    inputTXID.setText("Enviando a Transação ..." );
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        if(STATE == 1) {
+            alertDialogWait.dismiss();
+            alertDialogBuilder = null;
+        }
+
+    }
+
+    Thread threadBuild;
+    private void renewThreadBuild()
+    {
+        threadBuild = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    buildTXTH();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //Para a execução na thread pricipal
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        // do onPostExecute stuff
+                        //new NoConnection().onPostExecute(result);
+                        sendTXPhase2();
+                    }
+                });
+            }
+        });
+    }
+
+
+    String newTX = "";
+
+    private byte[] newTextChar;
+
+    public void buildTXTH()
+    {
+
+        String pvtkey = Variables.MainPaymail;
+        //String sendTo = SendTo.getText().toString();
+        //String sats = Satoshis.getText().toString();
+        String data = SHA256G.ByteToStrHex(newTextChar);
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        //Preparação das Chaves
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        Keygen pubKey = new Keygen();
+        //Boolean CompPKey = false;
+        //Variables.CompPKey = false;
+
+        String PUBKEY = pubKey.publicKeyHEX(pvtkey); //PVTKEY - string Hexadecimal de 64 elementos.
+        String BSV160 = pubKey.bsvWalletRMD160(PUBKEY, Variables.CompPKey);
+        String BSVADD = pubKey.bsvWalletFull(PUBKEY, Variables.CompPKey);
+
+
+        /////////////////////////////////////////////////////////////////////
+        //User Data Input
+        /////////////////////////////////////////////////////////////////////
+
+        String [] PayWallets = new String[10];
+        String [] PayValues = new String[10];
+        String [] OP_RETURNs = new String[10];
+
+        //PayWallets[0] = "1B69q3ZY6VsuKwCinvbB5tkKWLjHWfGz1J"; //MoneyButton
+        //PayWallets[0] = sendTo; //Carteira para onde esta sendo enviado
+        //PayWallets[1] = BSVADD;
+        PayWallets[0] = BSVADD;
+        PayValues[0] = "0";
+        //PayValues[0] = "1000";
+        //PayValues[0] = sats;
+        //...at the name of Jesus every knee should bow, of things in heaven, and things in earth, and things under the earth;
+        //OP_RETURNs[0] = "2e2e2e617420746865206e616d65206f66204a65737573206576657279206b6e65652073686f756c6420626f772c206f66207468696e677320696e2068656176656e2c20616e64207468696e677320696e2065617274682c20616e64207468696e677320756e646572207468652065617274683b";
+
+        int nOR = 0;
+        if(data.length() > 0) {
+            //OP_RETURNs[0] = StrToHex(data);
+            OP_RETURNs[0] = SHA256G.ByteToStrHex(newTextChar);
+            //OP_RETURNs[0] = "5465737465204e205454542074" + "5465737465204e205454542074";
+            nOR = 1;
+        }
+
+        if(nOR == 0) {
+
+            Toast.makeText(NFTText.this, "No Data!!!"
+                    , Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+
+        BsvTxCreation txCreate = new BsvTxCreation();
+
+        //Problema Aqui;
+        newTX = txCreate.txBuilder(pvtkey, Variables.CompPKey,1 + nOR, PayWallets,PayValues,OP_RETURNs, nOR);
+    }
+
+    Thread threadSend;
+    private void renewThreadSend()
+    {
+        threadSend = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    sendTXTH();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //Para a execução na thread pricipal
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        // do onPostExecute stuff
+                        //new NoConnection().onPostExecute(result);
+                        sendTXPhase3();
+                    }
+                });
+            }
+        });
+    }
+
+
+    String result = "";
+    //Boolean dialogX = false;
+    public void sendTXTH() {
+
+        BsvTxCreation txCreate = new BsvTxCreation();
+
+
+        Variables.LastTxHexData = newTX;
+
+        BsvTxOperations bsvTxOp = new BsvTxOperations();
+        bsvTxOp.txID(newTX);
+        Variables.LastTXID = bsvTxOp.TXID;
+
+        result = txCreate.txBroadCast(newTX);
+        //result = newTX;
+        //dialogX =true;
+    }
+
+    int phaseTx = 0;
+    //public void sendTXNEW() {
+    public void sendTXNEW(byte[] newTextCharThis){
+
+        newTextChar = newTextCharThis;
+
+        //dialogX = false;
+        phaseTx = 0;
+        Variables.TxPhases = 1;
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+        }
+
+        timer = new Timer();
+        timer.schedule(new TimeCheck(), 0, 4000);
+
+        //if(Variables.SatBalance!=null) {
+        //    Toast.makeText(Token.this, "Construindo TX...", Toast.LENGTH_LONG).show();
+        //    return;
+        //}
+        //Toast.makeText(Token.this, "Construindo TX...", Toast.LENGTH_LONG).show();
+        renewThreadBuild();
+        threadBuild.start();
+
+        phaseTx = 1;
+        DialogWait(0);
+
+    }
+
+
+    public void sendTXPhase2() {
+
+        if (newTX.length() > 5) {
+            if (newTX.substring(0, 5).compareTo("Error") == 0) {
+                Toast.makeText(NFTText.this, newTX
+                        , Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        //Toast.makeText(NFTText.this, "Enviando Transação ...", Toast.LENGTH_LONG).show();
+        renewThreadSend();
+        threadSend.start();
+    }
+
+
+    public void sendTXPhase3()
+    {
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+
+            if(alertDialogBuilder != null)
+                //if(dialogX)
+                DialogWait(1);
+        }
+
+        //Toast.makeText(NFTText.this, "Result: " + result, Toast.LENGTH_LONG).show();
+
+        //DialogWait(1);
+
+        //createAlertDialog(2, result);
+
+        if(result.length() != 64)
+            createAlertDialog(1, result);
+        else
+            createAlertDialog(2, result);
+
+        //Valor final da carteira
+        //Variables.SatBalance = Long.toString(Long.valueOf(Variables.SatBalance));
+
+        //((TextView) findViewById(R.id.DisplayCurrentBalance)).setText("Saldo (Miritis): " + Variables.SatBalance + " mrts");
+        //((TextView) findViewById(R.id.DisplayUserWallet)).setText(Variables.BSVWallet);
+
+    }
+
+    Timer timer;
+
+    //BsvTxCreation txCreate = new BsvTxCreation();
+    class TimeCheck extends TimerTask
+    {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        public void run()
+        {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    //Para a execução na thread pricipal
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+
+                            if(alertDialogBuilder != null)
+                                //if(dialogX)
+                                DialogWait(1);
+                            phaseTx ++;
+                            DialogWait(0);
+
+                        }
+                    });
+
+                }
+            }).start();
+        }
+    }
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     public void sendTX(byte[] newTextChar)
     {
@@ -392,7 +785,7 @@ public class NFTText extends AppCompatActivity {
         }
     }
 
-    byte[] result;
+    byte[] result2;
 
     class DecBackGround2 //extends AsyncTask<byte[], byte[],byte[]>
     {

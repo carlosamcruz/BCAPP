@@ -6,5 +6,19 @@
     <color name="colorText">#000000</color>
     <color name="backgroundcolor">#F9F4F8</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="Black">#000</color>
+    <color name="White">#DEFFFFFF</color>
+    <color name="BackgroundColor">#E9E9E9</color>
+    <color name="OnBackgroundColor">#F4F4F4</color>
+    <color name="Red">#A61B40</color>
+    <color name="Orange">#BF522A</color>
+    <color name="OnOrange">#3DBF532C</color>
+    <color name="TextColorLight">#DEFFFFFF</color>
+    <color name="TextColorDark">#000</color>
+    <color name="TextColorDark2">#29000000</color>
+
+
+
 </resources>
 

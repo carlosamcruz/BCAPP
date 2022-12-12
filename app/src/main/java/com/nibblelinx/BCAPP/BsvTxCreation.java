@@ -81,6 +81,8 @@ public class BsvTxCreation {
     {
         NewTxHexData = "";
 
+        Variables.TxPhases = 1;
+
         //DEBUG
         //if(PVTKEY != null)
         //    return "Error 1";
@@ -125,21 +127,35 @@ public class BsvTxCreation {
 
         */
 
-        while (bsvTX.threadreadBsvAddsUnspent.isAlive())
+        Variables.TxPhases = 2;
+
+        if(Variables.UTXOSET.compareTo("") ==0)
         {
-            unspentTX = "";
+
+            while (bsvTX.threadreadBsvAddsUnspent.isAlive())
+            {
+                unspentTX = "";
+            }
+
+            unspentTX = bsvTX.unsPentInputs;
+            //bsvTX.timer.cancel();
+            //bsvTX.timer.purge();
+
+            if(bsvTX.unsPentInputs == null)
+                return  "Error: Time out reading Unspent TX inputs";
+
+
+            //if(bsvTX.unsPentInputs != null)
+            //    return  "Error: " + unspentTX;
+        }
+        else
+        {
+            unspentTX = Variables.UTXOSET;
+            Variables.UTXOSET = "";
         }
 
-        unspentTX = bsvTX.unsPentInputs;
-        //bsvTX.timer.cancel();
-        //bsvTX.timer.purge();
-
-        if(bsvTX.unsPentInputs == null)
-            return  "Error: Time out reading Unspent TX inputs";
 
 
-        //if(bsvTX.unsPentInputs != null)
-        //    return  "Error: " + unspentTX;
 
 
 //////////Debug
@@ -189,6 +205,8 @@ public class BsvTxCreation {
         String OutputString = "";
         String preTX = "";
 
+        Variables.TxPhases = 3;
+
         /////////////////////////////////////////////////////////////////////
         //Confecção da String de Output
         /////////////////////////////////////////////////////////////////////
@@ -215,6 +233,7 @@ public class BsvTxCreation {
         //bsvTX.timer = new Timer();
         //bsvTX.timerCallWOC();
 
+        Variables.TxPhases = 4;
         String[] preimage = bsvTX.txPreImager41(preTX);
 
         //bsvTX.timer.cancel();
@@ -260,11 +279,15 @@ public class BsvTxCreation {
         int[] DERsize = new int[nInp];
         String[] inputScriptSize = new String[nInp];
 
+        Variables.TxPhases = 5;
+        Variables.TxPhasesNinpTotal = nInp;
+
         /////////////////////////////////////////////////////////////////////
         //Confecção das Assinatura DER para cada input
         /////////////////////////////////////////////////////////////////////
         for(int i = 0; i < nInp; i++)
         {
+            Variables.TxPhasesNinp = i + 1;
 
             String lastTXID = bsvTX.unspentTXID[i];
 
@@ -304,6 +327,8 @@ public class BsvTxCreation {
 
         NewTxHexData = newTX;
 
+        Variables.TxPhases = 6;
+
         return newTX;
         /////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////
@@ -329,6 +354,8 @@ public class BsvTxCreation {
 
 
         NewTxHexData = "";
+
+        Variables.TxPhases = 1;
 
         //DEBUG
         //if(PVTKEY != null)
@@ -365,6 +392,8 @@ public class BsvTxCreation {
 
 
         bsvTX.unsPentInputs = null;
+
+        Variables.TxPhases = 2;
 
         if(Variables.UTXOSET.compareTo("") ==0)
         {
@@ -481,6 +510,8 @@ public class BsvTxCreation {
         String OutputString = "";
         String preTX = "";
 
+        Variables.TxPhases = 3;
+
         /////////////////////////////////////////////////////////////////////
         //Confecção da String de Output
         /////////////////////////////////////////////////////////////////////
@@ -566,6 +597,8 @@ public class BsvTxCreation {
         //bsvTX.timer = new Timer();
         //bsvTX.timerCallWOC();
 
+        Variables.TxPhases = 4;
+
         String[] preimage = bsvTX.txPreImager41(preTX);
 
         //if(TXtype == 1)
@@ -620,11 +653,15 @@ public class BsvTxCreation {
         int[] DERsize = new int[nInp];
         String[] inputScriptSize = new String[nInp];
 
+        Variables.TxPhases = 5;
+        Variables.TxPhasesNinpTotal = nInp;
+
         /////////////////////////////////////////////////////////////////////
         //Confecção das Assinatura DER para cada input
         /////////////////////////////////////////////////////////////////////
         for(int i = 0; i < nInp; i++)
         {
+            Variables.TxPhasesNinp = i + 1;
 
             String lastTXID = bsvTX.unspentTXID[i];
 
@@ -673,6 +710,8 @@ public class BsvTxCreation {
         newTX = inputString + OutputString;
 
         NewTxHexData = newTX;
+
+        Variables.TxPhases = 6;
 
         return newTX;
         /////////////////////////////////////////////////////////////////////

@@ -13,6 +13,9 @@ public class Variables {
     static int operation = 0;
     static String SatBalance = "";
     static int STREAMTT = 0;
+    static int TxPhases = 0;
+    static int TxPhasesNinp = 0;
+    static int TxPhasesNinpTotal = 0;
 
     static Boolean threadM = false;
     static String LastTxHexData = "";

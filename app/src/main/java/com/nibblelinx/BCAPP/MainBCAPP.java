@@ -24,7 +24,7 @@ public class MainBCAPP extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainnft);
-        Button buttonMS1 = (Button) findViewById(R.id.buttonMS1);
+        Button buttonMS1 = (Button) findViewById(R.id.buttonMS1); //send Text
         Button buttonMS2 = (Button) findViewById(R.id.buttonMS2);
        // Button buttonMS4 = (Button) findViewById(R.id.buttonMS4);
         Button buttonMS6 = (Button) findViewById(R.id.buttonMS6); //PVT KEY
