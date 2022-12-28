@@ -1,5 +1,8 @@
 # BCAPP
-Template to Help Building Descentralized Application - DAPP on Android Platform using the Bitcoin Network
+
+Technically, this template works as user interface for WOC, GorillaPool e Bitails APIs, that allows the user to use the Bitcoin Blockchain, sending TXs and reading TX's details with the help of these APIs.
+
+It is worth for Building Descentralized Application - DAPP on Android Platform using the Bitcoin Network
 
 This template includes classes that enables the creation and use of Bitcoin legacy wallets from a hexadecimal private key.
 
