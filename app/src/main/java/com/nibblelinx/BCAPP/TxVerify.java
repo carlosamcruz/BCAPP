@@ -39,6 +39,8 @@ public class TxVerify extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarST);
         setSupportActionBar(toolbar);
 
+        BsvTxOperations bsvTX = new BsvTxOperations();
+
         //O verficador de pausa deve ser modificado em OnResume e OnCreate de cada Activity
         Variables.activityPause = false;
         //O contador de pausa deve estar presente em OnResume e OnCreate de cada Activity
@@ -69,8 +71,20 @@ public class TxVerify extends AppCompatActivity {
             Variables.LastTxHexData = bsvTx.txHexRead(Variables.LastTXID);
         }
 
+        bsvTX.txParts(Variables.LastTxHexData);
+
+        String txOutuputs  = "";
+
+        for(int i = 0; i < bsvTX.nOfOutputs; i++) {
+            txOutuputs = txOutuputs + "\n\n" + "Output " + i + ":\n\n"+ bsvTX.txHexOutputs[i * 3 + 2]
+
+            + "\n\n" + "Script Hash:" + "\n\n" + SHA256G.LEformat(SHA256G.SHA256bytes(SHA256G.HashStrToByte2(bsvTX.txHexOutputs[i * 3 + 2])));
+
+        }
+
+
         ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
-                Variables.LastTXID + "\n\n" + Variables.LastTxHexData
+                Variables.LastTXID + "\n\n" + Variables.LastTxHexData + txOutuputs
         );
 
 

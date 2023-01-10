@@ -21,7 +21,10 @@ public class BsvTxCreation {
 
         bsvTX.unsPentInputs = null;
         //bsvTX.timer = new Timer();
+
         bsvTX.readBsvAddsUnspent(BSVADD);
+
+
         String unspentTX = "";
 
         //Primeiro
@@ -66,6 +69,50 @@ public class BsvTxCreation {
         //totalValueHex = Long.toHexString(totalValue);
         return Long.toString(totalValue);
     }
+
+
+    public  String utxoList (String BSVADD)
+    {
+        /////////////////////////////////////////////////////////////////////
+        //Unspent TX treatment do Endereço da Chave privada Indicada pelo Usruário
+        /////////////////////////////////////////////////////////////////////
+
+        bsvTX.unsPentInputs = null;
+        //bsvTX.timer = new Timer();
+
+        if(BSVADD.length() == 64) //ScriptHash
+            bsvTX.readBsvSCRIPTUnspent(BSVADD);
+        else //Address
+            bsvTX.readBsvAddsUnspent(BSVADD);
+
+
+        String unspentTX = "";
+
+        //Primeiro
+
+        while (bsvTX.threadreadBsvAddsUnspent.isAlive())
+        {
+            unspentTX = "";
+        }
+
+        //if(bsvTX.unsPentInputs == null)
+        //    return ("erro");
+
+        unspentTX = bsvTX.unsPentInputs;
+        //bsvTX.timer.cancel();
+        //bsvTX.timer.purge();
+
+        if(bsvTX.unsPentInputs == null)
+            //return  "Error: Time out reading Unspent TX inputs" + " " + BSVADD;
+            return  "Error: reading Unspent TX inputs fail";
+        else
+            return unspentTX;
+
+
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+    }
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 

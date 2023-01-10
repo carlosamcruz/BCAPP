@@ -132,22 +132,40 @@ public class NFTOPReturn extends AppCompatActivity {
 
         TXID = getIntent().getExtras().getString("TXID");
 
+        if(TXID.length() > 64)
+        {
+            ((TextView) findViewById(R.id.TV_TEXTROR2)).setText("UTXO List");
+            videoView = (VideoView) findViewById(R.id.videoView);
+            videoView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
-        //https://stackoverflow.com/questions/15758856/android-how-to-download-a-file-from-a-webserver
-        url2 = true;
-        urlBaseTXID2 = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID + "/out/0/hex";
+            ((EditText) findViewById(R.id.ET_TEXTOROR2)).setBackgroundColor(0);//  + NFTDescription);
 
-        ((TextView)findViewById(R.id.TV_TEXTROR2)).setText("RETRIEVING DATA...");
 
-        videoView = (VideoView) findViewById(R.id.videoView);
-        videoView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            ((EditText)findViewById(R.id.ET_TEXTOROR2)).setText(
 
-        ((EditText) findViewById(R.id.ET_TEXTOROR2)).setBackgroundColor(0);//  + NFTDescription);
+                    TXID
+            );
 
-        DecOnly = true;
-        activeProcess = false;
+        }
+        else {
 
-        timer.schedule(new TimeCheckURL(), 0, 5000);
+
+            //https://stackoverflow.com/questions/15758856/android-how-to-download-a-file-from-a-webserver
+            url2 = true;
+            urlBaseTXID2 = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID + "/out/0/hex";
+
+            ((TextView) findViewById(R.id.TV_TEXTROR2)).setText("RETRIEVING DATA...");
+
+            videoView = (VideoView) findViewById(R.id.videoView);
+            videoView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+            ((EditText) findViewById(R.id.ET_TEXTOROR2)).setBackgroundColor(0);//  + NFTDescription);
+
+            DecOnly = true;
+            activeProcess = false;
+
+            timer.schedule(new TimeCheckURL(), 0, 5000);
+        }
     }
 
     ////////////////////////////////////////////////////////////////
