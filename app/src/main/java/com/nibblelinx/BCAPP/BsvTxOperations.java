@@ -36,6 +36,24 @@ public class BsvTxOperations {
     //String urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
     String urlBaseTXID = "";
 
+    Ecc eccVar = new Ecc();
+
+    String lockTime = "00000000"; // standard
+
+    //String lockTime = "94d50b00";  // test 1
+
+    //String lockTime = "74d50b00"; // test 2
+
+    //String lockTime = "a0d60b00";  // test 3
+    //String lockTime = "a1d60b00";  // test 4
+    //String lockTime = "ffffffff";  // test 5
+
+
+
+    String inputSeq = "ffffffff"; //standard
+
+    //String inputSeq = "feffffff"; //teste 1
+    //String inputSeq = "00000000"; //teste 2
 
     //Para recuperar o Script
     //String urlBaseTXID2 = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID + "/out/0/hex";
@@ -527,7 +545,7 @@ public class BsvTxOperations {
         while (nOfInputs.length() < 2)
             nOfInputs = "0" + nOfInputs;
 
-        String inputSeq = "ffffffff";
+        //String inputSeq = "ffffffff";
 
         String totalString = Version + nOfInputs;
 
@@ -568,7 +586,7 @@ public class BsvTxOperations {
         while (nOfInputs.length() < 2)
             nOfInputs = "0" + nOfInputs;
 
-        String inputSeq = "ffffffff";
+        //String inputSeq = "ffffffff";
 
         String totalString = Version + nOfInputs;
 
@@ -618,7 +636,7 @@ public class BsvTxOperations {
         while (nOfInputs.length() < 2)
             nOfInputs = "0" + nOfInputs;
 
-        String inputSeq = "ffffffff";
+        //String inputSeq = "ffffffff";
 
         String totalString = Version + nOfInputs;
 
@@ -666,7 +684,7 @@ public class BsvTxOperations {
         while (nOfInputs.length() < 2)
             nOfInputs = "0" + nOfInputs;
 
-        String inputSeq = "ffffffff";
+        //String inputSeq = "ffffffff";
 
         String totalString = Version + nOfInputs;
 
@@ -712,7 +730,7 @@ public class BsvTxOperations {
         while (nOfInputs.length() < 2)
             nOfInputs = "0" + nOfInputs;
 
-        String inputSeq = "ffffffff";
+        //String inputSeq = "ffffffff";
 
         String totalString = Version + nOfInputs;
 
@@ -999,7 +1017,8 @@ public class BsvTxOperations {
         }
 
         //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
-        String lockTime = "00000000";
+        //String lockTime = "00000000";
+        //lockTime = "00000000";
 
 
         //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
@@ -1416,7 +1435,8 @@ public class BsvTxOperations {
         }
 
         //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
-        String lockTime = "00000000";
+        //String
+        //lockTime = "00000000";
 
         //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
 
@@ -1694,7 +1714,8 @@ public class BsvTxOperations {
         }
 
         //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
-        String lockTime = "00000000";
+        //String
+        //lockTime = "00000000";
 
 
         //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
@@ -1928,7 +1949,8 @@ public class BsvTxOperations {
         }
 
         //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
-        String lockTime = "00000000";
+        //String
+        //        lockTime = "00000000";
 
         //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
 
@@ -2217,7 +2239,8 @@ public class BsvTxOperations {
         }
 
         //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
-        String lockTime = "00000000";
+        //String
+        //        lockTime = "00000000";
 
         //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
 
@@ -2498,7 +2521,8 @@ public class BsvTxOperations {
         }
 
         //Se o LockTime for referente a um bloco futuro, a TX só será minerada quando este bloco acontecer
-        String lockTime = "00000000";
+        //String
+        //        lockTime = "00000000";
 
 
         //long txFee = Long.valueOf(SHA256G.LEformat(out2Sat));
@@ -3766,6 +3790,26 @@ public class BsvTxOperations {
             BigInteger[] sigECD = new BigInteger[2];
             sigECD[0] = signature[0];
             sigECD[1] = signature[1];
+
+            //////////////////////////////////////////////////////////
+            // Escolhe o S mais curto
+            // Para evitar a maleabilidade e fazer o algo ser um pouco mais rápido
+            // https://www.derpturkey.com/inherent-malleability-of-ecdsa-signatures/
+            //////////////////////////////////////////////////////////
+
+            Variables.shortS = "normal s";
+
+            BigInteger sInv = eccVar.n_order.subtract(sigECD[1]); // sInv = n - s
+
+            if(sInv.compareTo(sigECD[1]) == -1) {
+                sigECD[1] = sInv;
+                Variables.shortS = "inverted s";
+            }
+
+            //////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////
+
+
 
             Keygen pubKey = new Keygen();
             //Assinatura no formato DER + FORKID

@@ -206,7 +206,8 @@
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.102"
             app:layout_constraintVertical_bias="0.763"/>
     -->
-    <!--
+
+
     <Button
             android:text="DIDACTIC"
             android:layout_width="wrap_content"
@@ -215,10 +216,8 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.91"
-            app:layout_constraintVertical_bias="0.763"/>
-
-    -->
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.507"
+            app:layout_constraintVertical_bias="0.749"/>
     <Button
             android:text="UTXOS"
             android:layout_width="wrap_content"

@@ -805,7 +805,8 @@ public class BsvTxCreation {
         //Whats On Chain aceitou uma TX com 1 sat de Taxa em 04/07/2022;
 
         if(Variables.PoolID == 0)
-            Variables.PoolID = 1;
+            //Variables.PoolID = 1;
+            Variables.PoolID = 0; // somente WoC por enquanto
         else
             Variables.PoolID = 0;
 

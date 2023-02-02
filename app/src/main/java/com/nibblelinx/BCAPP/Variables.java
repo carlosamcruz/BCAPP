@@ -27,6 +27,7 @@ public class Variables {
     static String DEBUG = "";
     static String UTXOSET = "";
     static String UnspentUTXOs = "";
+    static String shortS = "normal";
 
     //Didactic
     static Boolean ditactic = false;

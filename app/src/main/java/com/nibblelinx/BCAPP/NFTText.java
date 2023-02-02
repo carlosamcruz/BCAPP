@@ -3,6 +3,7 @@ package com.nibblelinx.BCAPP;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.BidiClassifier;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.os.Build;
@@ -21,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText;
 //////////////////////////////////////////////////////////////////
 //OPERACOES COM ARQUIVOS
 /////////////////////////////////////////////////////////////////
+import java.math.BigInteger;
 import java.util.Timer;
 import java.util.TimerTask;
 /////////////////////////////////////////////////////////////////
@@ -75,9 +77,17 @@ public class NFTText extends AppCompatActivity {
                 {
                     //didacticPrint();
 
+                    //BigInteger bNumber;
+
                     final String text = ((EditText) findViewById(R.id.ET_TEXTOST)).getText().toString();
-                    int numberOfZeros = Integer.valueOf(text);
-                    didacticPoW(numberOfZeros);
+                    //int numberOfZeros = Integer.valueOf(text);
+                    //didacticPoW(numberOfZeros);
+
+                    //bNumber = new BigInteger(text);
+
+                    //didacticInvGalois(text);
+
+                    chooseOperation(text);
 
 
                 }else
@@ -162,6 +172,218 @@ public class NFTText extends AppCompatActivity {
         Toast.makeText(this, "TEXT DATA!!!", Toast.LENGTH_SHORT).show();
     }
 
+    public void chooseOperation(String n)
+    {
+        int firstIndiceOf;
+        int nextIndex;
+        firstIndiceOf = n.indexOf(";");
+
+        nextIndex = n.indexOf(";", firstIndiceOf+1);
+
+        //n = n.substring(firstIndiceOf+1, nextIndex);
+
+        if(n.substring(0,1).compareTo("0") == 0)
+            didacticInvGalois(n.substring(firstIndiceOf+1, nextIndex));
+        if(n.substring(0,1).compareTo("1") == 0) {
+
+            String x, y, no;
+            x = n.substring(firstIndiceOf+1, nextIndex);
+            firstIndiceOf = n.indexOf(";", nextIndex+1);
+            nextIndex = n.indexOf(";", firstIndiceOf+1);
+            y = n.substring(firstIndiceOf+1, nextIndex);
+            firstIndiceOf = n.indexOf(";", nextIndex+1);
+            nextIndex = n.indexOf(";", firstIndiceOf+1);
+            no = n.substring(firstIndiceOf+1, nextIndex);
+
+            nG(x, y, no);
+        }
+        if(n.substring(0,1).compareTo("2") == 0) {
+
+            String x, y, x2, y2;
+            x = n.substring(firstIndiceOf+1, nextIndex);
+            firstIndiceOf = n.indexOf(";", nextIndex+1);
+            nextIndex = n.indexOf(";", firstIndiceOf+1);
+            y = n.substring(firstIndiceOf+1, nextIndex);
+            firstIndiceOf = n.indexOf(";", nextIndex+1);
+            nextIndex = n.indexOf(";", firstIndiceOf+1);
+            x2 = n.substring(firstIndiceOf+1, nextIndex);
+            firstIndiceOf = n.indexOf(";", nextIndex+1);
+            nextIndex = n.indexOf(";", firstIndiceOf+1);
+            y2 = n.substring(firstIndiceOf+1, nextIndex);
+
+
+            somaG(x, y, x2, y2);
+        }
+
+        //Determinar os Valores de Y de um Ponto X
+        if(n.substring(0,1).compareTo("3") == 0) {
+
+            yFromx(n.substring(firstIndiceOf+1, nextIndex));
+        }
+
+        //Determina se o Ponto Pertence a Curva
+        if(n.substring(0,1).compareTo("4") == 0) {
+
+            String x, y, no;
+            x = n.substring(firstIndiceOf+1, nextIndex);
+            firstIndiceOf = n.indexOf(";", nextIndex+1);
+            nextIndex = n.indexOf(";", firstIndiceOf+1);
+            y = n.substring(firstIndiceOf+1, nextIndex);
+           
+            pointInECC(x, y);
+        }
+
+        //((EditText) findViewById(R.id.ET_TEXTOST)).setText(n.substring(0,1) +"\n" + n.substring(firstIndiceOf+1, nextIndex));
+    }
+
+    Ecc keys = new Ecc();
+    TonelliShanks sqrtCF = new TonelliShanks();
+
+
+    public void pointInECC (String x, String y)
+    {
+        BigInteger [] point = new BigInteger[2];
+        point [0] = new BigInteger(x);
+        point [1] = new BigInteger(y);;
+
+        int i = 0;
+
+        if(keys.modp(
+                ((point[0].multiply(keys.modp(point[0].multiply(point[0]),keys.p))).add((keys.A).multiply(point[0]))).add(keys.B)
+                ,keys.p).compareTo(keys.modp(point[1].multiply(point[1]),keys.p)) == 0) {
+            i = 1;
+            ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                    "Result: Ponto Pertence a Curva"
+            );
+        }
+        else
+            ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                    "Result: Ponto NÃO Pertence a Curva"
+            );
+    }
+
+    public void yFromx (String x)
+    {
+        BigInteger [] point = new BigInteger[2];
+        point [0] = new BigInteger(x);
+        point [1] = BigInteger.valueOf(0);
+
+        // Entcontra o valor de GBy atraves do algoritmo de raiz quadrada em campos finitos
+        //   gBchIN64[1] = tonelli_shanks(modp((gBchIN64[0]*modp(gBchIN64[0]*gBchIN64[0], p) + A*gBchIN64[0] + B), p), p);
+
+        //Operacao xor para decidir se escolhe y ou (p - y)
+        //    if( ( !(gBchIN64[1] & 1) && (gBch64CAP[0] & 1) ) || ( (gBchIN64[1] & 1) && !(gBch64CAP[0] & 1) ) )
+        //        gBchIN64[1] = p - gBchIN64[1];
+
+        point[1] = sqrtCF.sqrtCF(keys.modp(
+                ((point[0].multiply(keys.modp(point[0].multiply(point[0]),keys.p))).add((keys.A).multiply(point[0]))).add(keys.B)
+                ,keys.p),keys.p);
+
+            //point[1] = (keys.p).subtract(point[1]);
+
+        ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                "Result: \n" +
+                        "\n\nx: " + point[0] +
+                        "\n\ny1: " + point[1]+
+                "\n\ny2: " + (keys.p).subtract(point[1])
+                //        "\n\nNZeros: " + numZeros +
+                //        "\n\nTZeros: " + 4*numZeros
+                // "\n\nCont: " + cont
+                // "\n\nCont2: " + cont2
+                //"\n\nChar 63: " + result.charAt(63)
+        );
+    }
+
+    public void somaG(String x, String y, String x2, String y2) {
+
+
+        Ecc bInt;
+        bInt = new Ecc();
+
+        BigInteger[] result;
+        BigInteger bx = new BigInteger(x);
+        BigInteger by = new BigInteger(y);
+        BigInteger bx2 = new BigInteger(x2);
+        BigInteger by2 = new BigInteger(y2);
+
+        result = bInt.addp(bx, by, bx2, by2);
+
+        //((EditText) findViewById(R.id.ET_TEXTOST)).setText("PVT Key: " + Variables.MainPaymail);
+
+
+
+        ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                "Result: \n" +
+                        "\n\nx: " + result[0] +
+                        "\n\ny: " + result[1]
+                //        "\n\nNZeros: " + numZeros +
+                //        "\n\nTZeros: " + 4*numZeros
+                // "\n\nCont: " + cont
+                // "\n\nCont2: " + cont2
+                //"\n\nChar 63: " + result.charAt(63)
+        );
+
+        //((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
+    }
+
+    public void nG(String x, String y, String n_order) {
+
+
+        Ecc bInt;
+        bInt = new Ecc();
+
+        BigInteger[] result;
+        BigInteger bx = new BigInteger(x);
+        BigInteger by = new BigInteger(y);
+        BigInteger n_o = new BigInteger(n_order);
+
+        result = bInt.eccnP(n_o, bx, by);
+
+        //((EditText) findViewById(R.id.ET_TEXTOST)).setText("PVT Key: " + Variables.MainPaymail);
+
+
+
+        ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                "Result: \n" +
+                        "\n\nx: " + result[0] +
+                        "\n\ny: " + result[1]
+                //        "\n\nNZeros: " + numZeros +
+                //        "\n\nTZeros: " + 4*numZeros
+                // "\n\nCont: " + cont
+                // "\n\nCont2: " + cont2
+                //"\n\nChar 63: " + result.charAt(63)
+        );
+
+        //((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
+    }
+
+    public void didacticInvGalois(String n) {
+
+
+        Ecc bInt;
+        bInt = new Ecc();
+
+        BigInteger result = new BigInteger(n);
+
+        result = bInt.inverse(result, bInt.n_order);
+
+        //((EditText) findViewById(R.id.ET_TEXTOST)).setText("PVT Key: " + Variables.MainPaymail);
+
+
+
+        ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                "Result: \n" + n +
+                        "\n\nn_order: " + bInt.n_order +
+                        "\n\nInv: " + result
+                //        "\n\nNZeros: " + numZeros +
+                //        "\n\nTZeros: " + 4*numZeros
+                // "\n\nCont: " + cont
+                // "\n\nCont2: " + cont2
+                //"\n\nChar 63: " + result.charAt(63)
+        );
+
+        //((TextView) findViewById(R.id.TV_TEXT2bsv)).setText("Balance (Satoshis): " + Variables.SatBalance + " sats");
+    }
 
     public void didacticPoW(int numZeros) {
 

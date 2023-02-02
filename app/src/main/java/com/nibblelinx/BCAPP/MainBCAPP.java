@@ -35,7 +35,7 @@ public class MainBCAPP extends AppCompatActivity {
         Button buttonMS10 = (Button) findViewById(R.id.buttonMS10); //Criar ODR Token
         Button buttonMS11 = (Button) findViewById(R.id.buttonMS11);
         Button buttonMS12 = (Button) findViewById(R.id.buttonMS12);
-       // Button buttonMS13 = (Button) findViewById(R.id.buttonMS13);
+        Button buttonMS13 = (Button) findViewById(R.id.buttonMS13);//Didactic
        // Button buttonMS14 = (Button) findViewById(R.id.buttonMS14);
         Button buttonMS15 = (Button) findViewById(R.id.buttonMS15);
         Button buttonMS16 = (Button) findViewById(R.id.buttonMS16);
@@ -86,7 +86,8 @@ public class MainBCAPP extends AppCompatActivity {
             }
         });
 
-        /*
+
+        //Didactic
         buttonMS13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,21 +96,23 @@ public class MainBCAPP extends AppCompatActivity {
                 Variables.ditactic = true;
 
                 //if(Variables.MainPaymail.compareTo("")==0)
+                /*
                 if(Variables.MainPaymail.length() != 64)
                 {
                     Toast.makeText(MainBCAPP.this, "Informe uma Chave Válida!!!", Toast.LENGTH_LONG).show();
                 }
-                else {
+                else
+                */
+                {
 
                     Intent it = new Intent(MainBCAPP.this, NFTText.class);
                     startActivity(it);
 
                 }
 
-                Toast.makeText(MainBCAPP.this, "Disabled!!!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainBCAPP.this, "Disabled!!!", Toast.LENGTH_LONG).show();
             }
         });
-        */
 
 
 
