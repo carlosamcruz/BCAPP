@@ -29,6 +29,26 @@ public class Variables {
     static String UnspentUTXOs = "";
     static String shortS = "normal";
 
+    //////////////////////////////////////////////////////////////
+    //ECDA DEBUGER
+    //////////////////////////////////////////////////////////////
+
+
+    static BigInteger kTEST = new BigInteger("0");
+    static String preimageParts = "";
+    static String preimage = "";
+    static String preimageE = "";
+    static String rECDSA = "";
+    static String sECDSA = "";
+    static String nmsECDSA = "";
+    static String trocoECDSA = "";
+    static Boolean flagECDSA = false;
+
+
+    //////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////
+
+
     //Didactic
     static Boolean ditactic = false;
     static BigInteger dPvtKey = BigInteger.valueOf(0);

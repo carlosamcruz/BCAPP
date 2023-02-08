@@ -982,17 +982,43 @@ public class BsvTxOperations {
                     //Tem que haver pelo menos 1 sat de taxa;
                     //if(ivalue<0)
                     //    ivalue = ivalue - totalSpent;
+
+
+                     if(Variables.trocoECDSA.length() == 16 && Variables.kTEST.compareTo(BigInteger.valueOf(0)) != 0) {
+                         out2Sat = Variables.trocoECDSA;
+                         Variables.flagECDSA = true;
+                     }
                 }
+
+
+
+
+
 
                 if(ivalue>0) { //se nao houver troco, nao executa no final
 
                     Variables.SatBalance = Long.toString(ivalue);
-                    out2Sat = Long.toHexString(ivalue);
+/*                    out2Sat = Long.toHexString(ivalue);
 
                     while (out2Sat.length() < 16)
                         out2Sat = "0" + out2Sat;
 
                     out2Sat = SHA256G.LEformat(out2Sat);
+*/
+
+                    if(!Variables.flagECDSA) {
+
+                        out2Sat = Long.toHexString(ivalue);
+
+                        while (out2Sat.length() < 16)
+                            out2Sat = "0" + out2Sat;
+
+                        out2Sat = SHA256G.LEformat(out2Sat);
+                    }
+                    Variables.flagECDSA = false;
+
+
+
 
                     //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
 
@@ -1843,15 +1869,28 @@ public class BsvTxOperations {
                     // / 200; //0.005 Satoshis por byte - funciona, mas ainda demora demais.
                     // 0.005 sat/b demora cerca de 6 hora para ser minerado em 30/06/2022
                     // Somente Gorilla Pool aceita TXs com estas taxas por enquanto (03/07/2022);
+
+                   // if(Variables.trocoECDSA.length() == 16 && Variables.kTEST.compareTo(BigInteger.valueOf(0)) != 0) {
+                   //     out2Sat = Variables.trocoECDSA;
+                   //     Variables.flagECDSA = true;
+                   // }
+
                 }
 
                 Variables.SatBalance = Long.toString(ivalue);
-                out2Sat = Long.toHexString(ivalue);
 
-                while (out2Sat.length() < 16)
-                    out2Sat = "0" + out2Sat;
+                //if(!Variables.flagECDSA) {
 
-                out2Sat = SHA256G.LEformat(out2Sat);
+                    out2Sat = Long.toHexString(ivalue);
+
+                    while (out2Sat.length() < 16)
+                        out2Sat = "0" + out2Sat;
+
+                    out2Sat = SHA256G.LEformat(out2Sat);
+                //}
+                //Variables.flagECDSA = false;
+
+
 
                 //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
 
@@ -3687,12 +3726,21 @@ public class BsvTxOperations {
         String [] TxPreimageOut = new String[nOfInputsCurrent];
 
 
-        for(int i = 0; i < nOfInputsCurrent; i++ )
+        for(int i = 0; i < nOfInputsCurrent; i++ ) {
             TxPreimageOut[i] =
                     TXVersion + prvOutHASH + inSeqDHash
                             + prevOutID[i] + lockingScript[i] + prevOutSatValue[i] + inSeqNumber[i]
                             + TxOutputsDHASH
                             + nLockTime + sighashType;
+
+            ////////Remover
+            Variables.preimageParts = TXVersion + "\n\n" + prvOutHASH + "\n\n" + inSeqDHash
+                    + "\n\n" + prevOutID[i] + "\n\n" + lockingScript[i] + "\n\n" + prevOutSatValue[i] + "\n\n" + inSeqNumber[i]
+                    + "\n\n" + TxOutputsDHASH
+                    + "\n\n" + nLockTime + "\n\n" + sighashType;
+            Variables.preimage = TxPreimageOut[i];
+
+        }
         return TxPreimageOut;
 
 

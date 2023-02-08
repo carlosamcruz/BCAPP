@@ -233,6 +233,23 @@ public class NFTText extends AppCompatActivity {
             pointInECC(x, y);
         }
 
+        //Determinar valor de K
+        if(n.substring(0,1).compareTo("5") == 0) {
+
+
+            String x, y, no;
+            x = n.substring(firstIndiceOf+1, nextIndex);
+            firstIndiceOf = n.indexOf(";", nextIndex+1);
+            nextIndex = n.indexOf(";", firstIndiceOf+1);
+            y = n.substring(firstIndiceOf+1, nextIndex);
+
+            //pointInECC(x, y);
+
+            Variables.trocoECDSA = y;
+            kLoad(x);
+
+        }
+
         //((EditText) findViewById(R.id.ET_TEXTOST)).setText(n.substring(0,1) +"\n" + n.substring(firstIndiceOf+1, nextIndex));
     }
 
@@ -293,6 +310,26 @@ public class NFTText extends AppCompatActivity {
                 //"\n\nChar 63: " + result.charAt(63)
         );
     }
+
+
+    public void kLoad (String x)
+    {
+        Variables.kTEST = new BigInteger(x);
+
+        Variables.kTEST = keys.modp(Variables.kTEST, keys.n_order);
+
+        ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                "Result: \n" +
+                        "\n\nk: " + Variables.kTEST +
+                        "\n\nTroco: " + Variables.trocoECDSA
+                //        "\n\nNZeros: " + numZeros +
+                //        "\n\nTZeros: " + 4*numZeros
+                // "\n\nCont: " + cont
+                // "\n\nCont2: " + cont2
+                //"\n\nChar 63: " + result.charAt(63)
+        );
+    }
+
 
     public void somaG(String x, String y, String x2, String y2) {
 

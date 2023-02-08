@@ -191,7 +191,6 @@ public class BsvTxCreation {
             if(bsvTX.unsPentInputs == null)
                 return  "Error: Time out reading Unspent TX inputs";
 
-
             //if(bsvTX.unsPentInputs != null)
             //    return  "Error: " + unspentTX;
         }
@@ -562,6 +561,8 @@ public class BsvTxCreation {
         /////////////////////////////////////////////////////////////////////
         //Confecção da String de Output
         /////////////////////////////////////////////////////////////////////
+
+        //Send Token
         if(TXtype == 0) {
             //return OutputString;
             OutputString = bsvTX.OutputString(nOfOutputs, PayWallets, PayValues, numberOfOPRETURNS, OP_RETURNs, inputString);

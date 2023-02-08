@@ -1,5 +1,7 @@
 package com.nibblelinx.BCAPP;
 
+import java.math.BigInteger;
+
 public class PDPUtils {
 
     public PDPUtils ()
@@ -98,5 +100,48 @@ public class PDPUtils {
     }
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////
+
+    static String bItoHexStr (BigInteger bInumber)
+    {
+        //BigInteger[] pubKey = pubKeyRev(pubkeyCOD);
+        //byte[] chA = new byte[64];
+        byte[] cSHA = new byte[100]; // chave comprimida
+        //byte[] cSHA2 = new byte[100]; // chave não comprimida
+
+        BigInteger tA, ichA, ichA2;
+        //pubkeyCOD = pubKey[0].toString() + "\n" + pubKey[1].toString();
+
+////////////////////////////////////////////////////////////////////
+//CONSTROI AS CHAVES PUBLICAS COMPRIMIDAS E NAO COMPRIMIDAS
+////////////////////////////////////////////////////////////////////
+
+        ichA = bInumber;
+
+        //for (int i = 31; i>0 ; i--)
+        for (int i = 99; i>0 ; i--)
+        {
+            // este cast pode dar problemas em UBUNTU
+            //cSHA2[i] = cSHA[i] = (byte) (ichA & 0xFF);
+            cSHA[i] = (byte) (((ichA.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
+            //cSHA2[i+32] = (unsigned char)(ichA2 & 255);
+        //    cSHA2[i] = (byte) (((ichA2.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
+
+            //ichA = ichA/256;
+            ichA = ichA.divide(BigInteger.valueOf(0x100));
+            //ichA2 = ichA2/256;
+          //  ichA2 = ichA2.divide(BigInteger.valueOf(0x100));
+        }
+
+        String r = SHA256G.ByteToStrHex(cSHA);
+        int ir = 0;
+        while ("00".compareTo(r.substring(0,2))==0)
+        {
+            r = r.substring(2);
+            ir ++;
+        }
+
+        return r;
+        //return (RIPEMDout + "\n" + RIPEMDout2);
+    }
 
 }
