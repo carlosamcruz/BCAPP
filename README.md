@@ -1,6 +1,6 @@
 # BCAPP
 
-Technically, this template works as user interface for WOC, GorillaPool e Bitails APIs, that allows the user to use the Bitcoin Blockchain, sending TXs and reading TX's details with the help of these APIs.
+This Android project works as user interface for WOC, GorillaPool e Bitails APIs, that allows the user to use the Bitcoin Blockchain, sending TXs and reading TX's details with the help of these APIs.
 
 It is worth for Building Descentralized Application - DAPP on Android Platform using the Bitcoin Network
 
@@ -42,8 +42,6 @@ The password must be of at least 8 char and get the related PVT KEY of that pass
 11) SEND TOKEN - transfer a single TOR TOKEN or ODR TOKEN to another P2PKH address through its script hash;
 
 12) MELT TOKEN - melts a single TOR TOKEN or ODR TOKEN and send its backed satoshis to the indicated P2PKH address through its script hash;
-
-13) 2TR TOKEN - creates a TRUE TOKEN from a TOR TOKEN or ODR TOKEN, such token is an open access token for teaching purposes, where anyone can use the satoshis on it;
 
 
 The code of all JAVA classes of the project are open, nevertheless they are still poorly documented, and it is not neatly written as well.
