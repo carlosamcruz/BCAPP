@@ -15,7 +15,6 @@ https://stackoverflow.com/questions/12131025/android-preventing-webview-reload-o
 
     -->
 
-
     <application
             android:allowBackup="true"
 
@@ -64,29 +63,7 @@ https://stackoverflow.com/questions/12131025/android-preventing-webview-reload-o
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--      <activity
-                android:name="pdpJSON"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity
-                android:name="com.nibblelinx.BCAPP.MainBCAPP               android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar"/>
-                -->
-
-
-        <!--
-        <activity
-                android:name="com.nibblelinx.BCAPP.MoneyButton"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar"/>
-
-
-        <activity
-                android:name="com.nibblelinx.BCAPP.MBPayment"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar"/>
-        -->
 
         <activity
                 android:name="com.nibblelinx.BCAPP.TxidList"
@@ -111,13 +88,6 @@ https://stackoverflow.com/questions/12131025/android-preventing-webview-reload-o
                 android:name="com.nibblelinx.BCAPP.TxVerify"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity
-                android:name="com.nibblelinx.BCAPP.BcListen"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar"/>
-
-
 
     </application>
 

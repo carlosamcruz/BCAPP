@@ -209,16 +209,6 @@
 
 
     <Button
-            android:text="DIDACTIC"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonMS13"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.507"
-            app:layout_constraintVertical_bias="0.749"/>
-    <Button
             android:text="UTXOS"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -269,16 +259,7 @@
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.93"
             app:layout_constraintVertical_bias="0.732"/>
-    <Button
-            android:text=" 2TR Token "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonMS18"
 
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.534"
-            app:layout_constraintVertical_bias="0.601"/>
     <Button
             android:text="TX Verify"
             android:layout_width="wrap_content"

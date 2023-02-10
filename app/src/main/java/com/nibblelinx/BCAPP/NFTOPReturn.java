@@ -742,7 +742,6 @@ public class NFTOPReturn extends AppCompatActivity {
     }
     private void putText (String text)
     {
-        Variables.LastRawDecriptData = text;
         ((TextView)findViewById(R.id.TV_TEXTROR2)).setText("BLOCKCHAIN DATA");
         ((EditText) findViewById(R.id.ET_TEXTOROR2)).setText(text);
     }

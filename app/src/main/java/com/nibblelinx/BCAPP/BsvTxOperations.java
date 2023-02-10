@@ -984,40 +984,19 @@ public class BsvTxOperations {
                     //    ivalue = ivalue - totalSpent;
 
 
-                     if(Variables.trocoECDSA.length() == 16 && Variables.kTEST.compareTo(BigInteger.valueOf(0)) != 0) {
-                         out2Sat = Variables.trocoECDSA;
-                         Variables.flagECDSA = true;
-                     }
                 }
-
-
-
-
 
 
                 if(ivalue>0) { //se nao houver troco, nao executa no final
 
                     Variables.SatBalance = Long.toString(ivalue);
-/*                    out2Sat = Long.toHexString(ivalue);
+
+                    out2Sat = Long.toHexString(ivalue);
 
                     while (out2Sat.length() < 16)
                         out2Sat = "0" + out2Sat;
 
                     out2Sat = SHA256G.LEformat(out2Sat);
-*/
-
-                    if(!Variables.flagECDSA) {
-
-                        out2Sat = Long.toHexString(ivalue);
-
-                        while (out2Sat.length() < 16)
-                            out2Sat = "0" + out2Sat;
-
-                        out2Sat = SHA256G.LEformat(out2Sat);
-                    }
-                    Variables.flagECDSA = false;
-
-
 
 
                     //String PayWallet160 = pubKey.addRMD(PayWallets[j]);
@@ -3733,13 +3712,6 @@ public class BsvTxOperations {
                             + TxOutputsDHASH
                             + nLockTime + sighashType;
 
-            ////////Remover
-            Variables.preimageParts = TXVersion + "\n\n" + prvOutHASH + "\n\n" + inSeqDHash
-                    + "\n\n" + prevOutID[i] + "\n\n" + lockingScript[i] + "\n\n" + prevOutSatValue[i] + "\n\n" + inSeqNumber[i]
-                    + "\n\n" + TxOutputsDHASH
-                    + "\n\n" + nLockTime + "\n\n" + sighashType;
-            Variables.preimage = TxPreimageOut[i];
-
         }
         return TxPreimageOut;
 
@@ -3885,8 +3857,5 @@ public class BsvTxOperations {
 
         return signDER;
     }
-
-
-
 
 }

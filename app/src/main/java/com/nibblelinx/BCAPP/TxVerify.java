@@ -83,26 +83,9 @@ public class TxVerify extends AppCompatActivity {
 
         }
 
-        if(Variables.kTEST.compareTo(BigInteger.valueOf(0)) == 0) {
-
-            ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
-                    Variables.LastTXID + "\n\n" + Variables.LastTxHexData + txOutuputs + "\n\n" + Variables.shortS
-            );
-        }
-        else
-        {
-            ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
-                    Variables.LastTXID + "\n\n" + Variables.LastTxHexData
-                            + "\n\nPreimage Parts\n\n" + Variables.preimageParts
-                            + "\n\nPreimage\n\n" + Variables.preimage
-                            + "\n\nPreimage e\n\n" + Variables.preimageE
-                            + "\n\nrECDSA\n\n" + Variables.rECDSA
-                            + "\n\nsECDSA\n\n" + Variables.sECDSA
-                            + "\n\n(n-s)ECDSA\n\n" + Variables.nmsECDSA
-                            + "\n\nk\n\n" + Variables.kTEST
-            );
-        }
-
+        ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
+                Variables.LastTXID + "\n\n" + Variables.LastTxHexData + txOutuputs + "\n\n" + Variables.shortS
+        );
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

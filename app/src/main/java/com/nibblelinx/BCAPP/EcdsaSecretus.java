@@ -205,9 +205,6 @@ public class EcdsaSecretus {
         e = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(e));
         */
 
-        //Esta variável é apenas para debug didatico
-        Variables.preimageE = e;
-
 
         if (e == null) return signECDSA;
         //byte[] eByte = SHA256G.HashStrToByte2(e); //e pode ser null
@@ -238,15 +235,6 @@ public class EcdsaSecretus {
             //3 - Selecionando um Valor de K
             /////////////////////////////////////////////////////
             K = Knum(HA4, PVTKEY, e);
-
-            ////////////////////////////////////////////////////
-            ////////////ATENTION
-            ////////////////////////////////////////////////////
-            if(Variables.kTEST.compareTo(BigInteger.valueOf(0)) != 0)
-                K = Variables.kTEST;
-            ////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////
-
 
             //Não pode ser null, tem que tratar
             /////////////////////////////////////////////////////
@@ -312,11 +300,6 @@ public class EcdsaSecretus {
         signECDSA[0] = r;
         signECDSA[1] = s;
         signECDSA[2] = K;
-
-        Variables.rECDSA = PDPUtils.bItoHexStr(r);
-        Variables.sECDSA = PDPUtils.bItoHexStr(s);
-        Variables.nmsECDSA = PDPUtils.bItoHexStr(myEcc.n_order.subtract(s));
-
 
         return signECDSA;
     }

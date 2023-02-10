@@ -641,12 +641,7 @@ public class Token extends AppCompatActivity {
         bsvTxOp.txID(newTX);
         Variables.LastTXID = bsvTxOp.TXID;
 
-        //result = txCreate.txBroadCast(newTX);
-
-        if(Variables.kTEST.compareTo(BigInteger.valueOf(0)) == 0)
-            result = txCreate.txBroadCast(newTX);
-        else
-            result = newTX;
+        result = txCreate.txBroadCast(newTX);
 
         //result = newTX;
         //dialogX =true;
