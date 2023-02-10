@@ -30,6 +30,16 @@ import java.io.InputStreamReader;
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////
+// Atualização 10/02/2023:
+// Inclusão da URL da Bitail para leitura de RAW TXs
+// Inclusão de metodo private byte[] JsonTaskTXIDNewByte(String theUrl)
+//      Para leitura de streams de URL na forma de bytes
+//
+// OBS: Código não sync com versão do DDAPP pois não possui várias das variáveis globais
+//
+/////////////////////////////////////////////////////////////////
+
 public class BsvTxOperations {
 
 
@@ -80,7 +90,25 @@ public class BsvTxOperations {
         public void run() {
             try {
 
-                TxHexData = JsonTaskTXIDNew(urlBaseTXID);
+                //TxHexData = JsonTaskTXIDNew(urlBaseTXID);
+
+                ///////////////////////////////////////////////////////////////////////////
+                //Acrescimeo da API da BITAILS e do metodo para ler da URL em Bytes
+                // Classe JsonTaskTXIDNewByte(urlBaseTXID)
+                ///////////////////////////////////////////////////////////////////////////
+
+
+                if(urlBaseTXID.substring(0,36).compareTo("https://api.bitails.net/download/tx/") == 0)
+                {
+
+                    byte[] TxByte = JsonTaskTXIDNewByte(urlBaseTXID);
+                    //String debug0 = "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+                    TxHexData = SHA256G.ByteToStrHex(TxByte);
+                    //TxHexData = debug0;
+
+                }
+                else
+                    TxHexData = JsonTaskTXIDNew(urlBaseTXID);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -95,7 +123,25 @@ public class BsvTxOperations {
             public void run() {
                 try {
 
-                    TxHexData = JsonTaskTXIDNew(urlBaseTXID);
+                    //TxHexData = JsonTaskTXIDNew(urlBaseTXID);
+
+                    ///////////////////////////////////////////////////////////////////////////
+                    //Acrescimeo da API da BITAILS e do metodo para ler da URL em Bytes
+                    // Classe JsonTaskTXIDNewByte(urlBaseTXID)
+                    ///////////////////////////////////////////////////////////////////////////
+
+
+                    if(urlBaseTXID.substring(0,36).compareTo("https://api.bitails.net/download/tx/") == 0)
+                    {
+
+                        byte[] TxByte = JsonTaskTXIDNewByte(urlBaseTXID);
+                        //String debug0 = "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+                        TxHexData = SHA256G.ByteToStrHex(TxByte);
+                        //TxHexData = debug0;
+
+                    }
+                    else
+                        TxHexData = JsonTaskTXIDNew(urlBaseTXID);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -138,7 +184,20 @@ public class BsvTxOperations {
         //timer.cancel();
         //timer.purge();
         //timer = new Timer();
+
+        ///////////////////////////////////////////////////////////////////////////
+        //DEFINICAO DA URL DA API de Download da RAW TX
+        ///////////////////////////////////////////////////////////////////////////
+
+        //Para Usar a API da WoC:
         urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/tx/" + TXID +  "/hex";
+
+        //Para Usar a API da Bitails:
+        //urlBaseTXID = "https://api.bitails.net/download/tx/" + TXID;
+
+        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
+
         //timer.schedule(new TimeCheckURL(), 0, 5000);
         //threadEndReadHexBsvTx = false;
 
@@ -415,6 +474,9 @@ public class BsvTxOperations {
 
     }
 
+    /////////////////////////////////////////////////////////////////
+    //Metodo para leitura de streams de URLs na forma de STRING
+    /////////////////////////////////////////////////////////////////
 
     //private static String JsonTaskTXIDNew(String theUrl) {
     private String JsonTaskTXIDNew(String theUrl) {
@@ -433,6 +495,46 @@ public class BsvTxOperations {
             return null;
         }
         return content.toString();
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //Metodo para leitura de streams de URLs na forma de bytes
+    /////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////
+    //https://stackoverflow.com/questions/2295221/java-net-url-read-stream-to-byte
+    ////////////////////////////////////////////////////////////
+    private byte[] JsonTaskTXIDNewByte(String theUrl) {
+
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        InputStream is = null;
+        try {
+
+            URL url = new URL(theUrl);
+            URLConnection urlConnection = url.openConnection();
+
+
+            is = url.openStream ();
+            byte[] byteChunk = new byte[4096]; // Or whatever size you want to read in at a time.
+            int n;
+
+            while ( (n = is.read(byteChunk)) > 0 ) {
+                baos.write(byteChunk, 0, n);
+            }
+
+            return baos.toByteArray();
+        }
+        catch (IOException e) {
+            //System.err.printf ("Failed while reading bytes from");
+            //e.printStackTrace ();
+            // Perform any other exception handling that's appropriate.
+        }
+        finally {
+            if (is != null) //{ is.close(); }
+            { is = null; }
+        }
+        return baos.toByteArray();
     }
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -3817,13 +3919,13 @@ public class BsvTxOperations {
             // https://www.derpturkey.com/inherent-malleability-of-ecdsa-signatures/
             //////////////////////////////////////////////////////////
 
-            Variables.shortS = "normal s";
+
 
             BigInteger sInv = eccVar.n_order.subtract(sigECD[1]); // sInv = n - s
 
             if(sInv.compareTo(sigECD[1]) == -1) {
                 sigECD[1] = sInv;
-                Variables.shortS = "inverted s";
+
             }
 
             //////////////////////////////////////////////////////////

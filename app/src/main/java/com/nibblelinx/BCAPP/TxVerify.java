@@ -84,7 +84,7 @@ public class TxVerify extends AppCompatActivity {
         }
 
         ((EditText) findViewById(R.id.ET_TEXTOST)).setText(
-                Variables.LastTXID + "\n\n" + Variables.LastTxHexData + txOutuputs + "\n\n" + Variables.shortS
+                Variables.LastTXID + "\n\n" + Variables.LastTxHexData + txOutuputs
         );
 
         fab.setOnClickListener(new View.OnClickListener() {

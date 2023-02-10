@@ -22,7 +22,6 @@ public class Variables {
 
     static String UTXOSET = "";
     static String UnspentUTXOs = "";
-    static String shortS = "normal";
 
     static int ntries = 0;
 

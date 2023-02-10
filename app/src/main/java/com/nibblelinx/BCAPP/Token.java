@@ -122,7 +122,7 @@ public class Token extends AppCompatActivity {
         {
             ((TextView) findViewById(R.id.ET_LobbyAct_SentTo)).setHint("Receiver Address (P2PKH):");
             ((TextView) findViewById(R.id.ET_LobbyAct_Value)).setText("Total Value");
-            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("Pub Key Script Hash:");
+            ((TextView) findViewById(R.id.ET_LobbyAct_Data)).setHint("P2PK Script Hash:");
             ((TextView) findViewById(R.id.ET_LobbyAct_CHWLLET)).setText("Nothing");
             ((TextView) findViewById(R.id.buttonSEND)).setText("SEND");
         }

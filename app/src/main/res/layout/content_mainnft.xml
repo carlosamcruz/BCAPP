@@ -83,7 +83,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.519"
-            app:layout_constraintHorizontal_bias="0.524"/>
+            app:layout_constraintHorizontal_bias="0.498"/>
     <TextView
             android:id="@+id/TV_TEXT5"
             android:layout_width="110dp"
@@ -118,7 +118,7 @@
             android:layout_width="362dp"
             android:layout_height="60dp"
             android:gravity="center"
-            android:text="BSV Wallet:"
+            android:text="Bitcoin Address:"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
