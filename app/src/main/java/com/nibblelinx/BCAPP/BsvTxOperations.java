@@ -85,6 +85,9 @@ public class BsvTxOperations {
     String TxHexData;
     //Boolean threadEndReadHexBsvTx = false;
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     Thread threadReadHexBsvTx = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -116,6 +119,9 @@ public class BsvTxOperations {
         }
     });
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     private void renewThread()
     {
         threadReadHexBsvTx = new Thread(new Runnable() {
@@ -177,8 +183,11 @@ public class BsvTxOperations {
     }
 
 
-    TimeCheckURL timerWoc01;// = new TimeCheckURL();
+    //TimeCheckURL timerWoc01;// = new TimeCheckURL();
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     public void readHexBsvTx(String TXID){
 
         //timer.cancel();
@@ -213,6 +222,9 @@ public class BsvTxOperations {
 
     }
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     public void readHexBsvTxSCRIP(String TXID){
 
         //timer.cancel();
@@ -276,6 +288,7 @@ public class BsvTxOperations {
     }
 
 
+    //Usado somente em this.readHexBsvTxWOC()
     class TimeCheckURLWOC extends TimerTask
     {
         @RequiresApi(api = Build.VERSION_CODES.M)
@@ -285,8 +298,6 @@ public class BsvTxOperations {
             //Variables.TxHexData = new JsonTaskTXID().execute(urlBaseTXID2);
             threadReadHexBsvTx.start();
             threadEndReadHexBsvTx = true;
-
-
         }
     }
 
@@ -309,6 +320,7 @@ public class BsvTxOperations {
     }
 
     int wocTimer = 0;
+    //Usado somente em this.timerCallWOC()
     class TimerWOC extends TimerTask
     {
         @RequiresApi(api = Build.VERSION_CODES.M)
@@ -322,8 +334,10 @@ public class BsvTxOperations {
 
     //private String result = "";
 
+    TimeCheckURL timerWoc01;// = new TimeCheckURL();
     Boolean threadEndReadHexBsvTx = false;
 
+    //Usado somente em this.TimeCheckURL
     class TimeCheckURL extends TimerTask
     {
 
@@ -396,6 +410,8 @@ public class BsvTxOperations {
     // https://stackoverflow.com/questions/33229869/get-json-data-from-url-using-android
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
+
+    //Usado somente em this.TimeCheckURL
     private class JsonTaskTXID //extends AsyncTask<String, String, String>
     {
         protected void onPreExecute()
@@ -478,6 +494,9 @@ public class BsvTxOperations {
     //Metodo para leitura de streams de URLs na forma de STRING
     /////////////////////////////////////////////////////////////////
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     //private static String JsonTaskTXIDNew(String theUrl) {
     private String JsonTaskTXIDNew(String theUrl) {
         StringBuilder content = new StringBuilder();
@@ -504,6 +523,9 @@ public class BsvTxOperations {
     ////////////////////////////////////////////////////////////
     //https://stackoverflow.com/questions/2295221/java-net-url-read-stream-to-byte
     ////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     private byte[] JsonTaskTXIDNewByte(String theUrl) {
 
 
@@ -544,6 +566,9 @@ public class BsvTxOperations {
     //Boolean threadEndReadBsvAddsUnspent = false;
     //int threadCounterReadBsvAddsUnspent = 0;
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     public void readBsvAddsUnspent(String BSVADD){
 
          urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/address/" + BSVADD +  "/unspent";
@@ -553,6 +578,9 @@ public class BsvTxOperations {
         threadreadBsvAddsUnspent.start();
     }
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     public void readBsvSCRIPTUnspent(String SCRIPTHASH){
 
         //urlBaseTXID = "https://api.whatsonchain.com/v1/bsv/main/address/" + BSVADD +  "/unspent";
@@ -564,6 +592,9 @@ public class BsvTxOperations {
         threadreadBsvAddsUnspent.start();
     }
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     Thread threadreadBsvAddsUnspent = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -577,6 +608,9 @@ public class BsvTxOperations {
         }
     });
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     public void renewThreadUnspent()
     {
 
@@ -599,6 +633,9 @@ public class BsvTxOperations {
     String[] unspentValue = new String[1000];
     String[] unspentTXID = new String[1000];
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     public int unspentUTXO (String unspentUTXOstring)
     {
         String[] parts = new String[1000];
@@ -638,6 +675,9 @@ public class BsvTxOperations {
         return i;
     }
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     public String inputPreString (int nInputs, String SECsizeOut, String PUBKEYSEC)
     {
         String Version = "01000000";
@@ -679,6 +719,9 @@ public class BsvTxOperations {
         return totalString;
     }
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     public String inputPreStringP2PK (int nInputs, String SECsizeOut, String PUBKEYSEC)
     {
         String Version = "01000000";
@@ -777,6 +820,9 @@ public class BsvTxOperations {
     }
     */
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
     public String inputPosString (int nInputs, String SECsizeOut, String PUBKEYSEC, String[] derSecPAD)
     {
         String Version = "01000000";
@@ -1060,7 +1106,10 @@ public class BsvTxOperations {
                                             ("0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000").length()
                             )/2)
                                     // / 2; //0.5 Satoshis por byte
-                                    / 20; //0.05 Satoshis por byte
+                                    // / 20; //0.05 Satoshis por byte
+                                    / 1000; ivalue = ivalue - 1; //0.001 Satoshis por byte, acrescenta 1 sat minimo, pode ser otimizado
+
+
 
                                     // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
                                     // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
@@ -1392,7 +1441,8 @@ public class BsvTxOperations {
                                             paySTR.length()
                             )/2)
                                     // / 2; //0.5 Satoshis por byte
-                                    / 20; //0.05 Satoshis por byte
+                                    // / 20; //0.05 Satoshis por byte
+                                    / 1000; ivalue = ivalue - 1; //0.001 Satoshis por byte, acrescenta 1 sat minimo, pode ser otimizado
 
                     // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
                     // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
@@ -1757,7 +1807,8 @@ public class BsvTxOperations {
                                             ("0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000").length()
                             )/2)
                                     // / 2; //0.5 Satoshis por byte
-                                    / 20; //0.05 Satoshis por byte
+                                    // / 20; //0.05 Satoshis por byte
+                                    / 1000; ivalue = ivalue - 1; //0.001 Satoshis por byte, acrescenta 1 sat minimo, pode ser otimizado
 
                     // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
                     // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
@@ -1930,7 +1981,8 @@ public class BsvTxOperations {
                                             paySTR.length()
                             )/2)
                                     // / 2; //0.5 Satoshis por byte
-                                    / 20; //0.05 Satoshis por byte
+                                    // / 20; //0.05 Satoshis por byte
+                                    / 1000; ivalue = ivalue - 1; //0.001 Satoshis por byte, acrescenta 1 sat minimo, pode ser otimizado
 
                     // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
                     // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
@@ -2294,7 +2346,8 @@ public class BsvTxOperations {
                                             paySTR.length()
                             )/2)
                                     // / 2; //0.5 Satoshis por byte
-                                    / 20; //0.05 Satoshis por byte
+                                    // / 20; //0.05 Satoshis por byte
+                                    / 1000; ivalue = ivalue - 1; //0.001 Satoshis por byte, acrescenta 1 sat minimo, pode ser otimizado
 
                     // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
                     // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita
@@ -2570,7 +2623,8 @@ public class BsvTxOperations {
                                             ("0000000000000000"+"1976a914" + PayWallet160 + "88ac" + "00000000").length()
                             )/2)
                                     // / 2; //0.5 Satoshis por byte
-                                    / 20; //0.05 Satoshis por byte
+                                    // / 20; //0.05 Satoshis por byte
+                                    / 1000; ivalue = ivalue - 1; //0.001 Satoshis por byte, acrescenta 1 sat minimo, pode ser otimizado
 
                     // (03/07/2022) 0.05 sat/byte ainda é limite mais segura para menor taxa
                     // Mais baixo que isso, ou fica congelado, ou semente a Gorilla Pool aceita

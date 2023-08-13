@@ -1,7 +1,9 @@
 package com.nibblelinx.BCAPP;
-
 import java.math.BigInteger;
 
+/////////////////////////////////////////////////
+//JESUS is the LORD!!!
+/////////////////////////////////////////////////
 public class Keygen {
 
     Ecc keys = new Ecc();
@@ -13,95 +15,24 @@ public class Keygen {
 
     public Keygen() {}
 
-    //Formação da chave publica a partir de uma string
-    //Outra função será publicKeyHEX - formação da chave publica a partir de uma chave privada em HEXADECIMAL
-    public String publicKey (String text)
-    {
-        int sizeStr256 = text.length()/8;
-        int keySize;
-        BigInteger SecretKey = new BigInteger("0");
-        BigInteger cont = new BigInteger("1");
-        char[] secKey;
-        char[] pubKey64 = new char[44];
-        secKey = text.toCharArray();
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
 
-        if(text.length()<=31) keySize = text.length() % 32;
-        else  keySize = 32;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Formação da chave publica a partir da Chave Privada PVTKey == text
+    //   onde PVTKey é uma String Hexadecimal de 64 elementos,
+    //   a saída é uma string em Base 64 codificada de acordo com this.base64: string[]
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        for(int i = keySize-1; i>=0; i--)
-        {
-            SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(secKey[i])));
-            cont = cont.multiply(BigInteger.valueOf(0x100));
-        }
-
-        // Chave MOD P
-        SecretKey = keys.modp(SecretKey, keys.p);
-
-        BigInteger [] point = new BigInteger[2];
-        point = keys.eccnP(SecretKey, keys.Gx, keys.Gy);
-
-        for(int i = 43 ; i>0; i--)
-        {
-            pubKey64[i] = base64[(point[0].and(BigInteger.valueOf(63))).intValue()];
-            point[0] = point[0].divide(BigInteger.valueOf(64));
-        }
-
-        //PRODUZINDO VALOR ERRADO???
-        if((point[1].and(BigInteger.valueOf(1)).intValue()) == 1)
-            pubKey64[0] = base64[3];
-        else
-            pubKey64[0] = base64[2];
-
-        text = String.valueOf(pubKey64);//necessario
-
-        return text;
-    }
-
-    public String stringToHEXString (String text)
-    {
-
-        //int sizeStr256 = text.length()/8;
-        int keySize;
-        //BigInteger SecretKey = new BigInteger("0");
-        //BigInteger cont = new BigInteger("1");
-        char[] secKey;
-        char[] hexString64 = new char[64];
-        //char[] pubKey64 = new char[44];
-        secKey = text.toCharArray();
-        for (int i=0; i<64; i++) hexString64[i] = '0';
-
-        if(text.length()<=31) keySize = text.length() % 32;
-        else  keySize = 32;
-
-        for(int i = keySize-1, j = 32-1; i>=0; i--, j--)
-        {
-
-            hexString64[j*2+1] =  base16[(secKey[i] & 0x0F)];
-            hexString64[j*2] = base16[((secKey[i]/0x10) & 0x0F)];
-        }
-        text = String.valueOf(hexString64);//necessario
-
-        return text;
-    }
-
-    //Formação da chave publica a partir de uma string com elemetos em HEXADECIMAL
-    //Outra função será publicKey - formação da chave publica a partir de uma chave privada em string
-    //A string tem 64 posições
     public String publicKeyHEX (String text)
     {
-        //int sizeStr256 = text.length()/8;
-        //int keySize;
         BigInteger SecretKey = new BigInteger("0");
         BigInteger cont = new BigInteger("1");
         char[] secKey;
         char[] pubKey64 = new char[44];
         secKey = text.toCharArray();
 
-        //if(text.length()<=31) keySize = text.length() % 32;
-        //else  keySize = 32;
-        //keySize = 32;
-
-        //for(int i = keySize-1; i>=0; i--)
         //A string tem 64 posições
         for(int i = 64-1; i>=0; i--)
         {
@@ -109,21 +40,15 @@ public class Keygen {
             for (value =0 ; value < 16; value++)
                 if (secKey[i]==base16[value]) break;
 
-            //SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(secKey[i])));
             SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(value)));
-            //cont = cont.multiply(BigInteger.valueOf(0x100));
             cont = cont.multiply(BigInteger.valueOf(0x10));
         }
-
-
 
         // Chave MOD P
         SecretKey = keys.modp(SecretKey, keys.p);
 
         BigInteger [] point = new BigInteger[2];
         point = keys.eccnP(SecretKey, keys.Gx, keys.Gy);
-
-
 
         for(int i = 43 ; i>0; i--)
         {
@@ -141,26 +66,23 @@ public class Keygen {
         return text;
     }
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
 
-    //Formação da chave publica a partir de uma string com elemetos em HEXADECIMAL
-    //Outra função será publicKey - formação da chave publica a partir de uma chave privada em string
-    //A string tem 64 posições
-    //FORMATO SEC Comprimido
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Formação da chave publica a partir da Chave Privada PVTKey == text
+    //   onde PVTKey é uma String Hexadecimal de 64 elementos,
+    //   a saída é uma string HEXADECIMAL códificada no Fomato SEC Comprimido
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
     public String publicKeyCompSEC (String text)
     {
-        //int sizeStr256 = text.length()/8;
-        //int keySize;
         BigInteger SecretKey = new BigInteger("0");
         BigInteger cont = new BigInteger("1");
         char[] secKey;
         char[] pubKeyHEX = new char[65];
         secKey = text.toCharArray();
 
-        //if(text.length()<=31) keySize = text.length() % 32;
-        //else  keySize = 32;
-        //keySize = 32;
-
-        //for(int i = keySize-1; i>=0; i--)
         //A string tem 64 posições
         for(int i = 64-1; i>=0; i--)
         {
@@ -168,9 +90,7 @@ public class Keygen {
             for (value =0 ; value < 16; value++)
                 if (secKey[i]==base16[value]) break;
 
-            //SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(secKey[i])));
             SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(value)));
-            //cont = cont.multiply(BigInteger.valueOf(0x100));
             cont = cont.multiply(BigInteger.valueOf(0x10));
         }
 
@@ -196,14 +116,17 @@ public class Keygen {
         return "0" +text;
     }
 
-    //Formação da chave publica a partir de uma string com elemetos em HEXADECIMAL
-    //Outra função será publicKey - formação da chave publica a partir de uma chave privada em string
-    //A string tem 64 posições
-    //FORMATO SEC UNCOMP
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Formação da chave publica a partir da Chave Privada PVTKey == text
+    //   onde PVTKeyque é uma String Hexadecimal de 64 elementos,
+    //   a saída é uma string HEXADECIMAL códificada no Fomato SEC Não-Comprimido
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
     public String publicKeyUncompSEC (String text)
     {
-        //int sizeStr256 = text.length()/8;
-        //int keySize;
         BigInteger SecretKey = new BigInteger("0");
         BigInteger cont = new BigInteger("1");
         char[] secKey;
@@ -211,22 +134,14 @@ public class Keygen {
         char[] pubKeyHEXY = new char[64];
         secKey = text.toCharArray();
 
-        //if(text.length()<=31) keySize = text.length() % 32;
-        //else  keySize = 32;
-        //keySize = 32;
-
-        //for(int i = keySize-1; i>=0; i--)
         //A string tem 64 posições
-        //for(int i = (64 + 64)-1; i>=0; i--)
         for(int i = (text.length())-1; i>=0; i--)
         {
             int value;
             for (value =0 ; value < 16; value++)
                 if (secKey[i]==base16[value]) break;
 
-            //SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(secKey[i])));
             SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(value)));
-            //cont = cont.multiply(BigInteger.valueOf(0x100));
             cont = cont.multiply(BigInteger.valueOf(0x10));
         }
 
@@ -253,164 +168,16 @@ public class Keygen {
 
         return text;
     }
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
 
-
-    //Produz uma chave privada em hexadecimal a partir de uma string qualquer
-    public String pvtKey2 (String text)
-    {
-
-        int keySize;
-        BigInteger SecretKey = new BigInteger("0");
-        BigInteger cont = new BigInteger("1");
-        char[] secKey;
-        char[] pvtKeyHex = new char[64];
-
-        if(text == null) return null;
-
-        secKey = text.toCharArray();
-
-        if(text.length()<=31) keySize = text.length() % 32;
-        else  keySize = 32;
-
-        for(int i = keySize-1; i>=0; i--)
-        {
-            SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(secKey[i])));
-            cont = cont.multiply(BigInteger.valueOf(0x100));
-        }
-
-        // Chave MOD P
-        SecretKey = keys.modp(SecretKey, keys.p);
-
-        for(int i = 63 ; i>0; i--)
-        {
-            pvtKeyHex[i] = base16[(SecretKey.and(BigInteger.valueOf(15))).intValue()];
-            SecretKey = SecretKey.divide(BigInteger.valueOf(16));
-        }
-
-        //text = String.valueOf(pvtKey64);//necessario
-        //text = String.valueOf(pvtKeyHex);//necessario
-
-        //return text;
-
-        return String.valueOf(pvtKeyHex);//necessario
-    }
-
-    //gera uma chave privada atraves de uma string qualquer em formato BigInteger
-    public BigInteger secKey (String text)
-    {
-        //int sizeStr256 = text.length()/8;
-        int keySize;
-        BigInteger SecretKey = new BigInteger("0");
-        BigInteger cont = new BigInteger("1");
-        char[] secKey;
-
-        secKey = text.toCharArray();
-
-        if(text.length()<=31) keySize = text.length() % 32;
-        else  keySize = 32;
-
-        for(int i = keySize-1; i>=0; i--)
-        {
-            SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(secKey[i])));
-            cont = cont.multiply(BigInteger.valueOf(0x100));
-        }
-
-        // Chave MOD P
-        SecretKey = keys.modp(SecretKey, keys.p);
-
-        return SecretKey;
-    }
-
-    //Gera uma chave privada a partir de uma string Hexadecimal resultante de uma HASH SHA256
-    public BigInteger secKeyHashToBigInt (String text)
-    {
-        //int sizeStr256 = text.length()/8;
-        int keySize;
-        BigInteger SecretKey = new BigInteger("0");
-        BigInteger cont = new BigInteger("1");
-        char[] secKey;
-
-        secKey = text.toCharArray();
-
-        for (int i = 0; i < text.length(); i++)
-        {
-            switch (secKey[i])
-            {
-                case '0':
-                    secKey[i] = 0;
-                    break;
-                case '1':
-                    secKey[i] = 1;
-                    break;
-                case '2':
-                    secKey[i] = 2;
-                    break;
-                case '3':
-                    secKey[i] = 3;
-                    break;
-                case '4':
-                    secKey[i] = 4;
-                    break;
-                case '5':
-                    secKey[i] = 5;
-                    break;
-                case '6':
-                    secKey[i] = 6;
-                    break;
-                case '7':
-                    secKey[i] = 7;
-                    break;
-                case '8':
-                    secKey[i] = 8;
-                    break;
-                case '9':
-                    secKey[i] = 9;
-                    break;
-                case 'a':
-                    secKey[i] = 10;
-                    break;
-                case 'b':
-                    secKey[i] = 11;
-                    break;
-                case 'c':
-                    secKey[i] = 12;
-                    break;
-                case 'd':
-                    secKey[i] = 13;
-                    break;
-                case 'e':
-                    secKey[i] = 14;
-                    break;
-                case 'f':
-                    secKey[i] = 15;
-                    break;
-            }
-        }
-        //for(int i = (Hx.length()/2)-1; i>=0; i--)
-        for(int i = 0; i < (text.length()/2); i++)
-        {
-            secKey [i] = (char) (secKey[2*i + 1] + (secKey[2*i] * 0x10));
-        }
-
-        if(text.length()/2<=31) keySize = text.length()/2 % 32;
-        else  keySize = 32;
-
-        for(int i = keySize-1; i>=0; i--)
-        {
-            SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(secKey[i])));
-            cont = cont.multiply(BigInteger.valueOf(0x100));
-        }
-
-        // Chave MOD P
-        SecretKey = keys.modp(SecretKey, keys.p);
-        return SecretKey;
-    }
-
-    //Gera uma chave privada a partir de uma string Hexadecimal resultante de uma HASH SHA256
-    //Não devolve MOD P
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Gera uma Chave Privada em BigInteger a partir de uma string Hexadecimal de 64 elementos
+    //  OBS: Não devolve MOD P
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
     public BigInteger HashToBigInt (String text)
     {
-        //int sizeStr256 = text.length()/8;
         int keySize;
         BigInteger SecretKey = new BigInteger("0");
         BigInteger cont = new BigInteger("1");
@@ -492,169 +259,13 @@ public class Keygen {
         return SecretKey;
     }
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
 
-    //Gera um BigInteger em Formato WIF
-    public BigInteger HashToBigIntWIF (String text)
-    {
-        //int sizeStr256 = text.length()/8;
-        int keySize;
-        BigInteger SecretKey = new BigInteger("0");
-        BigInteger cont = new BigInteger("1");
-        char[] secKey;
-
-        secKey = text.toCharArray();
-
-        for (int i = 0; i < text.length(); i++)
-        {
-            switch (secKey[i])
-            {
-                case '0':
-                    secKey[i] = 0;
-                    break;
-                case '1':
-                    secKey[i] = 1;
-                    break;
-                case '2':
-                    secKey[i] = 2;
-                    break;
-                case '3':
-                    secKey[i] = 3;
-                    break;
-                case '4':
-                    secKey[i] = 4;
-                    break;
-                case '5':
-                    secKey[i] = 5;
-                    break;
-                case '6':
-                    secKey[i] = 6;
-                    break;
-                case '7':
-                    secKey[i] = 7;
-                    break;
-                case '8':
-                    secKey[i] = 8;
-                    break;
-                case '9':
-                    secKey[i] = 9;
-                    break;
-                case 'a':
-                    secKey[i] = 10;
-                    break;
-                case 'b':
-                    secKey[i] = 11;
-                    break;
-                case 'c':
-                    secKey[i] = 12;
-                    break;
-                case 'd':
-                    secKey[i] = 13;
-                    break;
-                case 'e':
-                    secKey[i] = 14;
-                    break;
-                case 'f':
-                    secKey[i] = 15;
-                    break;
-            }
-        }
-        //for(int i = (Hx.length()/2)-1; i>=0; i--)
-        for(int i = 0; i < (text.length()/2); i++)
-        {
-            secKey [i] = (char) (secKey[2*i + 1] + (secKey[2*i] * 0x10));
-        }
-
-        //if(text.length()/2<=31) keySize = text.length()/2 % 32;
-        //else  keySize = 32;
-
-        for(int i = (text.length()/2)-1; i>=0; i--)
-        {
-            SecretKey = SecretKey.add(cont.multiply(BigInteger.valueOf(secKey[i])));
-            cont = cont.multiply(BigInteger.valueOf(0x100));
-        }
-
-        // Chave MOD P
-        //SecretKey = keys.modp(SecretKey, keys.p);
-        return SecretKey;
-    }
-
-
-
-
-    //Produz uma chave privada em hexadecimal a partir de uma string qualquer
-    public String encKeyToHexSTR (BigInteger [] point)
-    {
-        BigInteger[] pointx = new BigInteger[2];
-        pointx[0] = point[0];
-        pointx[1] = point[1];
-        char[] pvtKeyHex = new char[64];
-        char[] pvtKeyHex2 = new char[64];
-
-        for(int i = 63 ; i>=0; i--)
-        {
-            //pvtKeyHex[i] = base16[(SecretKey.and(BigInteger.valueOf(15))).intValue()];
-            pvtKeyHex[i] = base16[(pointx[0].and(BigInteger.valueOf(15))).intValue()];
-            pvtKeyHex2[i] = base16[(pointx[1].and(BigInteger.valueOf(15))).intValue()];
-            pointx[0] = pointx[0].divide(BigInteger.valueOf(16));
-            pointx[1] = pointx[1].divide(BigInteger.valueOf(16));
-        }
-
-        //text = String.valueOf(pvtKey64);//necessario
-        //text = String.valueOf(pvtKeyHex);//necessario
-
-        //return text;
-
-        return String.valueOf(pvtKeyHex) + String.valueOf(pvtKeyHex2);//necessario
-    }
-
-    //Converte um BigInteger em uma String Hexadecimal
-    public String encKeyHalfToHexSTR (BigInteger point)
-    {
-        BigInteger pointx =  point;
-        //pointx[1] = point[1];
-        char[] pvtKeyHex = new char[64];
-        char[] pvtKeyHex2 = new char[64];
-
-        for(int i = 63 ; i>=0; i--)
-        {
-            //pvtKeyHex[i] = base16[(SecretKey.and(BigInteger.valueOf(15))).intValue()];
-            pvtKeyHex[i] = base16[(pointx.and(BigInteger.valueOf(15))).intValue()];
-            //pvtKeyHex2[i] = base16[(pointx[1].and(BigInteger.valueOf(15))).intValue()];
-            pointx = pointx.divide(BigInteger.valueOf(16));
-            //pointx[1] = pointx[1].divide(BigInteger.valueOf(16));
-        }
-
-        //text = String.valueOf(pvtKey64);//necessario
-        //text = String.valueOf(pvtKeyHex);//necessario
-
-        //return text;
-
-        return String.valueOf(pvtKeyHex);//necessario
-    }
-
-    //Converte um BigInteger em uma String Hexadecimal
-    public byte[] encKeyHalfToByteSTR (BigInteger point)
-    {
-        BigInteger pointx =  point;
-        byte[] pvtKeyHex = new byte[32];
-        //char[] pvtKeyHex = new char[64];
-
-        //for(int i = 63 ; i>=0; i--)
-        for(int i = 31 ; i>=0; i--)
-        {
-            //pvtKeyHex[i] = base16[(pointx.and(BigInteger.valueOf(15))).intValue()];
-            pvtKeyHex[i] = (byte) (((pointx.and(BigInteger.valueOf(255))).intValue()) & 0xFF);
-            //pointx = pointx.divide(BigInteger.valueOf(16));
-            pointx = pointx.divide(BigInteger.valueOf(256));
-        }
-        //text = String.valueOf(pvtKey64);//necessario
-        //text = String.valueOf(pvtKeyHex);//necessario
-        //return text;
-
-        //return String.valueOf(pvtKeyHex);//necessario
-        return pvtKeyHex;//necessario
-    }
-
+    /////////////////////////////////////////////////////////////
+    // Reverte a chave publica do formato Base64 para BigInt
+    /////////////////////////////////////////////////////////////
     public BigInteger [] pubKeyRev (String pubkey)
     {
         BigInteger [] point = new BigInteger[2];
@@ -702,28 +313,16 @@ public class Keygen {
 
             point[1] = (keys.p).subtract(point[1]);
 
-        //gBchIN64[1] = tonelli_shanks(modp((gBchIN64[0]*modp(gBchIN64[0]*gBchIN64[0], p) + A*gBchIN64[0] + B), p), p);
-        /*
-        cpp_int gBchIN64[2];
-        // Converte de Base 64 para inteiro
-        gBchIN64[0] = 0;
-        tA = 1;
-
-        for (int i = 43; i>0; i--)
-        {
-            gBchIN64[0] = gBchIN64[0] + tA*toint64(gBch64CAP[i]);;
-            tA = tA*64;
-        }
-        // Entcontra o valor de GBy atraves do algoritmo de raiz quadrada em campos finitos
-        gBchIN64[1] = tonelli_shanks(modp((gBchIN64[0]*modp(gBchIN64[0]*gBchIN64[0], p) + A*gBchIN64[0] + B), p), p);
-
-        //Operacao xor para decidir se escolhe y ou (p - y)
-        if( ( !(gBchIN64[1] & 1) && (gBch64CAP[0] & 1) ) || ( (gBchIN64[1] & 1) && !(gBch64CAP[0] & 1) ) )
-            gBchIN64[1] = p - gBchIN64[1];
-            */
         return point;
     }
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////
+    // Reverte a chave publica do formato SEC Compactado para BigInt
+    //////////////////////////////////////////////////////////////////
     public BigInteger [] pubKeyCompSECRev (String pubkey)
     {
         BigInteger [] point = new BigInteger[2];
@@ -735,11 +334,8 @@ public class Keygen {
 
         char [] pubKey1 = pubkey.toCharArray();
 
-        //if(pubkey.length() != 44 ) return point;
         if(pubkey.length() != 65 ) return point;
 
-        //for(int i = 43; i>0; i--)
-        //for(int i = (pubkey.length()-1); i>((pubkey.length()-1)-43); i--)
         for(int i = (pubkey.length()-1); i>((pubkey.length()-1)-64); i--)
         {
             int x;
@@ -748,8 +344,6 @@ public class Keygen {
             point[0] = point[0].add(tA.multiply(BigInteger.valueOf(x)));
             tA = tA.multiply(BigInteger.valueOf(16));
         }
-
-
 
         // Entcontra o valor de GBy atraves do algoritmo de raiz quadrada em campos finitos
         //   gBchIN64[1] = tonelli_shanks(modp((gBchIN64[0]*modp(gBchIN64[0]*gBchIN64[0], p) + A*gBchIN64[0] + B), p), p);
@@ -776,28 +370,16 @@ public class Keygen {
 
             point[1] = (keys.p).subtract(point[1]);
 
-        //gBchIN64[1] = tonelli_shanks(modp((gBchIN64[0]*modp(gBchIN64[0]*gBchIN64[0], p) + A*gBchIN64[0] + B), p), p);
-        /*
-        cpp_int gBchIN64[2];
-        // Converte de Base 64 para inteiro
-        gBchIN64[0] = 0;
-        tA = 1;
-
-        for (int i = 43; i>0; i--)
-        {
-            gBchIN64[0] = gBchIN64[0] + tA*toint64(gBch64CAP[i]);;
-            tA = tA*64;
-        }
-        // Entcontra o valor de GBy atraves do algoritmo de raiz quadrada em campos finitos
-        gBchIN64[1] = tonelli_shanks(modp((gBchIN64[0]*modp(gBchIN64[0]*gBchIN64[0], p) + A*gBchIN64[0] + B), p), p);
-
-        //Operacao xor para decidir se escolhe y ou (p - y)
-        if( ( !(gBchIN64[1] & 1) && (gBch64CAP[0] & 1) ) || ( (gBchIN64[1] & 1) && !(gBch64CAP[0] & 1) ) )
-            gBchIN64[1] = p - gBchIN64[1];
-            */
         return point;
     }
 
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////
+    // Reverte a chave publica do formato SEC Não-Compactado para BigInt
+    //////////////////////////////////////////////////////////////////
     public BigInteger [] pubKeyUncompSECRev (String pubkey)
     {
 
@@ -809,24 +391,8 @@ public class Keygen {
         pubkey = pubkey.substring(1);
         char [] pubKey1 = pubkey.toCharArray();
 
-        //if(pubkey.length() != 44 ) return point;
         if(pubkey.length() != 65 + 64) return point;
 
-        //for(int i = 43; i>0; i--)
-        //for(int i = (pubkey.length()-1); i>((pubkey.length()-1)-43); i--)
-        //for(int i = (pubkey.length()-1); i>((pubkey.length()-1)-64); i--)
-        /*
-
-        for(int i = (pubkey.length()-1); i>((pubkey.length()-1)-64); i--)
-        {
-            int x;
-            for(x=0; x<16; x++) if(base16[x] == pubKey1[i]) break;
-
-            point[0] = point[0].add(tA.multiply(BigInteger.valueOf(x)));
-            tA = tA.multiply(BigInteger.valueOf(16));
-        }
-
-        */
         for(int i = (pubkey.length()-1); i>((pubkey.length()-1)-64); i--)
         {
             int x;
@@ -846,352 +412,39 @@ public class Keygen {
             point[0] = point[0].add(tA.multiply(BigInteger.valueOf(x)));
             tA = tA.multiply(BigInteger.valueOf(16));
         }
-
-
         return point;
     }
 
-    public String bsvWallet (String pubkeyCOD)
-    {
-        BigInteger[] pubKey = pubKeyRev(pubkeyCOD);
-        byte[] chA = new byte[64];
-        byte[] cSHA = new byte[33]; // chave comprimida
-        byte[] cSHA2 = new byte[65]; // chave não comprimida
-
-        BigInteger tA, ichA, ichA2;
-        //pubkeyCOD = pubKey[0].toString() + "\n" + pubKey[1].toString();
-
-////////////////////////////////////////////////////////////////////
-//CONSTROI AS CHAVES PUBLICAS COMPRIMIDAS E NAO COMPRIMIDAS
-////////////////////////////////////////////////////////////////////
-
-        ichA = pubKey [0];
-        ichA2 = pubKey [1];
-//        pubkeyCOD = ichA.toString() + "\n"+ ichA2.toString();
-
-        for (int i = 32; i>= 1; i--)
-        {
-            // este cast pode dar problemas em UBUNTU
-            //cSHA2[i] = cSHA[i] = (byte) (ichA & 0xFF);
-            cSHA2[i] = cSHA[i] = (byte) (((ichA.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
-            //cSHA2[i+32] = (unsigned char)(ichA2 & 255);
-            cSHA2[i+32] = (byte) (((ichA2.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
-
-            //ichA = ichA/256;
-            ichA = ichA.divide(BigInteger.valueOf(0x100));
-            //ichA2 = ichA2/256;
-            ichA2 = ichA2.divide(BigInteger.valueOf(0x100));
-        }
-
-        //if (g[1] & 1) cSHA [0] = 3;
-        if ((pubKey[1].and(BigInteger.valueOf(1))).intValue() == 1) cSHA [0] = 3;
-        else cSHA [0] = 2;
-        cSHA2 [0] = 4;
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//HASH SHA256 DA CHAVE PUBLICA COMPRIMIDA
-////////////////////////////////////////////////////////////////////
-
-        //unsigned char SHA256out[32], SHA256out2[32];
-
-        //byte[] SHA256out = new byte[32];
-        //byte[] SHA256out2 = new byte[32];
-        String SHA256out, SHA256out2;
-
-        //size_t in_len = sizeof(cSHA);
-        //size_t in_len2 = sizeof(cSHA2);
-
-        //Hash SHA256
-        //mbedtls_sha256(cSHA, in_len, SHA256out, 0);
-
-        SHA256out = SHA256G.SHA256bytes(cSHA);
-        //mbedtls_sha256(cSHA2, in_len2, SHA256out2, 0);
-        SHA256out2 = SHA256G.SHA256bytes(cSHA2);
-
-        //pubkeyCOD = SHA256out2;
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//HASH RIPEMD160 DA SHA256 DA CHAVE PUBLICA
-////////////////////////////////////////////////////////////////////
-
-        //unsigned char RIPEMDout[20], RIPEMDout2[20];
-
-        String RIPEMDout, RIPEMDout2;
-        Ripemd160 rmd160 = new Ripemd160();
-
-        //in_len = sizeof(SHA256out);
-        //in_len2 = sizeof(SHA256out2);
-
-        //mbedtls_ripemd160(SHA256out, in_len, RIPEMDout);
-
-        byte[] SHA256outb;// = new char[SHA256out.length()/2];
-        byte[] SHA256out2b;// = new char[SHA256out2.length()/2];
-        SHA256outb = SHA256G.HashStrToByte2(SHA256out);
-        SHA256out2b = SHA256G.HashStrToByte2(SHA256out2);
-        char[] SHA256outc = new char[SHA256out.length()/2];
-        char[] SHA256out2c = new char[SHA256out2.length()/2];
-        for (int i=0;i<SHA256out.length()/2 ; i++) SHA256outc [i] = (char) (SHA256outb[i] & 0xFF);
-        for (int i=0;i<SHA256out2.length()/2 ; i++) SHA256out2c [i] = (char) (SHA256out2b[i] & 0xFF);
-
-
-        //RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out.toCharArray(), SHA256out.length()));
-        RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256outc, SHA256out.length()/2));
-
-        //mbedtls_ripemd160(SHA256out2, in_len2, RIPEMDout2);
-
-        //RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2.toCharArray(), SHA256out2.length()));
-        RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2c, SHA256out2.length()/2));
-//        pubkeyCOD = RIPEMDout2;
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//PREFIX PLUS CHECKSUM
-////////////////////////////////////////////////////////////////////
-
-        //unsigned char pRIPEMD160[21], pRIPEMD1602[21];
-        byte[] pRIPEMD160 = new byte[21];
-        byte[] pRIPEMD1602 = new byte[21];
-
-        byte[] RIPEMDoutj = new byte[RIPEMDout.length()];
-        byte[] RIPEMDout2j = new byte[RIPEMDout2.length()];
-
-        RIPEMDoutj = SHA256G.HashStrToByte2(RIPEMDout);
-        RIPEMDout2j = SHA256G.HashStrToByte2(RIPEMDout2);
-
-        //in_len = sizeof(pRIPEMD160);
-        //in_len2 = sizeof(pRIPEMD1602);
-
-        //Acrescenta o byte de versao do BTC, neste caso 0x00
-        pRIPEMD1602 [0] = pRIPEMD160 [0] = 0;
-
-        for (int i = 1; i<21; i++)
-        {
-            //pRIPEMD160 [i] = RIPEMDout[i-1];
-            pRIPEMD160 [i] = RIPEMDoutj[i-1];
-
-            //pRIPEMD1602 [i] = RIPEMDout2[i-1];
-            pRIPEMD1602 [i] = RIPEMDout2j[i-1];
-        }
-
-        //SHAS256 (PREFIX + RIPEMD(SHA256(COMPRESSED PUB KEY)))
-        //mbedtls_sha256(pRIPEMD160, in_len, SHA256out, 0);
-        SHA256out = SHA256G.SHA256bytes(pRIPEMD160);
-
-        //SHAS256 (PREFIX + RIPEMD(SHA256(UNCOMPRESSED PUB KEY)))
-        //mbedtls_sha256(pRIPEMD1602, in_len2, SHA256out2, 0);
-        SHA256out2 = SHA256G.SHA256bytes(pRIPEMD1602);
-
-        //in_len = sizeof(SHA256out);
-        //in_len2 = sizeof(SHA256out2);
-
-        //SHA256 (SHAS256 (PREFIX + RIPEMD(SHA256(COMPRESSED PUB KEY))))
-        //mbedtls_sha256(SHA256out, in_len, SHA256out, 0);
-        SHA256out = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(SHA256out));
-        //SHA256 (SHAS256 (PREFIX + RIPEMD(SHA256(UNCOMPRESSED PUB KEY))))
-        //mbedtls_sha256(SHA256out2, in_len2, SHA256out2, 0);
-        SHA256out2 = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(SHA256out2));
-
-        //pubkeyCOD = SHA256out2;
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//PREPARA O BIGINT PARA CONVERSAO A BASE 58
-////////////////////////////////////////////////////////////////////
-
-        //Transformar o Payload em BIGNUMBER
-        //cpp_int VPC = 0, VPCcont = 1, VPC2 = 0, VPCcont2 = 1;
-        //cpp_int VPC = 0, VPCcont = 1, VPC2 = 0, VPCcont2 = 1;
-        BigInteger VPC, VPCcont, VPC2, VPCcont2;
-        VPC = BigInteger.valueOf(0);
-        VPCcont = BigInteger.valueOf(1);
-        VPC2 = BigInteger.valueOf(0);
-        VPCcont2 = BigInteger.valueOf(1);
-
-        byte[] SHA256outj = new byte[SHA256out.length()/2];
-        byte[] SHA256out2j = new byte[SHA256out2.length()/2];
-
-        SHA256outj = SHA256G.HashStrToByte2(SHA256out);
-        SHA256out2j = SHA256G.HashStrToByte2(SHA256out2);
-
-
-        //Primeiros 4 bites do SHA256 (SHAS256 (PREFIX + RIPEMD(SHA256(PUB KEY))))
-        //Adiciona o CHEKSUM ao BIGINT
-        for(int i = 3; i >= 0; i--)
-        {
-            //VPC = VPC + VPCcont * SHA256out[i];
-            //VPC = VPC + VPCcont * SHA256out[i];
-            VPC = VPC.add(VPCcont.multiply(BigInteger.valueOf(SHA256outj[i] & 0xFF)));
-            //VPCcont = VPCcont * 256;
-            VPCcont = VPCcont.multiply(BigInteger.valueOf(256));
-
-
-            //VPC2 = VPC2 + VPCcont2 * SHA256out2[i];
-            VPC2 = VPC2.add(VPCcont2.multiply(BigInteger.valueOf(SHA256out2j[i] & 0xFF)));
-            //VPCcont2 = VPCcont2 * 256;
-            VPCcont2 = VPCcont2.multiply(BigInteger.valueOf(256));
-        }
-
-        //Adiciona o PREFIXO + RIPEMD160 ao BIGINT
-        for(int i = 20; i >= 0; i--)
-        {
-            //VPC = VPC + VPCcont * pRIPEMD160[i];
-            VPC = VPC.add(VPCcont.multiply(BigInteger.valueOf(pRIPEMD160[i] & 0xFF)));
-            //VPCcont = VPCcont * 256;
-            VPCcont = VPCcont.multiply(BigInteger.valueOf(256));
-
-            //VPC2 = VPC2 + VPCcont2 * pRIPEMD1602[i];
-            VPC2 = VPC2.add(VPCcont2.multiply(BigInteger.valueOf(pRIPEMD1602[i] & 0xFF)));
-            //VPCcont2 = VPCcont2 * 256;
-            VPCcont2 = VPCcont2.multiply(BigInteger.valueOf(256));
-        }
-
-        //pubkeyCOD = VPC2.toString();
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//CONVERTE O BIGINT PARA BASE 58
-////////////////////////////////////////////////////////////////////
-
-        //unsigned char base58[] = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-        String base58s = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-        char[] base58 = base58s.toCharArray();
-        //unsigned char BTCaddr[100], BTCaddr2[100];
-        char[] BTCaddr = new char[100];
-        char[] BTCaddr2 = new char[100];
-
-        int li = 0, li2 = 0;
-
-        //while (VPC > 0)
-        while (VPC.compareTo(BigInteger.valueOf(0)) == 1)
-        {
-            //BTCaddr [li] = base58[(int)(VPC % 58)];
-            BTCaddr [li] = base58[(VPC.mod(BigInteger.valueOf(58))).intValue()];
-            //VPC = VPC / 58;
-            VPC = VPC.divide(BigInteger.valueOf(58));
-            li ++;
-        }
-
-        //while (VPC2 > 0)
-        while (VPC2.compareTo(BigInteger.valueOf(0)) == 1)
-        {
-            //BTCaddr2 [li2] = base58[(int)(VPC2 % 58)];
-            BTCaddr2 [li2] = base58[(VPC2.mod(BigInteger.valueOf(58))).intValue()];
-            //VPC2 = VPC2 / 58;
-            VPC2 = VPC2.divide(BigInteger.valueOf(58));
-            li2 ++;
-        }
-
-        //pubkeyCOD = String.valueOf(BTCaddr2);
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-
-////////////////////////////////////////////////////////////////////
-//ADICIONA OS LEADING ZEROES DO PREFIX + RIPEMED160
-////////////////////////////////////////////////////////////////////
-
-        int lzeros = 0, lzeros2 = 0;
-
-        while (pRIPEMD160[lzeros] == 0)
-        {
-            BTCaddr [li] = base58[0];
-            lzeros++;
-            li++;
-        }
-        while (pRIPEMD1602[lzeros2] == 0)
-        {
-            BTCaddr2 [li2] = base58[0];
-            lzeros2++;
-            li2++;
-        }
-
-        //pubkeyCOD = String.valueOf(BTCaddr2);
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//INVERTE A ORDEM DA MATRIZ DE ENDERECO E ADICIONA O FINALIZADOR
-////////////////////////////////////////////////////////////////////
-
-        char[] BTCaddrUNC = new char[li2];
-        char[] BTCaddrCOMP = new char[li];
-
-        // ENDERECO NAO COMPRIMIDO
-        int iout = 0;
-        li2--;
-        while (li2>=0)
-        {
-            BTCaddrUNC[iout] = BTCaddr2 [li2];
-            iout++;
-            li2--;
-        }
-        //FINALIZADOR PARA FUTURA COMPARACAO
-        //BTCaddrUNC[iout] = 0;
-
-        // ENDERECO COMPRIMIDO
-        iout = 0;
-        li--;
-        while (li>=0)
-        {
-            BTCaddrCOMP[iout] = BTCaddr [li];
-            iout++;
-            li--;
-        }
-        //FINALIZADOR PARA FUTURA COMPARACAO
-        //BTCaddrCOMP[iout] = 0;
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-        /*
-         */
-//        return pubkeyCOD;
-        //return (String.valueOf(BTCaddrUNC) + "\n" + String.valueOf(BTCaddrCOMP));
-        return String.valueOf(BTCaddrUNC);
-    }
-
-
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //Metodo utilizado para construir endereços Bitocoin Legacy Comprimidos e Não-Comprimidos
+    //  a partir da chave publica em Base 64 gerada pelo metodo
+    //  publicKeyHEX(text: string): string
+    ////////////////////////////////////////////////////////////////////////////////////////////
     public String bsvWalletFull (String pubkeyCOD, Boolean Compressed)
     {
         BigInteger[] pubKey = pubKeyRev(pubkeyCOD);
-        byte[] chA = new byte[64];
         byte[] cSHA = new byte[33]; // chave comprimida
         byte[] cSHA2 = new byte[65]; // chave não comprimida
 
         BigInteger tA, ichA, ichA2;
-        //pubkeyCOD = pubKey[0].toString() + "\n" + pubKey[1].toString();
 
-////////////////////////////////////////////////////////////////////
-//CONSTROI AS CHAVES PUBLICAS COMPRIMIDAS E NAO COMPRIMIDAS
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //CONSTROI AS CHAVES PUBLICAS COMPRIMIDAS E NAO COMPRIMIDAS
+        ////////////////////////////////////////////////////////////////////
 
         ichA = pubKey [0];
         ichA2 = pubKey [1];
-//        pubkeyCOD = ichA.toString() + "\n"+ ichA2.toString();
 
         for (int i = 32; i>= 1; i--)
         {
-            // este cast pode dar problemas em UBUNTU
-            //cSHA2[i] = cSHA[i] = (byte) (ichA & 0xFF);
             cSHA2[i] = cSHA[i] = (byte) (((ichA.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
-            //cSHA2[i+32] = (unsigned char)(ichA2 & 255);
             cSHA2[i+32] = (byte) (((ichA2.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
 
-            //ichA = ichA/256;
             ichA = ichA.divide(BigInteger.valueOf(0x100));
-            //ichA2 = ichA2/256;
             ichA2 = ichA2.divide(BigInteger.valueOf(0x100));
         }
 
@@ -1200,47 +453,29 @@ public class Keygen {
         else cSHA [0] = 2;
         cSHA2 [0] = 4;
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-//HASH SHA256 DA CHAVE PUBLICA COMPRIMIDA
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //HASH SHA256 DA CHAVE PUBLICA COMPRIMIDA
+        ////////////////////////////////////////////////////////////////////
 
-        //unsigned char SHA256out[32], SHA256out2[32];
-
-        //byte[] SHA256out = new byte[32];
-        //byte[] SHA256out2 = new byte[32];
         String SHA256out, SHA256out2;
 
-        //size_t in_len = sizeof(cSHA);
-        //size_t in_len2 = sizeof(cSHA2);
-
-        //Hash SHA256
-        //mbedtls_sha256(cSHA, in_len, SHA256out, 0);
-
         SHA256out = SHA256G.SHA256bytes(cSHA);
-        //mbedtls_sha256(cSHA2, in_len2, SHA256out2, 0);
         SHA256out2 = SHA256G.SHA256bytes(cSHA2);
 
-        //pubkeyCOD = SHA256out2;
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //HASH RIPEMD160 DA SHA256 DA CHAVE PUBLICA
+        ////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-//HASH RIPEMD160 DA SHA256 DA CHAVE PUBLICA
-////////////////////////////////////////////////////////////////////
-
-        //unsigned char RIPEMDout[20], RIPEMDout2[20];
 
         String RIPEMDout, RIPEMDout2;
         Ripemd160 rmd160 = new Ripemd160();
 
-        //in_len = sizeof(SHA256out);
-        //in_len2 = sizeof(SHA256out2);
-
-        //mbedtls_ripemd160(SHA256out, in_len, RIPEMDout);
 
         byte[] SHA256outb;// = new char[SHA256out.length()/2];
         byte[] SHA256out2b;// = new char[SHA256out2.length()/2];
@@ -1251,24 +486,16 @@ public class Keygen {
         for (int i=0;i<SHA256out.length()/2 ; i++) SHA256outc [i] = (char) (SHA256outb[i] & 0xFF);
         for (int i=0;i<SHA256out2.length()/2 ; i++) SHA256out2c [i] = (char) (SHA256out2b[i] & 0xFF);
 
-
-        //RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out.toCharArray(), SHA256out.length()));
         RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256outc, SHA256out.length()/2));
-
-        //mbedtls_ripemd160(SHA256out2, in_len2, RIPEMDout2);
-
-        //RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2.toCharArray(), SHA256out2.length()));
         RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2c, SHA256out2.length()/2));
-//        pubkeyCOD = RIPEMDout2;
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-//PREFIX PLUS CHECKSUM
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //PREFIX PLUS CHECKSUM
+        ////////////////////////////////////////////////////////////////////
 
-        //unsigned char pRIPEMD160[21], pRIPEMD1602[21];
         byte[] pRIPEMD160 = new byte[21];
         byte[] pRIPEMD1602 = new byte[21];
 
@@ -1278,55 +505,29 @@ public class Keygen {
         RIPEMDoutj = SHA256G.HashStrToByte2(RIPEMDout);
         RIPEMDout2j = SHA256G.HashStrToByte2(RIPEMDout2);
 
-
-        //in_len = sizeof(pRIPEMD160);
-        //in_len2 = sizeof(pRIPEMD1602);
-
         //Acrescenta o byte de versao do BTC, neste caso 0x00
         pRIPEMD1602 [0] = pRIPEMD160 [0] = 0;
 
         for (int i = 1; i<21; i++)
         {
-            //pRIPEMD160 [i] = RIPEMDout[i-1];
             pRIPEMD160 [i] = RIPEMDoutj[i-1];
-
-            //pRIPEMD1602 [i] = RIPEMDout2[i-1];
             pRIPEMD1602 [i] = RIPEMDout2j[i-1];
         }
 
-        //SHAS256 (PREFIX + RIPEMD(SHA256(COMPRESSED PUB KEY)))
-        //mbedtls_sha256(pRIPEMD160, in_len, SHA256out, 0);
         SHA256out = SHA256G.SHA256bytes(pRIPEMD160);
-
-        //SHAS256 (PREFIX + RIPEMD(SHA256(UNCOMPRESSED PUB KEY)))
-        //mbedtls_sha256(pRIPEMD1602, in_len2, SHA256out2, 0);
         SHA256out2 = SHA256G.SHA256bytes(pRIPEMD1602);
 
-        //in_len = sizeof(SHA256out);
-        //in_len2 = sizeof(SHA256out2);
-
-
-
-        //SHA256 (SHAS256 (PREFIX + RIPEMD(SHA256(COMPRESSED PUB KEY))))
-        //mbedtls_sha256(SHA256out, in_len, SHA256out, 0);
         SHA256out = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(SHA256out));
-        //SHA256 (SHAS256 (PREFIX + RIPEMD(SHA256(UNCOMPRESSED PUB KEY))))
-        //mbedtls_sha256(SHA256out2, in_len2, SHA256out2, 0);
         SHA256out2 = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(SHA256out2));
 
-        //pubkeyCOD = SHA256out2;
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//PREPARA O BIGINT PARA CONVERSAO A BASE 58
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //PREPARA O BIGINT PARA CONVERSAO A BASE 58
+        ////////////////////////////////////////////////////////////////////
 
         //Transformar o Payload em BIGNUMBER
-        //cpp_int VPC = 0, VPCcont = 1, VPC2 = 0, VPCcont2 = 1;
-        //cpp_int VPC = 0, VPCcont = 1, VPC2 = 0, VPCcont2 = 1;
         BigInteger VPC, VPCcont, VPC2, VPCcont2;
         VPC = BigInteger.valueOf(0);
         VPCcont = BigInteger.valueOf(1);
@@ -1344,79 +545,58 @@ public class Keygen {
         //Adiciona o CHEKSUM ao BIGINT
         for(int i = 3; i >= 0; i--)
         {
-            //VPC = VPC + VPCcont * SHA256out[i];
-            //VPC = VPC + VPCcont * SHA256out[i];
             VPC = VPC.add(VPCcont.multiply(BigInteger.valueOf(SHA256outj[i] & 0xFF)));
-            //VPCcont = VPCcont * 256;
             VPCcont = VPCcont.multiply(BigInteger.valueOf(256));
 
-
-            //VPC2 = VPC2 + VPCcont2 * SHA256out2[i];
             VPC2 = VPC2.add(VPCcont2.multiply(BigInteger.valueOf(SHA256out2j[i] & 0xFF)));
-            //VPCcont2 = VPCcont2 * 256;
             VPCcont2 = VPCcont2.multiply(BigInteger.valueOf(256));
         }
 
         //Adiciona o PREFIXO + RIPEMD160 ao BIGINT
         for(int i = 20; i >= 0; i--)
         {
-            //VPC = VPC + VPCcont * pRIPEMD160[i];
             VPC = VPC.add(VPCcont.multiply(BigInteger.valueOf(pRIPEMD160[i] & 0xFF)));
-            //VPCcont = VPCcont * 256;
             VPCcont = VPCcont.multiply(BigInteger.valueOf(256));
 
-            //VPC2 = VPC2 + VPCcont2 * pRIPEMD1602[i];
             VPC2 = VPC2.add(VPCcont2.multiply(BigInteger.valueOf(pRIPEMD1602[i] & 0xFF)));
-            //VPCcont2 = VPCcont2 * 256;
             VPCcont2 = VPCcont2.multiply(BigInteger.valueOf(256));
         }
 
-        //pubkeyCOD = VPC2.toString();
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //CONVERTE O BIGINT PARA BASE 58
+        ////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-//CONVERTE O BIGINT PARA BASE 58
-////////////////////////////////////////////////////////////////////
-
-        //unsigned char base58[] = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
         String base58s = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
         char[] base58 = base58s.toCharArray();
-        //unsigned char BTCaddr[100], BTCaddr2[100];
         char[] BTCaddr = new char[100];
         char[] BTCaddr2 = new char[100];
 
         int li = 0, li2 = 0;
 
-        //while (VPC > 0)
         while (VPC.compareTo(BigInteger.valueOf(0)) == 1)
         {
-            //BTCaddr [li] = base58[(int)(VPC % 58)];
             BTCaddr [li] = base58[(VPC.mod(BigInteger.valueOf(58))).intValue()];
-            //VPC = VPC / 58;
             VPC = VPC.divide(BigInteger.valueOf(58));
             li ++;
         }
 
-        //while (VPC2 > 0)
         while (VPC2.compareTo(BigInteger.valueOf(0)) == 1)
         {
-            //BTCaddr2 [li2] = base58[(int)(VPC2 % 58)];
             BTCaddr2 [li2] = base58[(VPC2.mod(BigInteger.valueOf(58))).intValue()];
-            //VPC2 = VPC2 / 58;
             VPC2 = VPC2.divide(BigInteger.valueOf(58));
             li2 ++;
         }
 
-        //pubkeyCOD = String.valueOf(BTCaddr2);
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////////////////////////
-//ADICIONA OS LEADING ZEROES DO PREFIX + RIPEMED160
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //ADICIONA OS LEADING ZEROES DO PREFIX + RIPEMED160
+        ////////////////////////////////////////////////////////////////////
 
         int lzeros = 0, lzeros2 = 0;
 
@@ -1433,14 +613,12 @@ public class Keygen {
             li2++;
         }
 
-        //pubkeyCOD = String.valueOf(BTCaddr2);
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//INVERTE A ORDEM DA MATRIZ DE ENDERECO E ADICIONA O FINALIZADOR
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //INVERTE A ORDEM DA MATRIZ DE ENDERECO E ADICIONA O FINALIZADOR
+        ////////////////////////////////////////////////////////////////////
 
         char[] BTCaddrUNC = new char[li2];
         char[] BTCaddrCOMP = new char[li];
@@ -1467,23 +645,25 @@ public class Keygen {
             li--;
         }
         //FINALIZADOR PARA FUTURA COMPARACAO
-        //BTCaddrCOMP[iout] = 0;
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-        /*
-         */
-//        return pubkeyCOD;
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
         if(Compressed)
             return String.valueOf(BTCaddrCOMP);
         else
             return String.valueOf(BTCaddrUNC);
 
-        //return (String.valueOf(BTCaddrUNC) + "\n" + String.valueOf(BTCaddrCOMP));
-        //return String.valueOf(BTCaddrUNC);
     }
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
 
+    //////////////////////////////////////////////////////////////////////////////////
+    //Metodo utilizado para decodificar o HASH160 da Chave Publica
+    //  a partir de um endereço Bitcoin Legacy, aqui gerados no método:
+    //  bsvWalletFull(pubkeyCOD: string, Compressed: boolean): string
+    //////////////////////////////////////////////////////////////////////////////////
     public String addRMD (String hashKey)
     {
         byte[] result = new byte[20];
@@ -1507,222 +687,83 @@ public class Keygen {
         addrINT = addrINT.divide(BigInteger.valueOf(0x100000000L));
         for(int j = 19; j >=0; j--)
         {
-            //int bint = addrINT.and(BigInteger.valueOf(0xFF)).intValue();
-
             result[j] = (byte) (addrINT.and(BigInteger.valueOf(0xFF)).intValue() & 0xFF );
-            //rmd160[i][j] = (unsigned char)(addrINT & 0xFF);
             addrINT = addrINT.divide(BigInteger.valueOf(0x100));
         }
 
-        //return  String.valueOf(result);
         return  SHA256G.ByteToStrHex(result);
-        //return  String.valueOf(strChar);
     }
 
-    //Esta versão apresenta somente o endereço comprimido
-    public String getAddressFromRMDHash (String ripemdHash) {
-        byte[] pRIPEMD160 = new byte[21];
-        byte[] RIPEMDoutj;
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
 
-        RIPEMDoutj = SHA256G.HashStrToByte2(ripemdHash);
-
-        // Acrescenta o byte de versao do BTC, neste caso, 0x00.
-        pRIPEMD160[0] = 0;
-
-        System.arraycopy(RIPEMDoutj, 0, pRIPEMD160, 1, 20);
-
-        String SHA256out = SHA256G.SHA256bytes(pRIPEMD160);
-
-        if (SHA256out == null) {
-            System.out.println("Hash SHA256 Inválido");
-            return null;
-        }
-
-        SHA256out = SHA256G.SHA256bytes(SHA256G.HashStrToByte2(SHA256out));
-
-        ////////////////////////////////////////////////////////////////////
-        //PREPARA O BIGINT PARA CONVERSAO A BASE 58
-        ////////////////////////////////////////////////////////////////////
-
-        //Transformar o Payload em BIGNUMBER
-        BigInteger VPC, VPCcont, VPC2, VPCcont2;
-        VPC = BigInteger.valueOf(0);
-        VPCcont = BigInteger.valueOf(1);
-        VPC2 = BigInteger.valueOf(0);
-        VPCcont2 = BigInteger.valueOf(1);
-
-        byte[] SHA256outj;
-
-        SHA256outj = SHA256G.HashStrToByte2(SHA256out);
-
-        // Primeiros 4 bits do SHA256 (SHAS256 (PREFIX + RIPEMD(SHA256(PUB KEY))))
-        // Adiciona o CHEKSUM ao BIGINT
-        for (int i = 3; i >= 0; i--) {
-            VPC = VPC.add(VPCcont.multiply(BigInteger.valueOf(SHA256outj[i] & 0xFF)));
-            VPCcont = VPCcont.multiply(BigInteger.valueOf(256));
-            VPCcont2 = VPCcont2.multiply(BigInteger.valueOf(256));
-        }
-
-        // Adiciona o PREFIXO + RIPEMD160 ao BIGINT
-        for (int i = 20; i >= 0; i--) {
-            VPC = VPC.add(VPCcont.multiply(BigInteger.valueOf(pRIPEMD160[i] & 0xFF)));
-            VPCcont = VPCcont.multiply(BigInteger.valueOf(256));
-            VPCcont2 = VPCcont2.multiply(BigInteger.valueOf(256));
-        }
-
-        ////////////////////////////////////////////////////////////////////
-        //CONVERTE O BIGINT PARA BASE 58
-        ////////////////////////////////////////////////////////////////////
-
-        String base58s = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-        char[] base58 = base58s.toCharArray();
-        char[] BTCaddr = new char[100];
-
-        int li = 0;
-
-        while (VPC.compareTo(BigInteger.valueOf(0)) > 0) {
-            BTCaddr [li] = base58[(VPC.mod(BigInteger.valueOf(58))).intValue()];
-            VPC = VPC.divide(BigInteger.valueOf(58));
-            li++;
-        }
-
-        ////////////////////////////////////////////////////////////////////
-        //ADICIONA OS LEADING ZEROES DO PREFIX + RIPEMED160
-        ////////////////////////////////////////////////////////////////////
-
-        int lzeros = 0;
-
-        while (pRIPEMD160[lzeros] == 0) {
-            BTCaddr [li] = base58[0];
-            lzeros++;
-            li++;
-        }
-
-        ////////////////////////////////////////////////////////////////////
-        //INVERTE A ORDEM DA MATRIZ DE ENDERECO E ADICIONA O FINALIZADOR
-        ////////////////////////////////////////////////////////////////////
-
-        char[] BTCaddrCOMP = new char[li];
-
-        // ENDERECO COMPRIMIDO
-        int iout = 0;
-        li--;
-
-        while (li >= 0) {
-            BTCaddrCOMP[iout] = BTCaddr [li];
-            iout++;
-            li--;
-        }
-
-        // FINALIZADOR PARA FUTURA COMPARACAO
-
-        return String.valueOf(BTCaddrCOMP);
-    }
-
+    //////////////////////////////////////////////////////////////////////////////////
+    //Metodo utilizado para construir o HASH160 da Chave Publica
+    //  a partir da chave publica em Base 64 gerada pelo metodo
+    //  publicKeyHEX(text: string): string
+    //////////////////////////////////////////////////////////////////////////////////
     public String bsvWalletRMD160 (String pubkeyCOD, Boolean Compressed)
     {
         BigInteger[] pubKey = pubKeyRev(pubkeyCOD);
-        byte[] chA = new byte[64];
         byte[] cSHA = new byte[33]; // chave comprimida
         byte[] cSHA2 = new byte[65]; // chave não comprimida
 
         BigInteger tA, ichA, ichA2;
-        //pubkeyCOD = pubKey[0].toString() + "\n" + pubKey[1].toString();
 
-////////////////////////////////////////////////////////////////////
-//CONSTROI AS CHAVES PUBLICAS COMPRIMIDAS E NAO COMPRIMIDAS
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //CONSTROI AS CHAVES PUBLICAS COMPRIMIDAS E NAO COMPRIMIDAS
+        ////////////////////////////////////////////////////////////////////
 
         ichA = pubKey [0];
         ichA2 = pubKey [1];
-//        pubkeyCOD = ichA.toString() + "\n"+ ichA2.toString();
 
         for (int i = 32; i>= 1; i--)
         {
-            // este cast pode dar problemas em UBUNTU
-            //cSHA2[i] = cSHA[i] = (byte) (ichA & 0xFF);
             cSHA2[i] = cSHA[i] = (byte) (((ichA.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
-            //cSHA2[i+32] = (unsigned char)(ichA2 & 255);
             cSHA2[i+32] = (byte) (((ichA2.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
 
-            //ichA = ichA/256;
             ichA = ichA.divide(BigInteger.valueOf(0x100));
-            //ichA2 = ichA2/256;
             ichA2 = ichA2.divide(BigInteger.valueOf(0x100));
         }
 
-        //if (g[1] & 1) cSHA [0] = 3;
         if ((pubKey[1].and(BigInteger.valueOf(1))).intValue() == 1) cSHA [0] = 3;
         else cSHA [0] = 2;
         cSHA2 [0] = 4;
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-//HASH SHA256 DA CHAVE PUBLICA COMPRIMIDA
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //HASH SHA256 DA CHAVE PUBLICA COMPRIMIDA
+        ////////////////////////////////////////////////////////////////////
 
-        //unsigned char SHA256out[32], SHA256out2[32];
-
-        //byte[] SHA256out = new byte[32];
-        //byte[] SHA256out2 = new byte[32];
         String SHA256out, SHA256out2;
-
-        //size_t in_len = sizeof(cSHA);
-        //size_t in_len2 = sizeof(cSHA2);
-
-        //Hash SHA256
-        //mbedtls_sha256(cSHA, in_len, SHA256out, 0);
-
         SHA256out = SHA256G.SHA256bytes(cSHA);
-
-
-        //mbedtls_sha256(cSHA2, in_len2, SHA256out2, 0);
         SHA256out2 = SHA256G.SHA256bytes(cSHA2);
 
-        //pubkeyCOD = SHA256out2;
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//HASH RIPEMD160 DA SHA256 DA CHAVE PUBLICA
-////////////////////////////////////////////////////////////////////
-
-        //unsigned char RIPEMDout[20], RIPEMDout2[20];
+        ////////////////////////////////////////////////////////////////////
+        //HASH RIPEMD160 DA SHA256 DA CHAVE PUBLICA
+        ////////////////////////////////////////////////////////////////////
 
         String RIPEMDout, RIPEMDout2;
         Ripemd160 rmd160 = new Ripemd160();
-
-        //in_len = sizeof(SHA256out);
-        //in_len2 = sizeof(SHA256out2);
-
-        //mbedtls_ripemd160(SHA256out, in_len, RIPEMDout);
 
         byte[] SHA256outb;// = new char[SHA256out.length()/2];
         byte[] SHA256out2b;// = new char[SHA256out2.length()/2];
         SHA256outb = SHA256G.HashStrToByte2(SHA256out);
         SHA256out2b = SHA256G.HashStrToByte2(SHA256out2);
 
-
-
-
         char[] SHA256outc = new char[SHA256out.length()/2];
         char[] SHA256out2c = new char[SHA256out2.length()/2];
         for (int i=0;i<SHA256out.length()/2 ; i++) SHA256outc [i] = (char) (SHA256outb[i] & 0xFF);
         for (int i=0;i<SHA256out2.length()/2 ; i++) SHA256out2c [i] = (char) (SHA256out2b[i] & 0xFF);
 
-
-        //RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out.toCharArray(), SHA256out.length()));
         RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256outc, SHA256out.length()/2));
-
-        //mbedtls_ripemd160(SHA256out2, in_len2, RIPEMDout2);
-
-        //RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2.toCharArray(), SHA256out2.length()));
         RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2c, SHA256out2.length()/2));
-//        pubkeyCOD = RIPEMDout2;
-
 
         if(Compressed)
             //Compressed Address
@@ -1730,161 +771,24 @@ public class Keygen {
         else
             //UnCompressed Address
             return RIPEMDout2;
-
-        //return (RIPEMDout + "\n" + RIPEMDout2);
-
-
-        /*
-         */
-//        return pubkeyCOD;
-        //return (String.valueOf(BTCaddrUNC) + "\n" + String.valueOf(BTCaddrCOMP));
-        //return String.valueOf(BTCaddrUNC);
     }
 
-    public String bsvPKvsWALLET (String pubkeyCOD, String WalletRMD)
-    {
-        BigInteger[] pubKey = pubKeyRev(pubkeyCOD);
-        byte[] chA = new byte[64];
-        byte[] cSHA = new byte[33]; // chave comprimida
-        byte[] cSHA2 = new byte[65]; // chave não comprimida
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
 
-        BigInteger tA, ichA, ichA2;
-        //pubkeyCOD = pubKey[0].toString() + "\n" + pubKey[1].toString();
-
-////////////////////////////////////////////////////////////////////
-//CONSTROI AS CHAVES PUBLICAS COMPRIMIDAS E NAO COMPRIMIDAS
-////////////////////////////////////////////////////////////////////
-
-        ichA = pubKey [0];
-        ichA2 = pubKey [1];
-//        pubkeyCOD = ichA.toString() + "\n"+ ichA2.toString();
-
-        for (int i = 32; i>= 1; i--)
-        {
-            // este cast pode dar problemas em UBUNTU
-            //cSHA2[i] = cSHA[i] = (byte) (ichA & 0xFF);
-            cSHA2[i] = cSHA[i] = (byte) (((ichA.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
-            //cSHA2[i+32] = (unsigned char)(ichA2 & 255);
-            cSHA2[i+32] = (byte) (((ichA2.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
-
-            //ichA = ichA/256;
-            ichA = ichA.divide(BigInteger.valueOf(0x100));
-            //ichA2 = ichA2/256;
-            ichA2 = ichA2.divide(BigInteger.valueOf(0x100));
-        }
-
-        //if (g[1] & 1) cSHA [0] = 3;
-        if ((pubKey[1].and(BigInteger.valueOf(1))).intValue() == 1) cSHA [0] = 3;
-        else cSHA [0] = 2;
-        cSHA2 [0] = 4;
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//HASH SHA256 DA CHAVE PUBLICA COMPRIMIDA
-////////////////////////////////////////////////////////////////////
-
-        //unsigned char SHA256out[32], SHA256out2[32];
-
-        //byte[] SHA256out = new byte[32];
-        //byte[] SHA256out2 = new byte[32];
-        String SHA256out, SHA256out2;
-
-        //size_t in_len = sizeof(cSHA);
-        //size_t in_len2 = sizeof(cSHA2);
-
-        //Hash SHA256
-        //mbedtls_sha256(cSHA, in_len, SHA256out, 0);
-
-        SHA256out = SHA256G.SHA256bytes(cSHA);
-        //mbedtls_sha256(cSHA2, in_len2, SHA256out2, 0);
-        SHA256out2 = SHA256G.SHA256bytes(cSHA2);
-
-        //pubkeyCOD = SHA256out2;
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-//HASH RIPEMD160 DA SHA256 DA CHAVE PUBLICA
-////////////////////////////////////////////////////////////////////
-
-        //unsigned char RIPEMDout[20], RIPEMDout2[20];
-
-        String RIPEMDout, RIPEMDout2;
-        Ripemd160 rmd160 = new Ripemd160();
-
-        //in_len = sizeof(SHA256out);
-        //in_len2 = sizeof(SHA256out2);
-
-        //mbedtls_ripemd160(SHA256out, in_len, RIPEMDout);
-
-        byte[] SHA256outb;// = new char[SHA256out.length()/2];
-        byte[] SHA256out2b;// = new char[SHA256out2.length()/2];
-        SHA256outb = SHA256G.HashStrToByte2(SHA256out);
-        SHA256out2b = SHA256G.HashStrToByte2(SHA256out2);
-        char[] SHA256outc = new char[SHA256out.length()/2];
-        char[] SHA256out2c = new char[SHA256out2.length()/2];
-        for (int i=0;i<SHA256out.length()/2 ; i++) SHA256outc [i] = (char) (SHA256outb[i] & 0xFF);
-        for (int i=0;i<SHA256out2.length()/2 ; i++) SHA256out2c [i] = (char) (SHA256out2b[i] & 0xFF);
-
-
-        //RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out.toCharArray(), SHA256out.length()));
-        RIPEMDout = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256outc, SHA256out.length()/2));
-
-        //mbedtls_ripemd160(SHA256out2, in_len2, RIPEMDout2);
-
-        //RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2.toCharArray(), SHA256out2.length()));
-        RIPEMDout2 = Ripemd160.HashCharToStr(rmd160.ripemd160(SHA256out2c, SHA256out2.length()/2));
-//        pubkeyCOD = RIPEMDout2;
-
-
-
-        if(WalletRMD.compareTo(RIPEMDout) == 0)
-        {
-            //return (RIPEMDout + "\n" + SHA256G.ByteToStrHex(cSHA));
-            return (SHA256G.ByteToStrHex(cSHA));
-
-            //return  SHA256G.ByteToStrHex(cSHA);
-
-        }
-        else if(WalletRMD.compareTo(RIPEMDout2) == 0)
-        {
-            //return (RIPEMDout2 + "\n" + SHA256G.ByteToStrHex(cSHA2));
-            return (SHA256G.ByteToStrHex(cSHA2));
-        }
-        else
-        {
-            return ("NONE");
-            //return (RIPEMDout2 + "\n" + SHA256G.ByteToStrHex(cSHA2));
-        }
-
-
-
-        /*
-         */
-//        return pubkeyCOD;
-        //return (String.valueOf(BTCaddrUNC) + "\n" + String.valueOf(BTCaddrCOMP));
-        //return String.valueOf(BTCaddrUNC);
-    }
-
-
-    //public String sigDERrev (BigInteger[] signECDSA)
-
+    //////////////////////////////////////////////////////////////////////////////////
+    //Metodo utilizado para reverter a codificação de uma assinatura ECDSA
+    //  do formado DER para BigInteger
+    //////////////////////////////////////////////////////////////////////////////////
     public BigInteger[] sigDERrev (String signECDSA)
-    //public String sigDERrev (String signECDSA)
     {
-        //BigInteger[] pubKey = pubKeyRev(pubkeyCOD);
-        //byte[] chA = new byte[64];
-
         signECDSA = signECDSA.substring(6);
 
         byte[] x = new byte[1]; // chave comprimida
         x = SHA256G.HashStrToByte2( signECDSA.substring(0,2) );
         String r = signECDSA.substring(2, (2 * x[0]) + 2);
         signECDSA = signECDSA.substring((2 * x[0]) + 2);
-        //x = SHA256G.HashStrToByte2( signECDSA.substring(0,2) );
         String s = signECDSA.substring(4);
 
         BigInteger[] bISign = new BigInteger[2];
@@ -1904,45 +808,39 @@ public class Keygen {
             bISign[0] = bISign[0].multiply(BigInteger.valueOf(0x100));
             bISign[0] = bISign[0].add(BigInteger.valueOf(((int)cR[i]) & 0xFF));
         }
-        //for(int i = 0; i < 32 - cR.length; i++)
-        //  bISign[0] = bISign[0].multiply(BigInteger.valueOf(0x100));
-
 
         for(int i = 0; i < cS.length; i++)
         {
             bISign[1] = bISign[1].multiply(BigInteger.valueOf(0x100));
             bISign[1] = bISign[1].add(BigInteger.valueOf(((int)cS[i]) & 0xFF));
         }
-        //for(int i = 0; i < 32 - cS.length; i++)
-        //  bISign[1] = bISign[1].multiply(BigInteger.valueOf(0x100));
-
-
 
         //return r + "\n" + s;
         return bISign;
-
-        //O método está correto
-        //return  sigDER(bISign);
     }
+
+    /////////////////////////////////////////////////
+    //JESUS is the LORD!!!
+    /////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////
+    //Metodo utilizado para codificar uma assinatura ECDSA
+    //  do formado BigInteger para DER
+    //////////////////////////////////////////////////////////////////////////////////
     public String sigDER (BigInteger[] signECDSA)
     {
-        //BigInteger[] pubKey = pubKeyRev(pubkeyCOD);
-        //byte[] chA = new byte[64];
         byte[] cSHA = new byte[100]; // chave comprimida
         byte[] cSHA2 = new byte[100]; // chave não comprimida
 
         BigInteger tA, ichA, ichA2;
-        //pubkeyCOD = pubKey[0].toString() + "\n" + pubKey[1].toString();
 
-////////////////////////////////////////////////////////////////////
-//CONSTROI AS CHAVES PUBLICAS COMPRIMIDAS E NAO COMPRIMIDAS
-////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        //CONSTROI AS CHAVES PUBLICAS COMPRIMIDAS E NAO COMPRIMIDAS
+        ////////////////////////////////////////////////////////////////////
 
         ichA = signECDSA [0];
         ichA2 = signECDSA [1];
-//        pubkeyCOD = ichA.toString() + "\n"+ ichA2.toString();
 
-        //for (int i = 31; i>0 ; i--)
         for (int i = 99; i>0 ; i--)
         {
             // este cast pode dar problemas em UBUNTU
@@ -1951,9 +849,7 @@ public class Keygen {
             //cSHA2[i+32] = (unsigned char)(ichA2 & 255);
             cSHA2[i] = (byte) (((ichA2.and(BigInteger.valueOf(0xFF))).intValue()) & 0xFF);
 
-            //ichA = ichA/256;
             ichA = ichA.divide(BigInteger.valueOf(0x100));
-            //ichA2 = ichA2/256;
             ichA2 = ichA2.divide(BigInteger.valueOf(0x100));
         }
 
@@ -2004,6 +900,4 @@ public class Keygen {
         return ("30" + SHA256G.ByteToStrHex(sizeSig) + r + s);
         //return (RIPEMDout + "\n" + RIPEMDout2);
     }
-
-
 }
